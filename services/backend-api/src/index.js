@@ -2,7 +2,7 @@ import express from 'express';
 import { TextSummarizationPipeline } from './TextSummarizationPipeline.js';
 
 const app = express();
-const PORT = 3000;
+const PORT = 8080;
 
 app.get('/test-ml', async (req, res) => {
 
@@ -27,5 +27,5 @@ app.get('/test-ml', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log('Server listening on port 3000');
+  console.log(`Server listening on port ${PORT}`);
 });
