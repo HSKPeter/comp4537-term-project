@@ -1,5 +1,6 @@
 import { pipeline, env } from '@xenova/transformers';
 
+// From https://huggingface.co/docs/transformers.js/tutorials/node
 class TextSummarizationPipeline {
     static task = 'summarization'
     static model = 'Xenova/distilbart-cnn-6-6'
