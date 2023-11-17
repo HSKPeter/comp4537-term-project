@@ -2,7 +2,7 @@ const { USER_MESSAGES } = require('../messages/userMessage');
 const { HTTP_STATUS_CODES } = require('../utils/httpUtils');
 
 // TODO: Remove this sample handler
-function sampleGetRouteHandler(req, res) {
+function sampleGetController(req, res) {
     try {
         const message = USER_MESSAGES.test;
         res.json({ message });
@@ -12,7 +12,7 @@ function sampleGetRouteHandler(req, res) {
 }
 
 // TODO: Remove this sample handler
-function samplePostRouteHandler(req, res) {
+function samplePostController(req, res) {
     try {
         const payload = req.body;
         res.json({ payload });
@@ -22,11 +22,11 @@ function samplePostRouteHandler(req, res) {
 
 }
 
-const ROUTE_HANDLERS = {
-    root: sampleGetRouteHandler,
-    summarize: samplePostRouteHandler,
+const ROUTE_CONTROLLERS = {
+    root: sampleGetController,
+    summarize: samplePostController,
 };
 
 module.exports = {
-    ROUTE_HANDLERS,
+    ROUTE_CONTROLLERS,
 };
