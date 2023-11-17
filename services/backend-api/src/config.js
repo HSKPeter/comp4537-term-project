@@ -1,3 +1,5 @@
+require('dotenv').config();  // Read .env file if it exists
+
 const MODES = {
     development: 'development',
     production: 'production'
@@ -23,10 +25,13 @@ const BACKEND_ORIGIN = IS_DEVELOPMENT_MODE ? `${LOCAL_HOST}:${PORTS.development.
 
 const WHITE_LIST_ORIGINS = [FRONTEND_ORIGIN, BACKEND_ORIGIN];
 
+const HUGGINGFACE_API_TOKEN = process.env.HUGGINGFACE_API_TOKEN;
+
 module.exports = {
     PORT,
     WHITE_LIST_ORIGINS,
     BACKEND_ORIGIN,
-    MODE
+    MODE,
+    HUGGINGFACE_API_TOKEN
 };
     

@@ -9,9 +9,9 @@ paths:
   /summarize-text:
     post:
       summary: Summarize text
-      description: Summarize text
+      description: Use the google/pegasus-large model on HuggingFace to summarize the given text
       requestBody:
-        description: The text to summarize
+        description: JSON object with the text to summarize
         required: true
         content:
           application/json:
@@ -23,12 +23,22 @@ paths:
                   description: The text to summarize
       responses:
         "200":
-          description: The summarized text
+          description: JSON object with the summarized text
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  text:
+                  summary:
                     type: string
                     description: The summarized text
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message

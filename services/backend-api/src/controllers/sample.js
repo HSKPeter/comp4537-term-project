@@ -1,7 +1,6 @@
-const { USER_MESSAGES } = require('../messages/userMessage');
+// TODO: Remove all sample controllers
 const { HTTP_STATUS_CODES } = require('../utils/httpUtils');
 
-// TODO: Remove this sample handler
 function sampleGetController(req, res) {
     try {
         const message = USER_MESSAGES.test;
@@ -11,7 +10,7 @@ function sampleGetController(req, res) {
     }
 }
 
-// TODO: Remove this sample handler
+
 function samplePostController(req, res) {
     try {
         const payload = req.body;
@@ -19,14 +18,9 @@ function samplePostController(req, res) {
     } catch (error) {
         res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ error: USER_MESSAGES.generalError });
     }
-
 }
 
-const ROUTE_CONTROLLERS = {
-    root: sampleGetController,
-    summarize: samplePostController,
-};
-
 module.exports = {
-    ROUTE_CONTROLLERS,
+    sampleGetController,
+    samplePostController
 };
