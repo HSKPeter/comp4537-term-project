@@ -9,6 +9,8 @@ const app = express();
 
 app.get(API_ROUTES.ROOT, ROUTE_HANDLERS.root);
 
+app.post(API_ROUTES.SUMMARIZE, ROUTE_HANDLERS.summarize);
+
 app.listen(PORT, () => {
   const message = vsprintf(SERVER_MESSAGES.portListening, [PORT]);
   console.log(message);
