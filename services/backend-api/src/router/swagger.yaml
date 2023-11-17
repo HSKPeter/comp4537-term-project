@@ -6,52 +6,29 @@ info:
 servers:
   - url: http://localhost:8080/  # TODO: Make it dynamic
 paths:
-  # TODO: Update documentation
-  /users:
-    get:
-      summary: Get a list of users
-      description: Returns a list of users
-      responses:
-        "200":
-          description: A list of users
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                      description: The user's ID
-                    name:
-                      type: string
-                      description: The user's name
+  /summarize-text:
     post:
-      summary: Add a new user
-      description: Adds a new user to the system
+      summary: Summarize text
+      description: Summarize text
       requestBody:
-        description: The user to add
+        description: The text to summarize
         required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                name:
+                text:
                   type: string
-                  description: The user's name
+                  description: The text to summarize
       responses:
-        "201":
-          description: The newly created user
+        "200":
+          description: The summarized text
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  id:
-                    type: integer
-                    description: The user's ID
-                  name:
+                  text:
                     type: string
-                    description: The user's name
+                    description: The summarized text
