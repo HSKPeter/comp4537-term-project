@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 const { vsprintf } = require('sprintf-js');
 const { PORT } = require('./config');
 const { API_ROUTES } = require('./api/routes');
@@ -11,6 +12,9 @@ const app = express();
 
 // Enable CORS
 app.use(cors(CORS_OPTIONS));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get(API_ROUTES.ROOT, ROUTE_HANDLERS.root);
 

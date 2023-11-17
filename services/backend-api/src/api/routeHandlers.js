@@ -14,8 +14,8 @@ function sampleGetRouteHandler(req, res) {
 // TODO: Remove this sample handler
 function samplePostRouteHandler(req, res) {
     try {
-        const message = USER_MESSAGES.test;
-        res.json({ message });
+        const payload = req.body;
+        res.json({ payload });
     } catch (error) {
         res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ error: USER_MESSAGES.generalError });
     }
