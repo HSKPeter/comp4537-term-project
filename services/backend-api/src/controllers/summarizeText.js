@@ -7,8 +7,9 @@ const { HTTP_STATUS_CODES } = require('../utils/httpUtils');
 async function textSummarizationController(req, res) {
     try {
         const { text } = req.body;
-        const summary = await summarizeText(text);
-        res.json({ summary });
+        summarizeText(text).then((summary) => {
+            res.json({ summary });
+        });
     } catch (err) {
         console.error(vsprintf(SERVER_MESSAGES.failedToSummarizeText, [err?.stack ?? err]))
         res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ error: USER_MESSAGES.failedToSummarizeText });
