@@ -14,7 +14,7 @@ const PORTS = {
         frontend: 3000,
         backend: 8080
     },
-    production: PORT_IN_PRODUCTION
+    production: PRODUCTION_CONFIGS.port
 };
 
 const MODES = {
