@@ -94,3 +94,49 @@ paths:
                   error:
                     type: string
                     description: The error message
+  /user:
+    post:
+      summary: Check user's eligibility based on the JWT token
+      description: Check if user is eligible to use the text summarization service
+      requestBody:
+        description: JSON object with the user data
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: The JWT token provided by the user
+      responses:
+        "200":
+          description: JSON object with the user data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hasRemainingQuota:
+                    type: boolean
+                    description: Boolean indicating if the user has remaining quota to use the backend API
+        "401":
+          description: JSON object with the error message due to unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message                
+        "500":
+          description: JSON object with the error message due to internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
