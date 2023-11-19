@@ -3,8 +3,10 @@ const cors = require('cors');
 const mysql = require('mysql2');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const swaggerUi = require('swagger-ui-express');
 require('dotenv').config({ path: './.env' });
 
+const { swaggerSpecs } = require('./swagger/swaggerDocs');
 
 const dbPool = mysql.createPool({
     host: "localhost",
@@ -41,6 +43,9 @@ const CREATE_TABLE_QUERIES = {
 }
 
 const app = express();
+
+const swaggerPath = '/api-docs';
+app.use(swaggerPath, swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 app.use(cors());
 app.use(express.json());
@@ -102,6 +107,7 @@ app.post('/login', async (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log(`Swagger docs available at http://localhost:${PORT}${swaggerPath}`);
     try {
         setupDatabase();
     } catch (error) {
