@@ -8,6 +8,6 @@ const router = Router();
 
 router.get(API_ROUTE_PATHS.ROOT, sampleGetController);
 router.post(API_ROUTE_PATHS.SUMMARIZE_TEXT, textSummarizationController);
-router.post(API_ROUTE_PATHS.login, userAuthenticationController);
+router.post(API_ROUTE_PATHS.LOGIN, userAuthenticationController);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const API_ROUTE_PATHS = {
     ROOT: '/',
     SUMMARIZE_TEXT: '/summarize-text',
-    login: '/login',
+    LOGIN: '/login',
 };
 
 const ROUTE_PATHS = {
