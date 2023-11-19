@@ -3,7 +3,7 @@ const cors = require('cors');
 const { vsprintf } = require('sprintf-js');
 const swaggerUi = require('swagger-ui-express');
 
-const { PORT, MODE, HUGGINGFACE_API_TOKEN } = require('./config');
+const { PORT, MODE, HUGGINGFACE_API_TOKEN, BACKEND_ORIGIN } = require('./config');
 const { ROUTE_PATHS } = require('./router/routes');
 const { swaggerSpecs } = require('./router/swaggerDocs');
 const { SERVER_MESSAGES } = require('./messages/serverMessage');
@@ -24,8 +24,8 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 app.use(ROUTE_PATHS.ROOT, router);
 
 app.listen(PORT, () => {
-  const message = vsprintf(SERVER_MESSAGES.portListening, [PORT, MODE]);
-  console.log(message);
+  console.info(vsprintf(SERVER_MESSAGES.portListening, [PORT, MODE]));
+  console.info(vsprintf(SERVER_MESSAGES.swaggerDocs, [BACKEND_ORIGIN + ROUTE_PATHS.SWAGGER]));
 
   if (HUGGINGFACE_API_TOKEN === undefined) {
     console.warn(SERVER_MESSAGES.huggingFaceTokenNotSet);
