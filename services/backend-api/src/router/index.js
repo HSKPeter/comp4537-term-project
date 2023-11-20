@@ -5,7 +5,7 @@ const { textSummarizationController } = require('../controllers/summarizeText');
 
 const router = Router();
 
-router.get(API_ROUTE_PATHS.ROOT, sampleGetController);
+router.get(API_ROUTE_PATHS.TEST, sampleGetController);
 router.post(API_ROUTE_PATHS.SUMMARIZE_TEXT, textSummarizationController);
 
 module.exports = router;
