@@ -3,8 +3,10 @@ const cors = require('cors');
 const mysql = require('mysql2');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const swaggerUi = require('swagger-ui-express');
 require('dotenv').config({ path: './.env' });
 
+const { swaggerSpecs } = require('./swagger/swaggerDocs');
 
 const dbPool = mysql.createPool({
     host: "localhost",
@@ -41,6 +43,9 @@ const CREATE_TABLE_QUERIES = {
 }
 
 const app = express();
+
+const swaggerPath = '/api-docs';
+app.use(swaggerPath, swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 app.use(cors());
 app.use(express.json());
@@ -100,8 +105,74 @@ app.post('/login', async (req, res) => {
     }
 });
 
+function decodeToken(token) {
+    try {
+        const decodedToken = jwt.verify(token, SECRET_KEY);
+        return decodedToken;
+    } catch (error) {
+        return null;
+    }
+}
+
+function checkIfTokenExpired(token) {
+    try {
+        const decodedToken = decodeToken(token);
+
+        const tokenExpirationEpoch = decodedToken?.exp;
+
+        if (!tokenExpirationEpoch) {
+            return false;
+        }
+
+        const currentEpoch = Math.floor(Date.now() / 1000);
+
+        return tokenExpirationEpoch < currentEpoch;
+    } catch (error) {
+        return false;
+    }
+}
+
+function checkIfUserHasRemainingQuota(token) {
+    // TODO: Get the information (e.g. user ID) from the token payload
+
+
+    // TODO: Read database to determine if the user has remaining quota
+
+
+    return true;
+}
+
+app.post('/user', async (req, res) => {
+    try {
+        const { token } = req.body;
+
+        // TODO: Remove the below commented code
+        // const isTokenValid = decodeToken(token) !== null;
+
+        // if (!isTokenValid) {
+        //     res.status(401).json({ error: 'Invalid token' });
+        //     return;
+        // }
+
+        // const isTokenExpired = checkIfTokenExpired(token);
+
+        // if (isTokenExpired) {
+        //     res.status(401).json({ error: 'Token expired' });
+        //     return;
+        // }
+
+        const hasRemainingQuota = checkIfUserHasRemainingQuota(token);
+
+        res.status(200).json({ hasRemainingQuota });
+    } catch (error) {
+        console.error('Error authenticating token: ', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    console.log(`Swagger docs available at http://localhost:${PORT}${swaggerPath}`);
     try {
         setupDatabase();
     } catch (error) {
