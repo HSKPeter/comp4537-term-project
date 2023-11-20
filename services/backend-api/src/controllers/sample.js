@@ -1,5 +1,6 @@
 // TODO: Remove all sample controllers
 const { HTTP_STATUS_CODES } = require('../utils/httpUtils');
+const { USER_MESSAGES } = require('../messages/userMessage');
 
 function sampleGetController(req, res) {
     try {
