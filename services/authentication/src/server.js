@@ -13,7 +13,7 @@ const dbPool = mysql.createPool({
     user: "root",
     password: "",
     database: "comp4537_project",
-    port: 4306
+    port: 3306
 });
 
 const CREATE_TABLE_QUERIES = {
@@ -134,10 +134,15 @@ function checkIfTokenExpired(token) {
 
 function checkIfUserHasRemainingQuota(token) {
     // TODO: Get the information (e.g. user ID) from the token payload
-
+    const decodedToken = decodeToken(token);
+    const username = decodedToken.username;
+    const userID = runSQLQuery('SELECT UserID FROM User WHERE Name = ?', [username]);
+    const apiCalls = runSQLQuery('SELECT COUNT(*) AS callCount FROM APICall WHERE UserID = ?', [userID]);
 
     // TODO: Read database to determine if the user has remaining quota
-
+    if (apiCalls > 20) {
+        return false;
+    }
 
     return true;
 }
@@ -147,19 +152,19 @@ app.post('/user', async (req, res) => {
         const { token } = req.body;
 
         // TODO: Remove the below commented code
-        // const isTokenValid = decodeToken(token) !== null;
+        const isTokenValid = decodeToken(token) !== null;
 
-        // if (!isTokenValid) {
-        //     res.status(401).json({ error: 'Invalid token' });
-        //     return;
-        // }
+        if (!isTokenValid) {
+            res.status(401).json({ error: 'Invalid token' });
+            return;
+        }
 
-        // const isTokenExpired = checkIfTokenExpired(token);
+        const isTokenExpired = checkIfTokenExpired(token);
 
-        // if (isTokenExpired) {
-        //     res.status(401).json({ error: 'Token expired' });
-        //     return;
-        // }
+        if (isTokenExpired) {
+            res.status(401).json({ error: 'Token expired' });
+            return;
+        }
 
         const hasRemainingQuota = checkIfUserHasRemainingQuota(token);
 
