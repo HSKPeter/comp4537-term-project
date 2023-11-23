@@ -49,47 +49,6 @@ paths:
                   error:
                     type: string
                     description: The error message
-      responses:
-        "200":
-          description: JSON object with the news
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  articles:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                          description: The title of the article
-                        description:
-                          type: string
-                          description: The description of the article
-                        url:
-                          type: string
-                          description: The URL of the article
-                        urlToImage:
-                          type: string
-                          description: The URL to the image of the article
-                        publishedAt:
-                          type: string
-                          description: The date the article was published
-                        content:
-                          type: string
-                          description: The content of the article
-        "500":
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    description: The error message
   /summarize-text:
     post:
       summary: Summarize text
