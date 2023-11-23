@@ -11,9 +11,9 @@ paths:
       summary: Get news
       description: Get news from the news API
       parameters:
-        - name: q
+        - name: keyword
           in: query
-          description: The query to search for
+          description: The keyword to search for
           required: true
           schema:
             type: string

@@ -5,9 +5,9 @@ const { HTTP_STATUS_CODES } = require('../utils/httpUtils');
 const { getNews } = require('../utils/newsUtils');
 
 async function newsContentController(req, res) {
-    const { q: keyword } = req.query;
+    const { keyword } = req.query;
     if (keyword === undefined) {
-        res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.missingQuery });
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.missingKeyword });
         return;
     }
 
