@@ -10,13 +10,11 @@ const onLogin = (token) => {
   // Redirect to index page
 };
 
-const SERVER = 'http://localhost:3000';
-
 function App() {
   const isAuthenticated = () => !!Cookies.get('authToken');
 
   return (
-    <Router>
+    <Router basename="/COMP4537/ai-project">
       <Routes>
         <Route path="/login" element={<LoginPage onLogin={onLogin} />} />
         <Route
@@ -29,6 +27,9 @@ function App() {
         />
       </Routes>
     </Router>
+    // <div>
+    //   <h1>Index Page</h1>
+    // </div>
   );
 }
 
