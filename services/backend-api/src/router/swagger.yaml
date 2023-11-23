@@ -6,6 +6,90 @@ info:
 servers:
   - url: http://localhost:8080/  # TODO: Make it dynamic
 paths:
+  /news:
+    get:
+      summary: Get news
+      description: Get news from the news API
+      parameters:
+        - name: q
+          in: query
+          description: The query to search for
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: JSON object with the news
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                          description: The title of the article
+                        link:
+                          type: string
+                          description: The link to the article
+                        content:
+                          type: string
+                          description: The content of the article
+                        published:
+                          type: string
+                          description: The date the article was published
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+      responses:
+        "200":
+          description: JSON object with the news
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  articles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        title:
+                          type: string
+                          description: The title of the article
+                        description:
+                          type: string
+                          description: The description of the article
+                        url:
+                          type: string
+                          description: The URL of the article
+                        urlToImage:
+                          type: string
+                          description: The URL to the image of the article
+                        publishedAt:
+                          type: string
+                          description: The date the article was published
+                        content:
+                          type: string
+                          description: The content of the article
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
   /summarize-text:
     post:
       summary: Summarize text
