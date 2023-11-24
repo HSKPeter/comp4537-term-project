@@ -167,8 +167,8 @@ function checkIfTokenExpired(token) {
 function checkIfUserHasRemainingQuota(token) {
     // TODO: Get the information (e.g. user ID) from the token payload
     const decodedToken = decodeToken(token);
-    const username = decodedToken.username;
-    const userID = runSQLQuery('SELECT UserID FROM User WHERE Name = ?', [username]);
+    console.log(`Decoded token: ${JSON.stringify(decodedToken)}`);
+    const userID = decodedToken.userID;
     const apiCalls = runSQLQuery('SELECT COUNT(*) AS callCount FROM APICall WHERE UserID = ?', [userID]);
 
     // TODO: Read database to determine if the user has remaining quota
