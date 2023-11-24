@@ -2,8 +2,8 @@
 export async function login(username, password) {
   // Use the environment variable for the backend API endpoint
   console.log("sending login request to backend")
-  console.log(process.env.SERVER)
-  const apiUrl = process.env.SERVER ?? 'https://bqw91brfqd.execute-api.us-east-2.amazonaws.com/Prod';
+  console.log(process.env.REACT_APP_SERVER_URL)
+  const apiUrl = process.env.REACT_APP_SERVER_URL ?? 'https://bqw91brfqd.execute-api.us-east-2.amazonaws.com/Prod';
   const response = await fetch(`${apiUrl}/login`, {
     method: 'POST',
     headers: {

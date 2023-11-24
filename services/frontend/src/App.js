@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import LoginPage from './LoginPage';
 import IndexPage from './IndexPage';
 import Cookies from 'js-cookie';
@@ -9,15 +9,13 @@ function App() {
 
   const onLogin = (token) => {
     Cookies.set('authToken', token);
-    setIsAuth(true); // Update state to reflect authentication
+    setIsAuth(true);
   };
 
-  // Redirect to the index page if authenticated
-  useEffect(() => {
-    if (isAuth) {
-      window.location.href = '/COMP4537/ai-project'; // Redirect to the base URL or IndexPage
-    }
-  }, [isAuth]);
+  const onLogout = () => {
+    Cookies.remove('authToken');
+    setIsAuth(false);
+  }
 
   return (
     <Router basename="/COMP4537/ai-project">
@@ -25,9 +23,9 @@ function App() {
         <Route path="/login" element={<LoginPage onLogin={onLogin} />} />
         <Route
           path="/"
-          element={
+          element={ 
             isAuth
-              ? <IndexPage />
+              ? <IndexPage onLogout={onLogout} />
               : <Navigate to="/login" replace />
           }
         />

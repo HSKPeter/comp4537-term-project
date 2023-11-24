@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const IndexPage = () => {
+const IndexPage = ({ onLogout }) => {
     const [keyword, setKeyword] = useState('');
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -21,6 +21,7 @@ const IndexPage = () => {
 
     return (
         <div>
+            <button onClick={onLogout}>Logout</button>
             <input
                 type="text"
                 value={keyword}
