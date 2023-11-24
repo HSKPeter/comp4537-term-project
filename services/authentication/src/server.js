@@ -93,7 +93,7 @@ app.post('/register', async (req, res) => {
         const userExists = await runSQLQuery(`SELECT * FROM User WHERE Name = ?`, [username]);
 
         if (userExists.length > 0) {
-            return res.status(400).json({ error: 'Username already exists' });
+            return res.status(500).json({ error: 'Username already exists' });
         }
 
         // Hash the password
