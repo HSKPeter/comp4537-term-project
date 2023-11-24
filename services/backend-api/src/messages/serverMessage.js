@@ -4,6 +4,8 @@ const SERVER_MESSAGES = {
     newsDataApiKeyNotSet: 'News Data API key not set',
     failedToSummarizeText: 'Failed to summarize text. %s',
     failedToGetNews: 'Failed to get news. %s',
+    failedToRegisterUser: 'Failed to register user. %s',
+    failedToLoginUser: 'Failed to login user. %s',
 };
 
 module.exports = {
