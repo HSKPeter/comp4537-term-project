@@ -3,3 +3,6 @@ api:
 
 auth:
 	@(cd services/authentication/src && node server.js)
+
+react:
+	@(cd services/frontend && npm run start)
