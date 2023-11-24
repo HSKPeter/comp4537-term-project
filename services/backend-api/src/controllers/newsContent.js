@@ -4,9 +4,13 @@ const { SERVER_MESSAGES } = require('../messages/serverMessage');
 const { HTTP_STATUS_CODES } = require('../utils/httpUtils');
 const { getNews } = require('../utils/newsUtils');
 
+const isMissingKeyword = (keyword) => {
+    return keyword === undefined || keyword.trim() === "";
+}
+
 async function newsContentController(req, res) {
     const { keyword } = req.query;
-    if (keyword === undefined) {
+    if (isMissingKeyword(keyword)) {
         res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.missingKeyword });
         return;
     }
