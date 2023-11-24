@@ -5,6 +5,7 @@ const USER_MESSAGES = {
     missingKeyword: 'Missing keyword in query. Please provide keyword to search for.',
     failedToSummarizeText: 'Failed to summarize text. Please try again later.',
     failedToGetNews: 'Failed to get news. Please try again later.',
+    invalidCredentials: 'Invalid credentials.',
 };
 
 module.exports = {
