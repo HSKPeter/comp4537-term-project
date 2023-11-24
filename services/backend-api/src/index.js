@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const { vsprintf } = require('sprintf-js');
+const swaggerUi = require('swagger-ui-express');
 
-const { PORT, MODE, HUGGINGFACE_API_TOKEN, BACKEND_ORIGIN } = require('./config');
+const { PORT, MODE, HUGGINGFACE_API_TOKEN, NEWS_DATA_API_KEY, BACKEND_ORIGIN } = require('./config');
 const { ROUTE_PATHS } = require('./router/routes');
 const { swaggerSpecs } = require('./router/swaggerDocs');
 const { SERVER_MESSAGES } = require('./messages/serverMessage');
