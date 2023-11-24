@@ -84,6 +84,51 @@ paths:
                   error:
                     type: string
                     description: The error message
+  /register:
+    post:
+      summary: Register user
+      description: Register with the given credentials
+      requestBody:
+        description: JSON object with the credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The user's email
+                password:
+                  type: string
+                  description: The user's password
+      responses:
+        "201":
+          description: Confirmation of user registration success
+          headers:
+            Set-Cookie:
+              description: The HttpOnly secure cookie with the token
+              schema:
+                type: string
+                example: "token=123; HttpOnly; SameSite=Strict; Secure"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: The success message
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
   /summarize-text:
     post:
       summary: Summarize text
