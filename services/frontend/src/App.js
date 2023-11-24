@@ -1,17 +1,23 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import LoginPage from './LoginPage';
 import IndexPage from './IndexPage';
 import Cookies from 'js-cookie';
 
-
-const onLogin = (token) => {
-  Cookies.set('authToken', token);
-  // Redirect to index page
-};
-
 function App() {
-  const isAuthenticated = () => !!Cookies.get('authToken');
+  const [isAuth, setIsAuth] = useState(!!Cookies.get('authToken'));
+
+  const onLogin = (token) => {
+    Cookies.set('authToken', token);
+    setIsAuth(true); // Update state to reflect authentication
+  };
+
+  // Redirect to the index page if authenticated
+  useEffect(() => {
+    if (isAuth) {
+      window.location.href = '/COMP4537/ai-project'; // Redirect to the base URL or IndexPage
+    }
+  }, [isAuth]);
 
   return (
     <Router basename="/COMP4537/ai-project">
@@ -20,16 +26,13 @@ function App() {
         <Route
           path="/"
           element={
-            isAuthenticated()
+            isAuth
               ? <IndexPage />
               : <Navigate to="/login" replace />
           }
         />
       </Routes>
     </Router>
-    // <div>
-    //   <h1>Index Page</h1>
-    // </div>
   );
 }
 
