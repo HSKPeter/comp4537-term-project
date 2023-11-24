@@ -20,22 +20,22 @@ const CREATE_TABLE_QUERIES = {
     User: `
         CREATE TABLE IF NOT EXISTS User (
             UserID INT PRIMARY KEY AUTO_INCREMENT,
-            Name VARCHAR(100),
-            Password VARCHAR(100),
-            UserType INT,
+            Name VARCHAR(100) NOT NULL,
+            Password VARCHAR(100) NOT NULL,
+            UserType INT NOT NULL,
             FOREIGN KEY (UserType) REFERENCES UserType(UserTypeID)
         );
     `,
     UserType: `
         CREATE TABLE IF NOT EXISTS UserType (
             UserTypeID INT PRIMARY KEY AUTO_INCREMENT,
-            UserAuthorization VARCHAR(100)
+            UserAuthorization VARCHAR(100) NOT NULL
         );
     `,
     APICall: `
         CREATE TABLE IF NOT EXISTS APICall (
             API_Call_ID INT PRIMARY KEY AUTO_INCREMENT,
-            UserID INT,
+            UserID INT NOT NULL,
             Time DATETIME,
             FOREIGN KEY (UserID) REFERENCES User(UserID)
         );
