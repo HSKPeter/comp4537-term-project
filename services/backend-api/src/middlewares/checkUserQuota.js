@@ -1,4 +1,4 @@
-const { validateToken } = require("../utils/userAuthenticationUtils");
+const { getUserQuotaFromToken } = require('../utils/userAuthenticationUtils');
 
 const BEARER = 'Bearer';
 
@@ -13,30 +13,30 @@ function parseBearerToken(headers) {
     if (bearer !== BEARER) {
       return undefined;
     }
-
     return token;
   } catch (err) {
     return undefined;
   }
 }
 
-function tokenAuth(req, res, next) {
+function checkUserQuota(req, res, next) {
   const token = req.cookies.token ?? parseBearerToken(req.headers);
   if (!token) {
     return res.status(401).json({ error: 'Token not found' });
   }
-  validateToken(token)
-    .then((isValid) => {
-      if (!isValid) {
-        return res.status(401).json({ error: 'Token invalid' });
+
+  getUserQuotaFromToken(token)
+    .then((userQuota) => {
+      if (userQuota <= 0) {
+        return res.status(401).json({ error: 'User quota exceeded' });
       }
       next();
     })
     .catch((err) => {
-      return res.status(401).json({ error: 'Token invalid' });
+      return res.status(401).json({ error: 'Error occurred when validating token' });
     });
 }
 
 module.exports = {
-  tokenAuth
+  checkUserQuota
 };

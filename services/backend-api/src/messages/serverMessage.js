@@ -7,6 +7,7 @@ const SERVER_MESSAGES = {
     failedToGetNews: 'Failed to get news. %s',
     failedToRegisterUser: 'Failed to register user. %s',
     failedToLoginUser: 'Failed to login user. %s',
+    failedToGetQuotaFromToken: 'Failed to get quota from token. %s',
 };
 
 module.exports = {

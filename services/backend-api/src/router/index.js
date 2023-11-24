@@ -6,14 +6,14 @@ const {
     userLoginController,
     userRegistrationController
 } = require('../controllers');
-const { tokenAuth } = require('../middlewares/tokenAuth');
+const { checkUserQuota } = require('../middlewares/checkUserQuota');
 
 const router = Router();
 
 router.post(API_ROUTE_PATHS.LOGIN, userLoginController);
 router.post(API_ROUTE_PATHS.REGISTER, userRegistrationController);
 
-router.use(tokenAuth);
+router.use(checkUserQuota);
 
 // The routes below require a valid token to be present either in the Authorization header or in the cookies
 router.get(API_ROUTE_PATHS.NEWS_CONTENT, newsContentController);

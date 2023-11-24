@@ -1,5 +1,4 @@
 const { vsprintf } = require('sprintf-js');
-const { CUSTOM_EXCEPTION_NAMES } = require('../exceptions');
 const { SERVER_MESSAGES } = require('../messages/serverMessage');
 const { USER_MESSAGES } = require('../messages/userMessage');
 const { HTTP_STATUS_CODES } = require('../utils/httpUtils');
@@ -21,12 +20,6 @@ function userLoginController(req, res) {
       })
       .catch((err) => {
         console.error(vsprintf(SERVER_MESSAGES.failedToLoginUser, [err?.stack ?? err]))
-
-        if (err?.name === CUSTOM_EXCEPTION_NAMES.USER_UNAUTHORIZED) {
-          res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: err?.message ?? USER_MESSAGES.failedToLoginUser });
-          return;
-        }
-
         res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ error: USER_MESSAGES.failedToLoginUser });
       });
 

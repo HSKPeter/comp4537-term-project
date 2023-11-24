@@ -1,6 +1,5 @@
 const axios = require('axios');
 const { AUTH_SERVER_ORIGIN } = require('../config');
-const { UserUnauthorizedException, AuthenticationServerException } = require('../exceptions');
 const { SERVER_MESSAGES } = require('../messages/serverMessage');
 const { HTTP_STATUS_CODES } = require('./httpUtils');
 
@@ -20,7 +19,6 @@ async function registerUser({ username, password }) {
 
         return false;
     } catch (err) {
-        console.error(vsprintf(SERVER_MESSAGES.failedToRegisterUser, [err?.stack ?? err]));
         return false;
     }
 }
@@ -31,21 +29,26 @@ async function loginUser({ username, password }) {
     if (response.status === HTTP_STATUS_CODES.OK) {
         const { token } = response.data;
         return token;
-    } else if (response.status === HTTP_STATUS_CODES.UNAUTHORIZED) {
-        const { error } = response.data;
-        throw new UserUnauthorizedException(error);
-    } else {
-        const { error } = response.data;
-        throw new AuthenticationServerException(error);
     }
+
+    const errorMessage = response.data.error ?? "";
+    throw new Error(errorMessage);
 }
 
-async function validateUser(token) {
-    return true;
-}
+async function getUserQuotaFromToken(token) {
+    const response = await axios.post(API_ENDPOINTS.VALIDATE, { token });
+    if (response.status === HTTP_STATUS_CODES.OK) {
+        const { hasRemainingQuota } = response.data;
+        return hasRemainingQuota ?? 0;
+    }
 
-async function validateToken(token) {
-    return true;
+    const { error } = response.data;
+    if (error) {
+        console.error(vsprintf(SERVER_MESSAGES.failedToGetQuotaFromToken, [error]));
+        throw new Error(error);
+    }
+
+    return 0;
 }
 
 const getHash = (password) => {
@@ -59,8 +62,7 @@ const getToken = () => {
 module.exports = {
     registerUser,
     loginUser,
-    validateUser,
     getHash, // TODO: remove this
     getToken, // TODO: remove this
-    validateToken
+    getUserQuotaFromToken
 }
