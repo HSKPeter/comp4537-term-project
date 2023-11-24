@@ -6,3 +6,6 @@ run: build
 
 deploy:
 	@sam deploy
+
+dev:
+	@npm run dev
