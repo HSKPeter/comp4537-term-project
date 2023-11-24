@@ -69,6 +69,11 @@ const DUMMY_DATA = {
 };
 
 
+const UserTypes = {
+    Admin: 1,
+    Regular: 2,
+}
+
 const app = express();
 
 const swaggerPath = '/api-docs';
@@ -95,7 +100,7 @@ app.post('/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Insert the user into the database
-        await runSQLQuery('INSERT INTO User (Name, Password) VALUES (?, ?)', [username, hashedPassword]);
+        await runSQLQuery('INSERT INTO User (Name, Password, UserType) VALUES (?, ?, ?)', [username, hashedPassword, UserTypes.Regular]);
 
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
@@ -232,16 +237,16 @@ async function setupDatabase() {
         await runSQLQuery(CREATE_TABLE_QUERIES.User);
         await runSQLQuery(CREATE_TABLE_QUERIES.APICall);
 
-        // Insert dummy data
-        for (const query of DUMMY_DATA.UserType) {
-            await runSQLQuery(query);
-        }
-        for (const query of DUMMY_DATA.User) {
-            await runSQLQuery(query);
-        }
-        for (const query of DUMMY_DATA.APICall) {
-            await runSQLQuery(query);
-        }
+        // Insert dummy data - COMMENT OUT FOR PRODUCTION
+        // for (const query of DUMMY_DATA.UserType) {
+        //     await runSQLQuery(query);
+        // }
+        // for (const query of DUMMY_DATA.User) {
+        //     await runSQLQuery(query);
+        // }
+        // for (const query of DUMMY_DATA.APICall) {
+        //     await runSQLQuery(query);
+        // }
 
         console.log('Database setup complete');
     } catch (err) {
