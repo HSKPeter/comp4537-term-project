@@ -19,27 +19,59 @@ const dbPool = mysql.createPool({
 const CREATE_TABLE_QUERIES = {
     User: `
         CREATE TABLE IF NOT EXISTS User (
-            UserID INT PRIMARY KEY AUTO_INCREMENT,
-            Name VARCHAR(100),
-            Password VARCHAR(100),
-            UserType INT,
+            UserID INT NOT NULL AUTO_INCREMENT,
+            Name VARCHAR(100) NOT NULL,
+            Password VARCHAR(100) NOT NULL,
+            UserType INT NOT NULL,
+            PRIMARY KEY (UserID),
             FOREIGN KEY (UserType) REFERENCES UserType(UserTypeID)
         );
     `,
     UserType: `
         CREATE TABLE IF NOT EXISTS UserType (
-            UserTypeID INT PRIMARY KEY AUTO_INCREMENT,
-            UserAuthorization VARCHAR(100)
+            UserTypeID INT NOT NULL AUTO_INCREMENT,
+            PRIMARY KEY (UserTypeID),
+            UserAuthorization VARCHAR(100) NOT NULL
         );
     `,
     APICall: `
         CREATE TABLE IF NOT EXISTS APICall (
-            API_Call_ID INT PRIMARY KEY AUTO_INCREMENT,
-            UserID INT,
+            API_Call_ID INT NOT NULL AUTO_INCREMENT,
+            UserID INT NOT NULL,
             Time DATETIME,
+            PRIMARY KEY (API_Call_ID),
             FOREIGN KEY (UserID) REFERENCES User(UserID)
         );
     `
+}
+
+// Dummy data for insertion into the database
+const DUMMY_DATA = {
+    User: [
+        "INSERT INTO User (Name, Password, UserType) VALUES ('admin', '111', 1);",
+        "INSERT INTO User (Name, Password, UserType) VALUES ('john', '123', 2);",
+        "INSERT INTO User (Name, Password, UserType) VALUES ('Alice Johnson', 'password3', 2);",
+        "INSERT INTO User (Name, Password, UserType) VALUES ('Bob White', 'password4', 2);",
+        "INSERT INTO User (Name, Password, UserType) VALUES ('Eva Brown', 'password5', 2);",
+    ],
+    UserType: [
+        "INSERT INTO UserType (UserAuthorization) VALUES ('Admin');",
+        "INSERT INTO UserType (UserAuthorization) VALUES ('Regular');",
+    ],
+    APICall: [
+        "INSERT INTO APICall (UserID, Time) VALUES (1, '2023-01-01 12:00:00');",
+        "INSERT INTO APICall (UserID, Time) VALUES (2, '2023-01-02 15:30:00');",
+        "INSERT INTO APICall (UserID, Time) VALUES (1, '2023-01-03 10:45:00');",
+        "INSERT INTO APICall (UserID, Time) VALUES (2, '2023-01-04 18:20:00');",
+        "INSERT INTO APICall (UserID, Time) VALUES (2, '2023-01-05 08:30:00');",
+        ...Array(21).fill("INSERT INTO APICall (UserID, Time) VALUES (3, '2023-01-06 01:00:00');"),
+    ],
+};
+
+
+const UserTypes = {
+    Admin: 1,
+    Regular: 2,
 }
 
 const app = express();
@@ -61,14 +93,14 @@ app.post('/register', async (req, res) => {
         const userExists = await runSQLQuery(`SELECT * FROM User WHERE Name = ?`, [username]);
 
         if (userExists.length > 0) {
-            return res.status(400).json({ error: 'Username already exists' });
+            return res.status(500).json({ error: 'Username already exists' });
         }
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Insert the user into the database
-        await runSQLQuery('INSERT INTO User (Name, Password) VALUES (?, ?)', [username, hashedPassword]);
+        await runSQLQuery('INSERT INTO User (Name, Password, UserType) VALUES (?, ?, ?)', [username, hashedPassword, UserTypes.Regular]);
 
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
@@ -135,8 +167,8 @@ function checkIfTokenExpired(token) {
 function checkIfUserHasRemainingQuota(token) {
     // TODO: Get the information (e.g. user ID) from the token payload
     const decodedToken = decodeToken(token);
-    const username = decodedToken.username;
-    const userID = runSQLQuery('SELECT UserID FROM User WHERE Name = ?', [username]);
+    console.log(`Decoded token: ${JSON.stringify(decodedToken)}`);
+    const userID = decodedToken.userID;
     const apiCalls = runSQLQuery('SELECT COUNT(*) AS callCount FROM APICall WHERE UserID = ?', [userID]);
 
     // TODO: Read database to determine if the user has remaining quota
@@ -199,9 +231,23 @@ function runSQLQuery(sqlQuery, params = []) {
 async function setupDatabase() {
     try {
         console.log('Setting up database');
+
+        // Execute the CREATE TABLE queries
         await runSQLQuery(CREATE_TABLE_QUERIES.UserType);
         await runSQLQuery(CREATE_TABLE_QUERIES.User);
         await runSQLQuery(CREATE_TABLE_QUERIES.APICall);
+
+        // Insert dummy data - COMMENT OUT FOR PRODUCTION
+        // for (const query of DUMMY_DATA.UserType) {
+        //     await runSQLQuery(query);
+        // }
+        // for (const query of DUMMY_DATA.User) {
+        //     await runSQLQuery(query);
+        // }
+        // for (const query of DUMMY_DATA.APICall) {
+        //     await runSQLQuery(query);
+        // }
+
         console.log('Database setup complete');
     } catch (err) {
         console.error('Error setting up database: ', err);

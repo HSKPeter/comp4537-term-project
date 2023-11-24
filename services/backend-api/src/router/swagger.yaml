@@ -49,6 +49,45 @@ paths:
                   error:
                     type: string
                     description: The error message
+  /login:
+    post:
+      summary: Login
+      description: Login with the given credentials
+      requestBody:
+        description: JSON object with the credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: The username
+                password:
+                  type: string
+                  description: The password
+      responses:
+        "200":
+          description: JSON object with the user token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: The user token
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:  # TODO: Change to error
+                    type: string
+                    description: The error message
   /summarize-text:
     post:
       summary: Summarize text
