@@ -1,7 +1,7 @@
 const API_ROUTE_PATHS = {
     ROOT: '/',
-    TEST: '/test',
     SUMMARIZE_TEXT: '/summarize-text',
+    NEWS_CONTENT: '/news',
 };
 
 const ROUTE_PATHS = {
