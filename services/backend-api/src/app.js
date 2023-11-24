@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
+const cookieParser = require('cookie-parser')
 
 const { ROUTE_PATHS } = require('./router/routes');
 const { swaggerSpecs } = require('./router/swaggerDocs');
@@ -20,10 +21,12 @@ if (IS_DEVELOPMENT_MODE) {
 }
 
 // Enable body parsing for JSON and URL encoded data
-app.use(express.json()) // for parsing application/json
-app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Enable cookie parsing
+app.use(cookieParser());
 
 app.use(ROUTE_PATHS.ROOT, router);
 
 module.exports = app;
-

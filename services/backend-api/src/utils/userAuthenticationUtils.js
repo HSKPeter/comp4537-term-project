@@ -11,39 +11,40 @@ const API_ENDPOINTS = {
 }
 
 async function registerUser({ username, password }) {
-    return true;
-    // try {
-    //     const response = await axios.post(API_ENDPOINTS.REGISTER, { username, password });
+    try {
+        const response = await axios.post(API_ENDPOINTS.REGISTER, { username, password });
 
-    //     if (response.status === HTTP_STATUS_CODES.CREATED) {
-    //         return true;
-    //     }
+        if (response.status === HTTP_STATUS_CODES.CREATED) {
+            return true;
+        }
 
-    //     return false;
-    // } catch (err) {
-    //     console.error(vsprintf(SERVER_MESSAGES.failedToRegisterUser, [err?.stack ?? err]));
-    //     return false;
-    // }
+        return false;
+    } catch (err) {
+        console.error(vsprintf(SERVER_MESSAGES.failedToRegisterUser, [err?.stack ?? err]));
+        return false;
+    }
 }
 
 async function loginUser({ username, password }) {
-    const token = "test-cookie"
-    return token;
-    // const response = await axios.post(API_ENDPOINTS.LOGIN, { username, password });
+    const response = await axios.post(API_ENDPOINTS.LOGIN, { username, password });
 
-    // if (response.status === HTTP_STATUS_CODES.OK) {
-    //     const { token } = response.data;
-    //     return token;
-    // } else if (response.status === HTTP_STATUS_CODES.UNAUTHORIZED) {
-    //     const { error } = response.data;
-    //     throw new UserUnauthorizedException(error);
-    // } else {
-    //     const { error } = response.data;
-    //     throw new AuthenticationServerException(error);
-    // }
+    if (response.status === HTTP_STATUS_CODES.OK) {
+        const { token } = response.data;
+        return token;
+    } else if (response.status === HTTP_STATUS_CODES.UNAUTHORIZED) {
+        const { error } = response.data;
+        throw new UserUnauthorizedException(error);
+    } else {
+        const { error } = response.data;
+        throw new AuthenticationServerException(error);
+    }
 }
 
 async function validateUser(token) {
+    return true;
+}
+
+async function validateToken(token) {
     return true;
 }
 
@@ -59,6 +60,7 @@ module.exports = {
     registerUser,
     loginUser,
     validateUser,
-    getHash,
-    getToken
+    getHash, // TODO: remove this
+    getToken, // TODO: remove this
+    validateToken
 }

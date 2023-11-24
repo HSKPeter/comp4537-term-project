@@ -4,49 +4,6 @@ info:
   description: This is an example API
   version: 1.0.0
 paths:
-  /news:
-    get:
-      summary: Get news
-      description: Get news from the news API
-      parameters:
-        - name: keyword
-          in: query
-          description: The keyword to search for
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: JSON object with the news
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    title:
-                      type: string
-                      description: The title of the article
-                    link:
-                      type: string
-                      description: The link to the article
-                    content:
-                      type: string
-                      description: The content of the article
-                    published:
-                      type: string
-                      description: The date the article was published
-        "500":
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    description: The error message
   /login:
     post:
       summary: Login user
@@ -133,6 +90,13 @@ paths:
     post:
       summary: Summarize text
       description: Use the google/pegasus-large model on HuggingFace to summarize the given text
+      parameters:
+        - name: Authorization
+          in: header
+          description: Token to authenticate the user
+          schema:
+            type: string
+            example: "Bearer 123"
       requestBody:
         description: JSON object with the text to summarize
         required: true
@@ -155,6 +119,56 @@ paths:
                   summary:
                     type: string
                     description: The summarized text
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+  /news:
+    get:
+      summary: Get news
+      description: Get news from the news API
+      parameters:
+        - name: keyword
+          in: query
+          description: The keyword to search for
+          required: true
+          schema:
+            type: string
+          example: "javascript"
+        - name: Authorization
+          in: header
+          description: Token to authenticate the user
+          schema:
+            type: string
+            example: "Bearer 123"
+      responses:
+        "200":
+          description: JSON object with the news
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      description: The title of the article
+                    link:
+                      type: string
+                      description: The link to the article
+                    content:
+                      type: string
+                      description: The content of the article
+                    published:
+                      type: string
+                      description: The date the article was published
         "500":
           description: Internal server error
           content:
