@@ -24,7 +24,8 @@ const MODES = {
     production: 'production'
 };
 
-const IS_DEVELOPMENT_MODE = process.env.NODE_ENV === MODES.development;
+const IS_PRODUCTION_MODE = process.env.MODE === MODES.production;
+const IS_DEVELOPMENT_MODE = !IS_PRODUCTION_MODE;
 
 const MODE = IS_DEVELOPMENT_MODE ? MODES.development : MODES.production;
 
