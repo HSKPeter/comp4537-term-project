@@ -2,6 +2,7 @@ const API_ROUTE_PATHS = {
     ROOT: '/',
     SUMMARIZE_TEXT: '/summarize-text',
     NEWS_CONTENT: '/news',
+    LOGIN: '/login',
 };
 
 const ROUTE_PATHS = {
