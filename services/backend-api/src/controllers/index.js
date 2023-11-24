@@ -1,11 +1,11 @@
-const {loginUserController} = require('./login');
-const {registerUserController} = require('./register');
-const {textSummarizationController} = require('./summarizeText');
-const {newsContentController} = require('./newsContent');
+const { textSummarizationController } = require('./summarizeText');
+const { newsContentController } = require('./newsContent');
+const { userLoginController } = require('./userLogin');
+const { userRegistrationController } = require('./userRegistration');
 
 module.exports = {
-    loginUserController,
-    registerUserController,
+    userLoginController,
+    userRegistrationController,
     textSummarizationController,
     newsContentController
 };

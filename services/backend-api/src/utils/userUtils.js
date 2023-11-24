@@ -1,3 +1,4 @@
+const axios = require('axios');
 const { AUTH_SERVER_ORIGIN } = require('../config');
 const { UserUnauthorizedException, AuthenticationServerException } = require('../exceptions');
 const { SERVER_MESSAGES } = require('../messages/serverMessage');

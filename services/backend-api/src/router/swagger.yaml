@@ -3,8 +3,6 @@ info:
   title: Example API
   description: This is an example API
   version: 1.0.0
-servers:
-  - url: http://localhost:8080/  # TODO: Make it dynamic
 paths:
   /news:
     get:
@@ -25,20 +23,20 @@ paths:
               schema:
                 type: array
                 items:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                          description: The title of the article
-                        link:
-                          type: string
-                          description: The link to the article
-                        content:
-                          type: string
-                          description: The content of the article
-                        published:
-                          type: string
-                          description: The date the article was published
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      description: The title of the article
+                    link:
+                      type: string
+                      description: The link to the article
+                    content:
+                      type: string
+                      description: The content of the article
+                    published:
+                      type: string
+                      description: The date the article was published
         "500":
           description: Internal server error
           content:
@@ -51,7 +49,7 @@ paths:
                     description: The error message
   /login:
     post:
-      summary: Login
+      summary: Login user
       description: Login with the given credentials
       requestBody:
         description: JSON object with the credentials
@@ -61,23 +59,21 @@ paths:
             schema:
               type: object
               properties:
-                username:
+                email:
                   type: string
-                  description: The username
+                  description: The user's email
                 password:
                   type: string
-                  description: The password
+                  description: The user's password
       responses:
-        "200":
-          description: JSON object with the user token
-          content:
-            application/json:
+        "204":
+          description: No content
+          headers:
+            Set-Cookie:
+              description: The HttpOnly secure cookie with the token
               schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    description: The user token
+                type: string
+                example: "token=123; HttpOnly; SameSite=Strict; Secure"
         "401":
           description: Unauthorized
           content:
@@ -85,7 +81,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  message:  # TODO: Change to error
+                  error:
                     type: string
                     description: The error message
   /summarize-text:
