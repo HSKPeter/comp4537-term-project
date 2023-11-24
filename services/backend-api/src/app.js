@@ -13,7 +13,8 @@ const app = express();
 app.use(ROUTE_PATHS.SWAGGER, swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 // Enable CORS
-app.use(cors(CORS_OPTIONS));
+// app.use(cors(CORS_OPTIONS)); 
+app.use(cors()); // TODO: Remove this line and uncomment the above line
 
 // Enable body parser
 app.use(bodyParser.json());
