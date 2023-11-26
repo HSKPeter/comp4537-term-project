@@ -5,6 +5,12 @@ const SERVER_MESSAGES = {
     newsDataApiKeyNotSet: 'News Data API key not set',
     failedToSummarizeText: 'Failed to summarize text. %s',
     failedToGetNews: 'Failed to get news. %s',
+    models: {
+        useHfApi: 'Using Hugging Face API to summarize text',
+        useSelfHostedModel: 'Using self-hosted model to summarize text',
+        successHfApi: 'Successfully summarized text with Hugging Face API',
+        successSelfHostedModel: 'Successfully summarized text with self-hosted model',
+    },
 };
 
 module.exports = {
