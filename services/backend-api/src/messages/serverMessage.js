@@ -10,6 +10,8 @@ const SERVER_MESSAGES = {
         useSelfHostedModel: 'Using self-hosted model to summarize text',
         successHfApi: 'Successfully summarized text with Hugging Face API',
         successSelfHostedModel: 'Successfully summarized text with self-hosted model',
+        errorSelfHostedModel: 'Error using self-hosted model. %s',
+        selfHostedNotAvailableInDev: 'Self-hosted model not available in development mode',
     },
 };
 
