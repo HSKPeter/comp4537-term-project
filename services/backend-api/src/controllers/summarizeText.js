@@ -1,4 +1,4 @@
-const { summarizeText } = require('../utils/huggingfaceUtils');
+const { summarizeText } = require('../utils/mlModelUtils');
 const { USER_MESSAGES } = require('../messages/userMessage');
 const { vsprintf } = require('sprintf-js');
 const { SERVER_MESSAGES } = require('../messages/serverMessage');

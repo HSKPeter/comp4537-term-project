@@ -8,6 +8,14 @@ const SERVER_MESSAGES = {
     failedToRegisterUser: 'Failed to register user. %s',
     failedToLoginUser: 'Failed to login user. %s',
     failedToGetQuotaFromToken: 'Failed to get quota from token. %s',
+    models: {
+        useHfApi: 'Using Hugging Face API to summarize text',
+        useSelfHostedModel: 'Using self-hosted model to summarize text',
+        successHfApi: 'Successfully summarized text with Hugging Face API',
+        successSelfHostedModel: 'Successfully summarized text with self-hosted model',
+        errorSelfHostedModel: 'Error using self-hosted model. %s',
+        selfHostedNotAvailableInDev: 'Self-hosted model not available in development mode',
+    },
 };
 
 module.exports = {
