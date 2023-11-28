@@ -73,6 +73,44 @@ paths:
                   error:
                     type: string
                     description: The error message
+  /api-consumption
+    get:
+      summary: Get API consumption
+      tags:
+        - User
+      description: Get the API consumption of the current user
+      responses:
+        "200":
+          description: JSON object with the API consumption
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  apiConsumption:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        api-name:
+                          type: string
+                          description: The name of the API
+                        request-type:
+                          type: string
+                          description: The type of the API request
+                        count:
+                          type: integer
+                          description: The number of API calls
+        "400":
+          description: JSON object with the error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
   /login:
     post:
       summary: Login user
