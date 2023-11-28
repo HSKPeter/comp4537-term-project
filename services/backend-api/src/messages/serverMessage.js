@@ -16,6 +16,9 @@ const SERVER_MESSAGES = {
         errorSelfHostedModel: 'Error using self-hosted model. %s',
         selfHostedNotAvailableInDev: 'Self-hosted model not available in development mode',
     },
+    callingAuthServer: {
+        unknownError: 'Unknown error occurred when calling auth server',
+    }
 };
 
 module.exports = {

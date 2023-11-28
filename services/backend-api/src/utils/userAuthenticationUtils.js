@@ -12,12 +12,7 @@ const API_ENDPOINTS = {
 async function registerUser({ username, password }) {
     try {
         const response = await axios.post(API_ENDPOINTS.REGISTER, { username, password });
-
-        if (response.status === HTTP_STATUS_CODES.CREATED) {
-            return true;
-        }
-
-        return false;
+        return response.status === HTTP_STATUS_CODES.CREATED;
     } catch (err) {
         return false;
     }
@@ -26,43 +21,28 @@ async function registerUser({ username, password }) {
 async function loginUser({ username, password }) {
     const response = await axios.post(API_ENDPOINTS.LOGIN, { username, password });
 
-    if (response.status === HTTP_STATUS_CODES.OK) {
-        const { token } = response.data;
-        return token;
+    if (response.status !== HTTP_STATUS_CODES.OK) {
+        const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
+        throw new Error(errorMessage);
     }
 
-    const errorMessage = response.data.error ?? "";
-    throw new Error(errorMessage);
+    const { token } = response.data;
+    return token;
 }
 
 async function getUserQuotaFromToken(token) {
     const response = await axios.post(API_ENDPOINTS.VALIDATE, { token });
-    if (response.status === HTTP_STATUS_CODES.OK) {
-        const { hasRemainingQuota } = response.data;
-        return hasRemainingQuota ?? 0;
+    if (response.status !== HTTP_STATUS_CODES.OK) {
+        const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
+        throw new Error(errorMessage);
     }
 
-    const { error } = response.data;
-    if (error) {
-        console.error(vsprintf(SERVER_MESSAGES.failedToGetQuotaFromToken, [error]));
-        throw new Error(error);
-    }
-
-    return 0;
-}
-
-const getHash = (password) => {
-    return "" + password + "_hash"
-}
-
-const getToken = () => {
-    return "one_time_token"
+    const { hasRemainingQuota } = response.data;
+    return hasRemainingQuota ?? 0;
 }
 
 module.exports = {
     registerUser,
     loginUser,
-    getHash, // TODO: remove this
-    getToken, // TODO: remove this
     getUserQuotaFromToken
 }

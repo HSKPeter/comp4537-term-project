@@ -12,6 +12,12 @@ const USER_MESSAGES = {
         tokenNotFound: 'Token not found.',
         userQuotaExceeded: 'User quota exceeded.',
         errorValidatingToken: 'Error occurred when validating token.',
+    },
+    registration: {
+        missingEmailOrPassword: 'Missing email or password.',
+        failure: 'Failed to register. Please try again later.',
+        success: 'User registered successfully.',
+
     }
 };
 
