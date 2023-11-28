@@ -8,6 +8,10 @@ const SERVER_MESSAGES = {
     failedToRegisterUser: 'Failed to register user. %s',
     failedToLoginUser: 'Failed to login user. %s',
     failedToGetQuotaFromToken: 'Failed to get quota from token. %s',
+    failedToGetAllFields: 'Failed to get all fields. %s',
+    failedToCreateEntry: 'Failed to create entry. %s',
+    failedToUpdateEntry: 'Failed to update entry. %s',
+    failedToDeleteEntry: 'Failed to delete entry. %s',
     models: {
         useHfApi: 'Using Hugging Face API to summarize text',
         useSelfHostedModel: 'Using self-hosted model to summarize text',

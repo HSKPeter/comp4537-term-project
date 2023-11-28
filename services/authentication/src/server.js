@@ -13,7 +13,7 @@ const dbPool = mysql.createPool({
     user: "root",
     password: "",
     database: "comp4537_project",
-    port: 3306
+    port: 4306
 });
 
 const CREATE_TABLE_QUERIES = {
@@ -39,6 +39,8 @@ const CREATE_TABLE_QUERIES = {
             API_Call_ID INT NOT NULL AUTO_INCREMENT,
             UserID INT NOT NULL,
             Time DATETIME,
+            Method VARCHAR(255),
+            Endpoint VARCHAR(255),
             PRIMARY KEY (API_Call_ID),
             FOREIGN KEY (UserID) REFERENCES User(UserID)
         );

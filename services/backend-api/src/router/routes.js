@@ -5,6 +5,10 @@ const API_ROUTE_PATHS = {
     SUMMARIZE_TEXT: '/summarize-text',
     NEWS_CONTENT: '/news',
     LOGIN: '/login',
+    READ_ALL_FIELDS: '/readAllFields',
+    CREATE_ENTRY: '/createEntry',
+    UPDATE_ENTRY: '/updateEntry',
+    DELETE_ENTRY: '/deleteEntry',
 };
 
 const ROUTE_PATHS = {
