@@ -1,7 +1,7 @@
 const { USER_MESSAGES } = require("../messages/userMessage");
 const { HTTP_STATUS_CODES } = require("../utils/httpUtils");
 const { registerUser } = require("../utils/userAuthenticationUtils");
-const {COOKIE_KEYS, COOKIE_CONFIG} = require("../utils/cookieUtils");
+const { COOKIE_KEYS, COOKIE_CONFIG } = require("../utils/cookieUtils");
 
 function userRegistrationController(req, res) {
     try {
@@ -12,9 +12,9 @@ function userRegistrationController(req, res) {
         }
 
         registerUser({ email, password })
-            .then((token) => {
+            .then(({ token, role }) => {
                 res.cookie(COOKIE_KEYS.TOKEN, token, COOKIE_CONFIG);
-                res.status(HTTP_STATUS_CODES.OK).json({ token });
+                res.status(HTTP_STATUS_CODES.OK).json({ role });
             })
             .catch((err) => {
                 console.error(err);

@@ -13,8 +13,6 @@ function userLoginController(req, res) {
       return;
     }
 
-    console.info(`Logging in user: ${email}`);
-
     loginUser({ email, password })
       .then(({ token, role }) => {
         res.cookie(COOKIE_KEYS.TOKEN, token, COOKIE_CONFIG);

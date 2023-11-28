@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login, register } from './auth';
+import { updateUserRoleInCache } from './utils/userRoleUtils';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -10,7 +11,8 @@ export default function LoginPage() {
 
     const handleLogin = async (event) => {
         try {
-            await login(email, password);
+            const role = await login(email, password);
+            updateUserRoleInCache(role);
             navigate('/');
         } catch (error) {
             setErrorMessage("" + error.message + " Please try again.");
@@ -19,7 +21,8 @@ export default function LoginPage() {
 
     const handleRegistration = async (event) => {
         try {
-            await register(email, password);
+            const role = await register(email, password);
+            updateUserRoleInCache(role);
             navigate('/');
         } catch (error) {
             setErrorMessage("" + error.message + " Please try again.");

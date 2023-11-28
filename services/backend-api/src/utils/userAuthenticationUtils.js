@@ -19,7 +19,7 @@ async function registerUser({ username, password }) {
     // return response.status === HTTP_STATUS_CODES.CREATED;
     const role = "user";
     const token = jwt.sign({ role, username }, secret);
-    return token;
+    return { token, role };
 }
 
 async function loginUser({ username, password }) {
@@ -35,7 +35,7 @@ async function loginUser({ username, password }) {
     const role = "admin";
     const secret = "abcd1234";
     const token = jwt.sign({ role, username }, secret);
-    return {token, role};
+    return { token, role };
 }
 
 async function getUserQuotaFromToken(token) {

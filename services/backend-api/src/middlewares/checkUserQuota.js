@@ -26,8 +26,6 @@ function checkUserQuota(req, res, next) {
   if (!token) {
     return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.auth.tokenNotFound });
   }
-  
-  console.log(token);
 
   getUserQuotaFromToken(token)
     .then((userQuota) => {

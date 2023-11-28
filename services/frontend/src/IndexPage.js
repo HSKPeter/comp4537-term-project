@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { API_PATHS, HTTP_STATUS_CODES, axiosInstance } from './utils/httpUtils';
-import { getUserRole, getUserRoleFromCache } from './utils/userRoleUtils';
+import { getUserRoleFromCache, getUserRole } from './utils/userRoleUtils';
 
 const IndexPage = () => {
     const [keyword, setKeyword] = useState('');
@@ -14,6 +14,7 @@ const IndexPage = () => {
     useEffect(() => {
         async function navigateToLoginPageIfRoleNotFound() {
             let role = getUserRoleFromCache();
+
             if (!role) {
                 navigate('/login', { state: { from: location } });
                 return;

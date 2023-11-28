@@ -12,11 +12,18 @@ export async function login(email, password) {
       throw new Error('An error occurred.');
     }
   }
+
+  const { role } = response.data;
+  return role;
 }
 
 export async function register(email, password) {
   const response = await axiosInstance.post(API_PATHS.register, { email, password });
 
-  const statusCode = response.status;
-  return statusCode === HTTP_STATUS_CODES.CREATED;
+  if (response.status !== HTTP_STATUS_CODES.CREATED) {
+    throw new Error('An error occurred.');
+  }
+
+  const { role } = response.data;
+  return role;
 }
