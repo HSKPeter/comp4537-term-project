@@ -4,7 +4,7 @@ require('dotenv').config();  // Read .env file if it exists
 const PRODUCTION_CONFIGS = {
     backendOrigin: 'https://bqw91brfqd.execute-api.us-east-2.amazonaws.com/Prod',
     frontendOrigin: 'https://sepehrzohoorirad.com',
-    authServerOrigin: 'TBC',
+    authServerOrigin: 'https://patrickcammayo.com/COMP4537/project/api/v1/authentication/',
     port: 80,
 };
 

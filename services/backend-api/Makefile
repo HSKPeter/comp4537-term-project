@@ -7,7 +7,7 @@ build: confirm-prod
 run: build
 	@sam local start-api --skip-pull-image
 
-deploy:
+deploy: build
 	@sam deploy
 
 dev:

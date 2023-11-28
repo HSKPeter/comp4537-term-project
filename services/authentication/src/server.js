@@ -110,12 +110,9 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-
     try {
         // Check if the username exists
         const user = await runSQLQuery('SELECT * FROM User WHERE Name = ?', [username]);
-
         if (user.length === 0) {
             return res.status(401).json({ error: 'Invalid username or password' });
         }
@@ -201,6 +198,22 @@ app.post('/user', async (req, res) => {
         const hasRemainingQuota = checkIfUserHasRemainingQuota(token);
 
         res.status(200).json({ hasRemainingQuota });
+    } catch (error) {
+        console.error('Error authenticating token: ', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.post('/role', async (req, res) => {
+    try {
+        const { token } = req.body;
+
+        const decodedToken = jwt.verify(token, SECRET_KEY);
+
+        const { payload } = decodedToken;
+        const { role } = payload;
+
+        res.status(200).json({ role });
     } catch (error) {
         console.error('Error authenticating token: ', error);
         res.status(500).json({ error: 'Internal server error' });
