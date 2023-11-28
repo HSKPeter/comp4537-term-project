@@ -73,7 +73,7 @@ paths:
                   error:
                     type: string
                     description: The error message
-  /api-consumption
+  /api-consumption:
     get:
       summary: Get API consumption
       tags:
