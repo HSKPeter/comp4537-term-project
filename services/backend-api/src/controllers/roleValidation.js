@@ -1,5 +1,6 @@
-const jwt = require('jsonwebtoken');
+const { HTTP_STATUS_CODES } = require('../utils/httpUtils');
 const { USER_MESSAGES } = require('../messages/userMessage');
+const { getRoleFromToken } = require('../utils/roleValidationUtils');
 
 function roleValidationController(req, res) {
     try {
@@ -9,20 +10,16 @@ function roleValidationController(req, res) {
             return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.role.roleNotFound });
         }
 
-        const payload = jwt.decode(token);
-        if (!payload) {
-            res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.role.roleNotFound });
-            return;
-        }
+        getRoleFromToken(token)
+            .then((role) => {
+                res.status(HTTP_STATUS_CODES.OK).json({ role });
+            })
+            .catch((_err) => {
+                res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.role.roleNotFound });
+            });
 
-        const { role } = payload;
-        if (role === undefined) {
-            res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.role.roleNotFound });
-            return;
-        }
-
-        res.json({ role });
     } catch (err) {
+        console.error(err);
         return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.role.roleNotFound });
     }
 }

@@ -24,18 +24,20 @@ function parseBearerToken(headers) {
 function checkUserQuota(req, res, next) {
   const token = req.cookies.token ?? parseBearerToken(req.headers); // TODO: Remove parsing of Authorization header after development is done
   if (!token) {
-    return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.auth.tokenNotFound });
+    return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.auth.tokenNotFound });
   }
 
   getUserQuotaFromToken(token)
     .then((userQuota) => {
       if (userQuota <= 0) {
-        return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.auth.userQuotaExceeded });
+        res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.auth.userQuotaExceeded });
+        return;
       }
       next();
     })
-    .catch((err) => {
-      return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.auth.errorValidatingToken });
+    .catch((_err) => {
+      res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.auth.errorValidatingToken });
+      return;
     });
 }
 

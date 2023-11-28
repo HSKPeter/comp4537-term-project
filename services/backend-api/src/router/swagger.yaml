@@ -1,12 +1,14 @@
 openapi: 3.0.0
 info:
-  title: Example API
-  description: This is an example API
+  title: Backend API for the News Summarizer
+  description: This is the backend API for the News Summarizer
   version: 1.0.0
 paths:
   /login:
     post:
       summary: Login user
+      tags:
+        - User
       description: Login with the given credentials
       requestBody:
         description: JSON object with the credentials
@@ -23,16 +25,35 @@ paths:
                   type: string
                   description: The user's password
       responses:
-        "204":
-          description: No content
+        "200":
+          description: Successful login
           headers:
             Set-Cookie:
               description: The HttpOnly secure cookie with the token
               schema:
                 type: string
                 example: "token=123; HttpOnly; SameSite=Strict; Secure"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  role:
+                    type: string
+                    description: The user's role
+                    example: "user"
         "401":
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+        "500":
+          description: Internal server error
           content:
             application/json:
               schema:
@@ -44,6 +65,8 @@ paths:
   /register:
     post:
       summary: Register user
+      tags:
+        - User
       description: Register with the given credentials
       requestBody:
         description: JSON object with the credentials
@@ -61,7 +84,7 @@ paths:
                   description: The user's password
       responses:
         "201":
-          description: Confirmation of user registration success
+          description: Successful registration
           headers:
             Set-Cookie:
               description: The HttpOnly secure cookie with the token
@@ -73,9 +96,20 @@ paths:
               schema:
                 type: object
                 properties:
-                  message:
+                  role:
                     type: string
-                    description: The success message
+                    description: The user's role
+                    example: "user"
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
         "500":
           description: Internal server error
           content:
@@ -89,14 +123,9 @@ paths:
   /summarize-text:
     post:
       summary: Summarize text
+      tags:
+        - Machine Learning
       description: Use the google/pegasus-large model on HuggingFace to summarize the given text
-      parameters:
-        - name: Authorization  # TODO: Remove this after development is done
-          in: header
-          description: Token to authenticate the user
-          schema:
-            type: string
-            example: "Bearer 123"
       requestBody:
         description: JSON object with the text to summarize
         required: true
@@ -133,6 +162,8 @@ paths:
   /news:
     get:
       summary: Get news
+      tags:
+        - News
       description: Get news from the news API
       parameters:
         - name: keyword
@@ -142,12 +173,6 @@ paths:
           schema:
             type: string
           example: "javascript"
-        - name: Authorization  # TODO: Remove this after development is done
-          in: header
-          description: Token to authenticate the user
-          schema:
-            type: string
-            example: "Bearer 123"
       responses:
         "200":
           description: JSON object with the news
@@ -180,3 +205,37 @@ paths:
                   error:
                     type: string
                     description: The error message
+  /role:
+      get:
+        summary: Get user role
+        tags:
+          - User
+        description: Get the user role based on the JWT token in HttpOnly secure cookie
+        responses:
+          "200":
+            description: JSON object with the user data
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    role:
+                      type: string
+                      description: The user's role
+          "400":
+            description: JSON object with the error message
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                      description: The error message          
+tags:
+  - name: User
+    description: API endpoints for user management
+  - name: News
+    description: API endpoints for news content
+  - name: Machine Learning
+    description: API endpoints for machine learning

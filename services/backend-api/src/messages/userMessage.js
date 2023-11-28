@@ -16,8 +16,14 @@ const USER_MESSAGES = {
     role: {
         roleNotFound: 'Role not found.',
     },
+    login: {
+        missingEmailOrPassword: 'Missing email or password.',
+        invalidCredentials: 'Invalid credentials.',
+        failure: 'Failed to login. Please try again later.',
+    },
     registration: {
         missingEmailOrPassword: 'Missing email or password.',
+        invalidCredentials: 'Invalid credentials.',
         failure: 'Failed to register. Please try again later.',
         success: 'User registered successfully.',
 

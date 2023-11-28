@@ -18,7 +18,7 @@ function userRegistrationController(req, res) {
             })
             .catch((err) => {
                 console.error(err);
-                res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ error: USER_MESSAGES.registration.failure });
+                res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.registration.invalidCredentials });
             });
     } catch (err) {
         console.error(err);

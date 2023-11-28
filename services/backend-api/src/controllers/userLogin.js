@@ -9,7 +9,7 @@ function userLoginController(req, res) {
   try {
     const { email, password } = req.body;
     if (email === undefined || password === undefined) {
-      res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.missingEmailOrPassword });
+      res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.login.missingEmailOrPassword });
       return;
     }
 
@@ -20,12 +20,12 @@ function userLoginController(req, res) {
       })
       .catch((err) => {
         console.error(vsprintf(SERVER_MESSAGES.failedToLoginUser, [err?.stack ?? err]))
-        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ error: USER_MESSAGES.failedToLoginUser });
+        res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.login.invalidCredentials });
       });
 
   } catch (err) {
     console.error(vsprintf(SERVER_MESSAGES.failedToLoginUser, [err?.stack ?? err]))
-    res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ error: USER_MESSAGES.failedToLoginUser });
+    res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ error: USER_MESSAGES.login.failure });
   }
 }
 
