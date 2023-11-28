@@ -4,7 +4,8 @@ const {
     textSummarizationController,
     newsContentController,
     userLoginController,
-    userRegistrationController
+    userRegistrationController,
+    userLogoutController
 } = require('../controllers');
 const { checkUserQuota } = require('../middlewares/checkUserQuota');
 const { roleValidationController } = require('../controllers/roleValidation');
@@ -20,5 +21,6 @@ router.use(checkUserQuota);
 // In production, the routes below require a valid token to be present either in the Authorization header or in the cookies
 router.get(API_ROUTE_PATHS.NEWS_CONTENT, newsContentController);
 router.post(API_ROUTE_PATHS.SUMMARIZE_TEXT, textSummarizationController);
+router.post(API_ROUTE_PATHS.LOGOUT, userLogoutController);
 
 module.exports = router;

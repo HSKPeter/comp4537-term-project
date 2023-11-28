@@ -102,7 +102,15 @@ app.post('/register', async (req, res) => {
         // Insert the user into the database
         await runSQLQuery('INSERT INTO User (Name, Password, UserType) VALUES (?, ?, ?)', [username, hashedPassword, UserTypes.Regular]);
 
-        res.status(201).json({ message: 'User registered successfully' });
+        const role = 'user'; // TODO: Get the role from database
+
+        const payload = {
+            username,
+            role,
+        };
+
+        const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+        res.status(201).json({ message: 'User registered successfully', token, role });
     } catch (error) {
         console.error('Error registering user: ', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -111,11 +119,10 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
-
+    
     try {
         // Check if the username exists
         const user = await runSQLQuery('SELECT * FROM User WHERE Name = ?', [username]);
-
         if (user.length === 0) {
             return res.status(401).json({ error: 'Invalid username or password' });
         }
@@ -127,10 +134,12 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid username or password' });
         }
 
-        // Sign a JWT token
-        const token = jwt.sign({ userID: user[0].UserID, username: user[0].Name }, SECRET_KEY, { expiresIn: '1h' });
+        const role = 'user'; // TODO: Get the role from database
 
-        res.status(200).json({ token });
+        // Sign a JWT token
+        const token = jwt.sign({ userID: user[0].UserID, username: user[0].Name, role }, SECRET_KEY, { expiresIn: '1h' });
+
+        res.status(200).json({ token, role });
     } catch (error) {
         console.error('Error logging in: ', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -201,6 +210,18 @@ app.post('/user', async (req, res) => {
         const hasRemainingQuota = checkIfUserHasRemainingQuota(token);
 
         res.status(200).json({ hasRemainingQuota });
+    } catch (error) {
+        console.error('Error authenticating token: ', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.post('/role', async (req, res) => {
+    try {
+        const { token } = req.body;
+        const decodedToken = jwt.verify(token, SECRET_KEY);
+        const { role } = decodedToken;
+        res.status(200).json({ role });
     } catch (error) {
         console.error('Error authenticating token: ', error);
         res.status(500).json({ error: 'Internal server error' });

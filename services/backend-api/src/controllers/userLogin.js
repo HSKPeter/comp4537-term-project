@@ -12,8 +12,10 @@ function userLoginController(req, res) {
       res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.login.missingEmailOrPassword });
       return;
     }
+    
+    const username = email; // TODO: Need to further discuss with the team
 
-    loginUser({ email, password })
+    loginUser({ username, password })
       .then(({ token, role }) => {
         res.cookie(COOKIE_KEYS.TOKEN, token, COOKIE_CONFIG);
         res.status(HTTP_STATUS_CODES.OK).json({ role });

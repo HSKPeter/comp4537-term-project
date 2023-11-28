@@ -15,26 +15,26 @@ const API_ENDPOINTS = {
 }
 
 async function registerUser({ username, password }) {
-    // const response = await axios.post(API_ENDPOINTS.REGISTER, { username, password });
-    // return response.status === HTTP_STATUS_CODES.CREATED;
-    const role = "user";
-    const token = jwt.sign({ role, username }, secret);
+    const response = await axios.post(API_ENDPOINTS.REGISTER, { username, password });
+
+    if (response.status !== HTTP_STATUS_CODES.OK) {
+        const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
+        throw new Error(errorMessage);
+    }
+
+    const { token, role } = response.data;
     return { token, role };
 }
 
 async function loginUser({ username, password }) {
-    // TODO: Uncomment the followings when the auth server is ready
-    // const response = await axios.post(API_ENDPOINTS.LOGIN, { username, password });
+    const response = await axios.post(API_ENDPOINTS.LOGIN, { username, password });
 
-    // if (response.status !== HTTP_STATUS_CODES.OK) {
-    //     const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
-    //     throw new Error(errorMessage);
-    // }
+    if (response.status !== HTTP_STATUS_CODES.OK) {
+        const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
+        throw new Error(errorMessage);
+    }
 
-    // const { token } = response.data;
-    const role = "admin";
-    const secret = "abcd1234";
-    const token = jwt.sign({ role, username }, secret);
+    const { token, role } = response.data;
     return { token, role };
 }
 

@@ -62,6 +62,25 @@ paths:
                   error:
                     type: string
                     description: The error message
+  /logout:
+    post:
+      summary: Logout user
+      tags:
+        - User
+      description: Logout the user by clearing the HttpOnly secure cookie
+      responses:
+        "204":
+          description: Successful logout
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
   /register:
     post:
       summary: Register user

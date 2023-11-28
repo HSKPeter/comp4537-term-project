@@ -10,14 +10,15 @@ function userRegistrationController(req, res) {
             res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.registration.missingEmailOrPassword });
             return;
         }
+        
+        const username = email; // TODO: Need to further discuss with the team
 
-        registerUser({ email, password })
+        registerUser({ username, password })
             .then(({ token, role }) => {
                 res.cookie(COOKIE_KEYS.TOKEN, token, COOKIE_CONFIG);
                 res.status(HTTP_STATUS_CODES.CREATED).json({ role });
             })
-            .catch((err) => {
-                console.error(err);
+            .catch((_err) => {
                 res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.registration.invalidCredentials });
             });
     } catch (err) {
