@@ -3,42 +3,79 @@ info:
   title: Example API
   description: This is an example API
   version: 1.0.0
-servers:
-  - url: http://localhost:8080/  # TODO: Make it dynamic
 paths:
-  /news:
-    get:
-      summary: Get news
-      description: Get news from the news API
-      parameters:
-        - name: keyword
-          in: query
-          description: The keyword to search for
-          required: true
-          schema:
-            type: string
+  /login:
+    post:
+      summary: Login user
+      description: Login with the given credentials
+      requestBody:
+        description: JSON object with the credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The user's email
+                password:
+                  type: string
+                  description: The user's password
       responses:
-        "200":
-          description: JSON object with the news
+        "204":
+          description: No content
+          headers:
+            Set-Cookie:
+              description: The HttpOnly secure cookie with the token
+              schema:
+                type: string
+                example: "token=123; HttpOnly; SameSite=Strict; Secure"
+        "401":
+          description: Unauthorized
           content:
             application/json:
               schema:
-                type: array
-                items:
-                      type: object
-                      properties:
-                        title:
-                          type: string
-                          description: The title of the article
-                        link:
-                          type: string
-                          description: The link to the article
-                        content:
-                          type: string
-                          description: The content of the article
-                        published:
-                          type: string
-                          description: The date the article was published
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+  /register:
+    post:
+      summary: Register user
+      description: Register with the given credentials
+      requestBody:
+        description: JSON object with the credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The user's email
+                password:
+                  type: string
+                  description: The user's password
+      responses:
+        "201":
+          description: Confirmation of user registration success
+          headers:
+            Set-Cookie:
+              description: The HttpOnly secure cookie with the token
+              schema:
+                type: string
+                example: "token=123; HttpOnly; SameSite=Strict; Secure"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: The success message
         "500":
           description: Internal server error
           content:
@@ -49,49 +86,17 @@ paths:
                   error:
                     type: string
                     description: The error message
-  /login:
-    post:
-      summary: Login
-      description: Login with the given credentials
-      requestBody:
-        description: JSON object with the credentials
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                username:
-                  type: string
-                  description: The username
-                password:
-                  type: string
-                  description: The password
-      responses:
-        "200":
-          description: JSON object with the user token
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    description: The user token
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:  # TODO: Change to error
-                    type: string
-                    description: The error message
   /summarize-text:
     post:
       summary: Summarize text
       description: Use the google/pegasus-large model on HuggingFace to summarize the given text
+      parameters:
+        - name: Authorization  # TODO: Remove this after development is done
+          in: header
+          description: Token to authenticate the user
+          schema:
+            type: string
+            example: "Bearer 123"
       requestBody:
         description: JSON object with the text to summarize
         required: true
@@ -115,6 +120,56 @@ paths:
                   summary:
                     type: string
                     description: The summarized text
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+  /news:
+    get:
+      summary: Get news
+      description: Get news from the news API
+      parameters:
+        - name: keyword
+          in: query
+          description: The keyword to search for
+          required: true
+          schema:
+            type: string
+          example: "javascript"
+        - name: Authorization  # TODO: Remove this after development is done
+          in: header
+          description: Token to authenticate the user
+          schema:
+            type: string
+            example: "Bearer 123"
+      responses:
+        "200":
+          description: JSON object with the news
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      description: The title of the article
+                    link:
+                      type: string
+                      description: The link to the article
+                    content:
+                      type: string
+                      description: The content of the article
+                    published:
+                      type: string
+                      description: The date the article was published
         "500":
           description: Internal server error
           content:

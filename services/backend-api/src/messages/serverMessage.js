@@ -5,6 +5,9 @@ const SERVER_MESSAGES = {
     newsDataApiKeyNotSet: 'News Data API key not set',
     failedToSummarizeText: 'Failed to summarize text. %s',
     failedToGetNews: 'Failed to get news. %s',
+    failedToRegisterUser: 'Failed to register user. %s',
+    failedToLoginUser: 'Failed to login user. %s',
+    failedToGetQuotaFromToken: 'Failed to get quota from token. %s',
     models: {
         useHfApi: 'Using Hugging Face API to summarize text',
         useSelfHostedModel: 'Using self-hosted model to summarize text',
@@ -13,6 +16,9 @@ const SERVER_MESSAGES = {
         errorSelfHostedModel: 'Error using self-hosted model. %s',
         selfHostedNotAvailableInDev: 'Self-hosted model not available in development mode',
     },
+    callingAuthServer: {
+        unknownError: 'Unknown error occurred when calling auth server',
+    }
 };
 
 module.exports = {
