@@ -14,11 +14,7 @@ const app = express();
 app.use(ROUTE_PATHS.SWAGGER, swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 // Enable CORS
-if (IS_DEVELOPMENT_MODE) {
-    app.use(cors());
-} else {
-    app.use(cors(CORS_OPTIONS));
-}
+app.use(cors(CORS_OPTIONS));
 
 // Enable body parsing for JSON and URL encoded data
 app.use(express.json());

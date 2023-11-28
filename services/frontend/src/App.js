@@ -1,35 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginPage from './LoginPage';
 import IndexPage from './IndexPage';
-import Cookies from 'js-cookie';
-
-
-const onLogin = (token) => {
-  Cookies.set('authToken', token);
-  // Redirect to index page
-};
+import AdminPage from './AdminPage';
+import './App.css';
 
 function App() {
-  const isAuthenticated = () => !!Cookies.get('authToken');
 
   return (
     <Router basename="/COMP4537/ai-project">
       <Routes>
-        <Route path="/login" element={<LoginPage onLogin={onLogin} />} />
-        <Route
-          path="/"
-          element={
-            isAuthenticated()
-              ? <IndexPage />
-              : <Navigate to="/login" replace />
-          }
-        />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<IndexPage />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
     </Router>
-    // <div>
-    //   <h1>Index Page</h1>
-    // </div>
   );
 }
 

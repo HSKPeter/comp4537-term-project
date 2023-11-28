@@ -18,7 +18,8 @@ const SERVER_MESSAGES = {
     },
     callingAuthServer: {
         unknownError: 'Unknown error occurred when calling auth server',
-    }
+    },
+    failedToRetrieveRoleFromToken: 'Failed to retrieve role from token. %s',
 };
 
 module.exports = {

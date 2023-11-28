@@ -1,14 +1,29 @@
+import { API_PATHS, HTTP_STATUS_CODES, axiosInstance } from "./utils/httpUtils";
+
 // src/auth.js
-export async function login(username, password) {
-  // Use the environment variable for the backend API endpoint
-  const apiUrl = process.env.SERVER ?? 'https://bqw91brfqd.execute-api.us-east-2.amazonaws.com/Prod';
-  const response = await fetch(`${apiUrl}/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ username, password }),
-  });
-  const data = await response.json();
-  return data.token;
+
+export async function login(email, password) {
+  const response = await axiosInstance.post(API_PATHS.login, { email, password });
+
+  if (response.status !== HTTP_STATUS_CODES.OK) {
+    if (response.status === HTTP_STATUS_CODES.UNAUTHORIZED) {
+      throw new Error('Invalid credentials.');
+    } else {
+      throw new Error('An error occurred.');
+    }
+  }
+
+  const { role } = response.data;
+  return role;
+}
+
+export async function register(email, password) {
+  const response = await axiosInstance.post(API_PATHS.register, { email, password });
+
+  if (response.status !== HTTP_STATUS_CODES.CREATED) {
+    throw new Error('An error occurred.');
+  }
+
+  const { role } = response.data;
+  return role;
 }

@@ -1,38 +1,38 @@
-.App {
-  text-align: center;
+/* General Layout Styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #1a1a1a; /* Dark background */
+  color: #f1f1f1; /* Light text color for contrast */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
+/* Other styles can remain the same, but you may want to adjust text and other colors for better visibility on a dark background */
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Navbar Styles */
+.navbar {
+  background-color: #333; /* Slightly lighter shade for the navbar */
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.5);
+  padding: 10px 20px;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.navbar a {
+  color: #fff; /* Light color for text */
+  text-decoration: none;
+  margin-left: 15px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.navbar a:hover {
+  text-decoration: underline;
 }
+
+
+
+/* Admin Page Styles */
+.admin-page {
+  padding: 20px;
+}
+
+/* Additional styles for other components can be added here */
