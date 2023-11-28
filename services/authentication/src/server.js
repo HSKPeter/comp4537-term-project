@@ -118,6 +118,8 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+    
     try {
         // Check if the username exists
         const user = await runSQLQuery('SELECT * FROM User WHERE Name = ?', [username]);
