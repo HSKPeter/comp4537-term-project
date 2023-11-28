@@ -1,18 +1,25 @@
 // src/IndexPage.js
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const IndexPage = ({ onLogout, userRole }) => {
     const [keyword, setKeyword] = useState('');
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
+
+    // TODO: use useEffect to fetch news on page load
 
     const fetchNews = async () => {
         setLoading(true);
         try {
             const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/news?keyword=${keyword}`);
+            if (response.status === 401) {
+                navigate('/login', { state: { from: location } });
+                return;
+            }
             setNews(response.data);
         } catch (error) {
             console.error("Error fetching news:", error);

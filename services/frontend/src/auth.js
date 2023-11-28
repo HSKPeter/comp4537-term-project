@@ -1,12 +1,10 @@
 import { HTTP_STATUS_CODES } from "./utils/httpUtils";
 
 // src/auth.js
-const productionBackendApiUrl = 'https://bqw91brfqd.execute-api.us-east-2.amazonaws.com/Prod';
-const backendApiUrl = process.env.REACT_APP_BACKEND_API_URL ?? productionBackendApiUrl;
+const productionApiUrl = 'https://bqw91brfqd.execute-api.us-east-2.amazonaws.com/Prod';
+const apiUrl = process.env.REACT_APP_SERVER_URL ?? productionApiUrl;
 
 export async function login(username, password) {
-  // Use the environment variable for the backend API endpoint
-  const apiUrl = process.env.REACT_APP_SERVER_URL ?? 'https://bqw91brfqd.execute-api.us-east-2.amazonaws.com/Prod';
   const response = await fetch(`${apiUrl}/login`, {
     method: 'POST',
     headers: {
@@ -21,18 +19,12 @@ export async function login(username, password) {
     } else {
       throw new Error('An error occurred.');
     }
-    
   }
-  console.log("login request sent")
-  const data = await response.json();
-  console.log("login request response")
-  console.log(data)
-  return data.token;
 }
 
 export async function register(email, password) {
   // Use the environment variable for the backend API endpoint
-  const response = await fetch(`${backendApiUrl}/register`, {
+  const response = await fetch(`${apiUrl}/register`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

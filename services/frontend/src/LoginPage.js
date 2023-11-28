@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from './auth';
 
-export default function LoginPage({ onLogin }) {
+export default function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -10,15 +10,12 @@ export default function LoginPage({ onLogin }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        try {
-            const token = await login(username, password);
-            if (token) {
-                onLogin(token);
-                navigate('/');
-            }
-        } catch (error) {
-            setErrorMessage("" + error.message + " Please try again.");
-        }
+        // try {
+        //     await login(username, password);
+            navigate('/');
+        // } catch (error) {
+        //     setErrorMessage("" + error.message + " Please try again.");
+        // }
     };
 
     return (

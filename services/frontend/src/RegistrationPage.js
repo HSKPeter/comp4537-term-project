@@ -1,26 +1,23 @@
 // src/RegistrationPage.js
 import React, { useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { register } from './auth';
 
-export default function RegistrationPage() {
+export default function RegistrationPage({ onRegister }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [hasCompletedRegistration, setHasCompletedRegistration] = useState(false);
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         const isSuccessful = await register(email, password);
         if (isSuccessful) {
-            setHasCompletedRegistration(true);
+            navigate('/');
+            return;
         } else {
             alert('Registration failed!'); // TODO: Show in modal
         }
     };
-
-    if (hasCompletedRegistration) {
-        return <Navigate to="/" />;
-    }
 
     return (
         <>
