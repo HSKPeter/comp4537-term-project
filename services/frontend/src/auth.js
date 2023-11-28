@@ -1,14 +1,9 @@
-import { HTTP_STATUS_CODES } from "./utils/httpUtils";
-import axios from "axios";
+import { API_PATHS, HTTP_STATUS_CODES, axiosInstance } from "./utils/httpUtils";
 
 // src/auth.js
-const productionApiUrl = 'https://bqw91brfqd.execute-api.us-east-2.amazonaws.com/Prod';
-const apiUrl = process.env.REACT_APP_SERVER_URL ?? productionApiUrl;
 
 export async function login(email, password) {
-  const response = await axios.post(`${apiUrl}/login`, { email, password }, {
-    withCredentials: true,
-  });
+  const response = await axiosInstance.post(API_PATHS.login, { email, password });
 
   if (response.status !== HTTP_STATUS_CODES.OK) {
     if (response.status === HTTP_STATUS_CODES.UNAUTHORIZED) {
@@ -20,9 +15,7 @@ export async function login(email, password) {
 }
 
 export async function register(email, password) {
-  const response = await axios.post(`${apiUrl}/register`, { email, password }, {
-    withCredentials: true,
-  });
+  const response = await axiosInstance.post(API_PATHS.register, { email, password });
 
   const statusCode = response.status;
   return statusCode === HTTP_STATUS_CODES.CREATED;

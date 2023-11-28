@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getUserRole } from './utils/userRoleUtils';
 
 const Navbar = () => {
     const onLogout = () => {
         // TODO
     }
-
-    const userRole = localStorage.getItem('userRole');
+    const userRole = getUserRole();
 
     return (
         <nav className="navbar">

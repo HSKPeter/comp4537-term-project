@@ -1,26 +1,39 @@
 // src/IndexPage.js
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { API_PATHS, HTTP_STATUS_CODES, axiosInstance } from './utils/httpUtils';
+import { getUserRole, getUserRoleFromCache } from './utils/userRoleUtils';
 
-const IndexPage = ({ onLogout, userRole }) => {
+const IndexPage = () => {
     const [keyword, setKeyword] = useState('');
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
 
-    // TODO: use useEffect to fetch news on page load
+    useEffect(() => {
+        async function navigateToLoginPageIfRoleNotFound() {
+            let role = getUserRoleFromCache();
+            if (!role) {
+                navigate('/login', { state: { from: location } });
+                return;
+            }
+
+            role = await getUserRole();
+            if (!role) {
+                navigate('/login', { state: { from: location } });
+                return;
+            }
+        }
+
+        navigateToLoginPageIfRoleNotFound();
+    }, []);
 
     const fetchNews = async () => {
         setLoading(true);
         try {
-            const response = await axios(`${process.env.REACT_APP_SERVER_URL}/news?keyword=${keyword}`, {
-                method: "GET",
-                data: {},
-                withCredentials: true
-            });
-            if (response.status === 401) {
+            const response = await axiosInstance.get(`${API_PATHS.news}?keyword=${keyword}`);
+            if (response.status === HTTP_STATUS_CODES.UNAUTHORIZED) {
                 navigate('/login', { state: { from: location } });
                 return;
             }

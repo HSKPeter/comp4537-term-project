@@ -22,7 +22,6 @@ function parseBearerToken(headers) {
 }
 
 function checkUserQuota(req, res, next) {
-  console.log(req.cookies);
   const token = req.cookies.token ?? parseBearerToken(req.headers); // TODO: Remove parsing of Authorization header after development is done
   if (!token) {
     return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.auth.tokenNotFound });
