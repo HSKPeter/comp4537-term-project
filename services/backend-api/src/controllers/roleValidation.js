@@ -19,7 +19,6 @@ function roleValidationController(req, res) {
             });
 
     } catch (err) {
-        console.error(err);
         return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.role.roleNotFound });
     }
 }

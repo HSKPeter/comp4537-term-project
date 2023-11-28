@@ -16,9 +16,13 @@ const API_ENDPOINTS = {
 
 async function registerUser({ username, password }) {
     const response = await axios.post(API_ENDPOINTS.REGISTER, { username, password });
-    // TODO
-    const role = "user";
-    const token = jwt.sign({ role, username }, secret);
+
+    if (response.status !== HTTP_STATUS_CODES.OK) {
+        const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
+        throw new Error(errorMessage);
+    }
+
+    const { token, role } = response.data;
     return { token, role };
 }
 
@@ -30,8 +34,7 @@ async function loginUser({ username, password }) {
         throw new Error(errorMessage);
     }
 
-    const { token } = response.data;
-    const role = 'user'; // TODO: Get the role from the auth server
+    const { token, role } = response.data;
     return { token, role };
 }
 

@@ -18,8 +18,7 @@ function userRegistrationController(req, res) {
                 res.cookie(COOKIE_KEYS.TOKEN, token, COOKIE_CONFIG);
                 res.status(HTTP_STATUS_CODES.CREATED).json({ role });
             })
-            .catch((err) => {
-                console.error(err);
+            .catch((_err) => {
                 res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.registration.invalidCredentials });
             });
     } catch (err) {
