@@ -1,8 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { getUserRole, getUserRoleFromCache } from './utils/userRoleUtils';
-
+import { navigateToLoginPageIfRoleNotFound } from './utils/securityUtils';
 
 
 function AdminPage() {
@@ -10,22 +9,7 @@ function AdminPage() {
     const location = useLocation();
 
     useEffect(() => {
-        async function navigateToLoginPageIfRoleNotFound() {
-            let role = getUserRoleFromCache();
-
-            if (!role) {
-                navigate('/login', { state: { from: location } });
-                return;
-            }
-
-            role = await getUserRole();
-            if (!role) {
-                navigate('/login', { state: { from: location } });
-                return;
-            }
-        }
-
-        navigateToLoginPageIfRoleNotFound();
+        navigateToLoginPageIfRoleNotFound(navigate, location);
     }, []);
     
     return (

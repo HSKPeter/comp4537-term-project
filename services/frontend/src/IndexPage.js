@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { API_PATHS, HTTP_STATUS_CODES, axiosInstance } from './utils/httpUtils';
 import { getUserRoleFromCache, getUserRole } from './utils/userRoleUtils';
 import Navbar from './Navbar';
+import { navigateToLoginPageIfRoleNotFound } from './utils/securityUtils';
 
 const IndexPage = () => {
     const [keyword, setKeyword] = useState('');
@@ -13,22 +14,7 @@ const IndexPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        async function navigateToLoginPageIfRoleNotFound() {
-            let role = getUserRoleFromCache();
-
-            if (!role) {
-                navigate('/login', { state: { from: location } });
-                return;
-            }
-
-            role = await getUserRole();
-            if (!role) {
-                navigate('/login', { state: { from: location } });
-                return;
-            }
-        }
-
-        navigateToLoginPageIfRoleNotFound();
+        navigateToLoginPageIfRoleNotFound(navigate, location);
     }, []);
 
     const fetchNews = async () => {
