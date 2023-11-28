@@ -3,6 +3,11 @@ const { AUTH_SERVER_ORIGIN } = require('../config');
 const { SERVER_MESSAGES } = require('../messages/serverMessage');
 const { HTTP_STATUS_CODES } = require('./httpUtils');
 
+const USER_ROLES = {
+    ADMIN: "admin",
+    USER: "user"
+}
+
 const API_ENDPOINTS = {
     REGISTER: "/register",
     LOGIN: "/login",
@@ -69,5 +74,6 @@ module.exports = {
     registerUser,
     loginUser,
     getUserQuotaFromToken,
-    getRoleFromToken
+    getRoleFromToken,
+    USER_ROLES
 }

@@ -12,6 +12,7 @@ const USER_MESSAGES = {
         tokenNotFound: 'Token not found.',
         userQuotaExceeded: 'User quota exceeded.',
         errorValidatingToken: 'Error occurred when validating token.',
+        notAdmin: 'Non-admin user is not allowed to access this resource.',
     },
     role: {
         roleNotFound: 'Role not found.',
