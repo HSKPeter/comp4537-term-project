@@ -45,30 +45,6 @@ const CREATE_TABLE_QUERIES = {
     `
 }
 
-// Dummy data for insertion into the database
-const DUMMY_DATA = {
-    User: [
-        "INSERT INTO User (Name, Password, UserType) VALUES ('admin', '111', 1);",
-        "INSERT INTO User (Name, Password, UserType) VALUES ('john', '123', 2);",
-        "INSERT INTO User (Name, Password, UserType) VALUES ('Alice Johnson', 'password3', 2);",
-        "INSERT INTO User (Name, Password, UserType) VALUES ('Bob White', 'password4', 2);",
-        "INSERT INTO User (Name, Password, UserType) VALUES ('Eva Brown', 'password5', 2);",
-    ],
-    UserType: [
-        "INSERT INTO UserType (UserAuthorization) VALUES ('Admin');",
-        "INSERT INTO UserType (UserAuthorization) VALUES ('Regular');",
-    ],
-    APICall: [
-        "INSERT INTO APICall (UserID, Time) VALUES (1, '2023-01-01 12:00:00');",
-        "INSERT INTO APICall (UserID, Time) VALUES (2, '2023-01-02 15:30:00');",
-        "INSERT INTO APICall (UserID, Time) VALUES (1, '2023-01-03 10:45:00');",
-        "INSERT INTO APICall (UserID, Time) VALUES (2, '2023-01-04 18:20:00');",
-        "INSERT INTO APICall (UserID, Time) VALUES (2, '2023-01-05 08:30:00');",
-        ...Array(21).fill("INSERT INTO APICall (UserID, Time) VALUES (3, '2023-01-06 01:00:00');"),
-    ],
-};
-
-
 const UserTypes = {
     Admin: 1,
     Regular: 2,
