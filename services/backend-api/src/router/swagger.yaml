@@ -4,6 +4,75 @@ info:
   description: This is the backend API for the News Summarizer
   version: 1.0.0
 paths:
+  /api-stats:
+    get:
+      summary: Get API usage statistics
+      tags:
+        - User
+      description: Get the API usage statistics based on the JWT token in HttpOnly secure cookie
+      responses:
+        "200":
+          description: JSON object with the API usage statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  usageStats:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        api-name:
+                          type: string
+                          description: The name of the API
+                        request-type:
+                          type: string
+                          description: The type of the API request
+                        count:
+                          type: integer
+                          description: The number of API calls
+  /api-stats-by-user:
+    get:
+      summary: Get API usage statistics by user
+      tags:
+        - User
+      description: Get the API usage statistics by user based on the JWT token in HttpOnly secure cookie
+      responses:
+        "200":
+          description: JSON object with the API usage statistics by user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  usageStats:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        api-name:
+                          type: string
+                          description: The name of the API
+                        request-type:
+                          type: string
+                          description: The type of the API request
+                        count:
+                          type: integer
+                          description: The number of API calls
+                        user:
+                          type: string
+                          description: The user's email
+        "400":
+          description: JSON object with the error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
   /login:
     post:
       summary: Login user
