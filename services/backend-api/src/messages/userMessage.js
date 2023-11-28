@@ -13,6 +13,9 @@ const USER_MESSAGES = {
         userQuotaExceeded: 'User quota exceeded.',
         errorValidatingToken: 'Error occurred when validating token.',
     },
+    role: {
+        roleNotFound: 'Role not found.',
+    },
     registration: {
         missingEmailOrPassword: 'Missing email or password.',
         failure: 'Failed to register. Please try again later.',

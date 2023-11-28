@@ -1,10 +1,16 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { getUserRoleFromCache, removeUserRoleFromCache } from './utils/userRoleUtils';
 
-const Navbar = ({ userRole, onLogout }) => {
-    const location = useLocation();
+const Navbar = () => {
+    const navigate = useNavigate();
+    
+    const onLogout = () => {
+        removeUserRoleFromCache();
+        navigate('/login');
+    }
 
-    console.log("userRole: ", userRole)
+    const userRole = getUserRoleFromCache();
 
     return (
         <nav className="navbar">

@@ -1,34 +1,42 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from './auth';
+import { login, register } from './auth';
+import { updateUserRoleInCache } from './utils/userRoleUtils';
 
-export default function LoginPage({ onLogin }) {
-    const [username, setUsername] = useState('');
+export default function LoginPage() {
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    const handleLogin = async (event) => {
         try {
-            const token = await login(username, password);
-            if (token) {
-                onLogin(token);
-                navigate('/');
-            }
+            const role = await login(email, password);
+            updateUserRoleInCache(role);
+            navigate('/');
         } catch (error) {
             setErrorMessage("" + error.message + " Please try again.");
         }
     };
 
+    const handleRegistration = async (event) => {
+        try {
+            const role = await register(email, password);
+            updateUserRoleInCache(role);
+            navigate('/');
+        } catch (error) {
+            setErrorMessage("" + error.message + " Please try again.");
+        }
+    }
+
     return (
         <div className='login-page' style={styles.loginPage}>
-            <form className='login-form' onSubmit={handleSubmit} style={styles.loginForm}>
+            <div className='login-form' style={styles.loginForm}>
                 <input
                     type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     style={styles.input}
                 />
                 <input
@@ -38,9 +46,10 @@ export default function LoginPage({ onLogin }) {
                     onChange={(e) => setPassword(e.target.value)}
                     style={styles.input}
                 />
-                <button type="submit" style={styles.button}>Login</button>
+                <button style={styles.loginButton} onClick={handleLogin}>Login</button>
+                <button style={styles.registrationButton} onClick={handleRegistration}>Registration</button>
                 {errorMessage && <div style={styles.errorMessage}>{errorMessage}</div>}
-            </form>
+            </div>
         </div>
     );
 }
@@ -56,6 +65,10 @@ const styles = {
         color: '#f1f1f1', // Light text
     },
     loginForm: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
         padding: '20px',
         borderRadius: '5px',
         backgroundColor: '#333', // Dark background for form
@@ -73,7 +86,17 @@ const styles = {
         color: '#333', // Dark text for inputs
         position: 'relative',
     },
-    button: {
+    loginButton: {
+        display: 'block',
+        width: '100%',
+        padding: '10px',
+        backgroundColor: '#007bff',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+    },
+    registrationButton: {
+        margin: '10px',
         display: 'block',
         width: '100%',
         padding: '10px',
