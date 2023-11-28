@@ -237,17 +237,6 @@ async function setupDatabase() {
         await runSQLQuery(CREATE_TABLE_QUERIES.User);
         await runSQLQuery(CREATE_TABLE_QUERIES.APICall);
 
-        // Insert dummy data - COMMENT OUT FOR PRODUCTION
-        // for (const query of DUMMY_DATA.UserType) {
-        //     await runSQLQuery(query);
-        // }
-        // for (const query of DUMMY_DATA.User) {
-        //     await runSQLQuery(query);
-        // }
-        // for (const query of DUMMY_DATA.APICall) {
-        //     await runSQLQuery(query);
-        // }
-
         console.log('Database setup complete');
     } catch (err) {
         console.error('Error setting up database: ', err);
