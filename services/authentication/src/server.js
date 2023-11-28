@@ -61,6 +61,39 @@ app.use(express.json());
 const PORT = 8000;
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
+// TODO: Remove 'abcd' from the below line
+const API_SECRET_KEY = process.env.API_SECRET_KEY ?? 'abcd';
+
+const BEARER_TOKEN_PREFIX = 'Bearer ';
+app.use((req, res, next) => {
+    try {
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader) {
+            res.status(401).json({ error: 'No token provided' });
+            return;
+        }
+
+        if (!authHeader.startsWith(BEARER_TOKEN_PREFIX)) {
+            res.status(401).json({ error: 'Invalid token' });
+            return;
+        }
+
+        const apiKey = authHeader.substring(BEARER_TOKEN_PREFIX.length);
+        
+        // TODO: Find the API key in the database
+        if (apiKey !== API_SECRET_KEY) {
+            res.status(401).json({ error: 'Invalid token' });
+            return;
+        }
+
+        next();
+    } catch (error) {
+        console.error('Error authenticating token: ', error);
+        res.status(401).json({ error: 'Invalid token' });
+    }
+});
+
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
 
@@ -95,7 +128,7 @@ app.post('/register', async (req, res) => {
 
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
-    
+
     try {
         // Check if the username exists
         const user = await runSQLQuery('SELECT * FROM User WHERE Name = ?', [username]);

@@ -1,6 +1,6 @@
 const { HTTP_STATUS_CODES } = require('../utils/httpUtils');
 const { USER_MESSAGES } = require('../messages/userMessage');
-const { getRoleFromToken } = require('../utils/roleValidationUtils');
+const { getRoleFromToken } = require('../utils/userAuthenticationUtils');
 
 function roleValidationController(req, res) {
     try {
