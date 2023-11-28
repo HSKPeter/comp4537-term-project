@@ -1,11 +1,13 @@
-// src/LoginPage.js
+// src/IndexPage.js
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link, useLocation } from 'react-router-dom';
 
-const IndexPage = ({ onLogout }) => {
+const IndexPage = ({ onLogout, userRole }) => {
     const [keyword, setKeyword] = useState('');
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(false);
+    const location = useLocation();
 
     const fetchNews = async () => {
         setLoading(true);
@@ -14,14 +16,12 @@ const IndexPage = ({ onLogout }) => {
             setNews(response.data);
         } catch (error) {
             console.error("Error fetching news:", error);
-            // Handle error accordingly
         }
         setLoading(false);
     };
 
     return (
         <div>
-            <button onClick={onLogout}>Logout</button>
             <input
                 type="text"
                 value={keyword}
