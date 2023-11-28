@@ -15,7 +15,11 @@ const IndexPage = ({ onLogout, userRole }) => {
     const fetchNews = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`${process.env.REACT_APP_SERVER_URL}/news?keyword=${keyword}`);
+            const response = await axios(`${process.env.REACT_APP_SERVER_URL}/news?keyword=${keyword}`, {
+                method: "GET",
+                data: {},
+                withCredentials: true
+            });
             if (response.status === 401) {
                 navigate('/login', { state: { from: location } });
                 return;

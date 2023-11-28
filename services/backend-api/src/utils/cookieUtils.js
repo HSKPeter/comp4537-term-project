@@ -1,6 +1,6 @@
 const COOKIE_CONFIG = {
     httpOnly: true,
-    sameSite: 'strict',
+    sameSite: 'None',
     secure: true,
 };
 

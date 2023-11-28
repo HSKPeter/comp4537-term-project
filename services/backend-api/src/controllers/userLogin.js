@@ -13,10 +13,12 @@ function userLoginController(req, res) {
       return;
     }
 
+    console.info(`Logging in user: ${email}`);
+
     loginUser({ email, password })
-      .then((token) => {
+      .then(({ token, role }) => {
         res.cookie(COOKIE_KEYS.TOKEN, token, COOKIE_CONFIG);
-        res.status(HTTP_STATUS_CODES.OK).json({ token });
+        res.status(HTTP_STATUS_CODES.OK).json({ role });
       })
       .catch((err) => {
         console.error(vsprintf(SERVER_MESSAGES.failedToLoginUser, [err?.stack ?? err]))
