@@ -91,7 +91,7 @@ paths:
       summary: Summarize text
       description: Use the google/pegasus-large model on HuggingFace to summarize the given text
       parameters:
-        - name: Authorization
+        - name: Authorization  # TODO: Remove this after development is done
           in: header
           description: Token to authenticate the user
           schema:
@@ -142,7 +142,7 @@ paths:
           schema:
             type: string
           example: "javascript"
-        - name: Authorization
+        - name: Authorization  # TODO: Remove this after development is done
           in: header
           description: Token to authenticate the user
           schema:
