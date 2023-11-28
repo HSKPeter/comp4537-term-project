@@ -102,7 +102,7 @@ app.post('/register', async (req, res) => {
         // Insert the user into the database
         await runSQLQuery('INSERT INTO User (Name, Password, UserType) VALUES (?, ?, ?)', [username, hashedPassword, UserTypes.Regular]);
 
-        const role = 'user'; // TODO: Get the role from the auth server
+        const role = 'user'; // TODO: Get the role from database
 
         const payload = {
             username,
@@ -134,7 +134,7 @@ app.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid username or password' });
         }
 
-        const role = 'user'; // TODO: Get the role from the auth server
+        const role = 'user'; // TODO: Get the role from database
 
         // Sign a JWT token
         const token = jwt.sign({ userID: user[0].UserID, username: user[0].Name, role }, SECRET_KEY, { expiresIn: '1h' });
