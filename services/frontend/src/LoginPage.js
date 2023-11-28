@@ -1,31 +1,39 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from './auth';
+import { login, register } from './auth';
 
 export default function LoginPage() {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        // try {
-        //     await login(username, password);
+    const handleLogin = async (event) => {
+        try {
+            await login(email, password);
             navigate('/');
-        // } catch (error) {
-        //     setErrorMessage("" + error.message + " Please try again.");
-        // }
+        } catch (error) {
+            setErrorMessage("" + error.message + " Please try again.");
+        }
     };
+
+    const handleRegistration = async (event) => {
+        try {
+            await register(email, password);
+            navigate('/');
+        } catch (error) {
+            setErrorMessage("" + error.message + " Please try again.");
+        }
+    }
 
     return (
         <div className='login-page' style={styles.loginPage}>
-            <form className='login-form' onSubmit={handleSubmit} style={styles.loginForm}>
+            <div className='login-form' style={styles.loginForm}>
                 <input
                     type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     style={styles.input}
                 />
                 <input
@@ -35,9 +43,10 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     style={styles.input}
                 />
-                <button type="submit" style={styles.button}>Login</button>
+                <button style={styles.loginButton} onClick={handleLogin}>Login</button>
+                <button style={styles.registrationButton} onClick={handleRegistration}>Registration</button>
                 {errorMessage && <div style={styles.errorMessage}>{errorMessage}</div>}
-            </form>
+            </div>
         </div>
     );
 }
@@ -53,6 +62,10 @@ const styles = {
         color: '#f1f1f1', // Light text
     },
     loginForm: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
         padding: '20px',
         borderRadius: '5px',
         backgroundColor: '#333', // Dark background for form
@@ -70,7 +83,17 @@ const styles = {
         color: '#333', // Dark text for inputs
         position: 'relative',
     },
-    button: {
+    loginButton: {
+        display: 'block',
+        width: '100%',
+        padding: '10px',
+        backgroundColor: '#007bff',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+    },
+    registrationButton: {
+        margin: '10px',
         display: 'block',
         width: '100%',
         padding: '10px',

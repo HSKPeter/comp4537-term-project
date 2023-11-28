@@ -4,13 +4,13 @@ import { HTTP_STATUS_CODES } from "./utils/httpUtils";
 const productionApiUrl = 'https://bqw91brfqd.execute-api.us-east-2.amazonaws.com/Prod';
 const apiUrl = process.env.REACT_APP_SERVER_URL ?? productionApiUrl;
 
-export async function login(username, password) {
+export async function login(email, password) {
   const response = await fetch(`${apiUrl}/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify({ email, password }),
   });
   if (!response.ok) {
     if (response.status === 401) {

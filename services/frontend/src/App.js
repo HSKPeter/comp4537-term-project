@@ -5,7 +5,6 @@ import IndexPage from './IndexPage';
 import AdminPage from './AdminPage';
 import Navbar from './Navbar';
 import './App.css';
-import RegistrationPage from './RegistrationPage';
 
 function App() {
   return (
@@ -13,7 +12,6 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegistrationPage />} />
         <Route path="/" element={<IndexPage />}/>
         <Route path="/admin" element={<AdminPage />} />
       </Routes>
