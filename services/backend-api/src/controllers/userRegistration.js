@@ -14,7 +14,7 @@ function userRegistrationController(req, res) {
         registerUser({ email, password })
             .then(({ token, role }) => {
                 res.cookie(COOKIE_KEYS.TOKEN, token, COOKIE_CONFIG);
-                res.status(HTTP_STATUS_CODES.OK).json({ role });
+                res.status(HTTP_STATUS_CODES.CREATED).json({ role });
             })
             .catch((err) => {
                 console.error(err);

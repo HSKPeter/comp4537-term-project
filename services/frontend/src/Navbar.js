@@ -1,11 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { getUserRole, getUserRoleFromCache } from './utils/userRoleUtils';
+import { Link, useNavigate } from 'react-router-dom';
+import { getUserRoleFromCache, removeUserRoleFromCache } from './utils/userRoleUtils';
 
 const Navbar = () => {
+    const navigate = useNavigate();
+    
     const onLogout = () => {
-        // TODO
+        removeUserRoleFromCache();
+        navigate('/login');
     }
+
     const userRole = getUserRoleFromCache();
 
     return (
