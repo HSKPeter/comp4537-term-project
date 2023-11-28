@@ -1,43 +1,88 @@
-// src/LoginPage.js
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { login } from './auth';
 
-export default function LoginPage() {
-    const [email, setEmail] = useState('');
+export default function LoginPage({ onLogin }) {
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const isSuccessful = await login(email, password);
-        if (isSuccessful) {
-            alert('Login successful!');
-        } else {
-            alert('Login failed!'); // TODO: Show in modal
+        try {
+            const token = await login(username, password);
+            if (token) {
+                onLogin(token);
+                navigate('/');
+            }
+        } catch (error) {
+            setErrorMessage("" + error.message + " Please try again.");
         }
     };
 
-
     return (
-        <>
-            <form onSubmit={handleSubmit}>
+        <div className='login-page' style={styles.loginPage}>
+            <form className='login-form' onSubmit={handleSubmit} style={styles.loginForm}>
                 <input
                     type="text"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    style={styles.input}
                 />
                 <input
                     type="password"
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    style={styles.input}
                 />
-                <button type="submit">Login</button>
+                <button type="submit" style={styles.button}>Login</button>
+                {errorMessage && <div style={styles.errorMessage}>{errorMessage}</div>}
             </form>
-            <div>
-                <Link to="/register">Register</Link>
-            </div>
-        </>
+        </div>
     );
 }
+
+// Styles matching the app's dark theme
+const styles = {
+    loginPage: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        backgroundColor: '#1a1a1a', // Dark background
+        color: '#f1f1f1', // Light text
+    },
+    loginForm: {
+        padding: '20px',
+        borderRadius: '5px',
+        backgroundColor: '#333', // Dark background for form
+        boxShadow: '0 2px 4px 0 rgba(0,0,0,0.2)',
+        color: '#fff', // White text color
+    },
+    input: {
+        display: 'block',
+        width: '100%',
+        padding: '10px',
+        marginBottom: '10px',
+        border: '1px solid #ddd',
+        borderRadius: '4px',
+        backgroundColor: '#fff', // Keeping input background white for readability
+        color: '#333', // Dark text for inputs
+        position: 'relative',
+    },
+    button: {
+        display: 'block',
+        width: '100%',
+        padding: '10px',
+        backgroundColor: '#007bff',
+        color: 'white',
+        border: 'none',
+        borderRadius: '4px',
+    },
+    errorMessage: {
+        color: 'red', // Red color for error messages
+    }
+};
