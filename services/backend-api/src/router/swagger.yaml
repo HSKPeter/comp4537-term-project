@@ -180,3 +180,94 @@ paths:
                   error:
                     type: string
                     description: The error message
+  /readAllFields/{tableName}:
+    get:
+      summary: Read all fields from the specified table
+      description: Retrieve all fields from the specified table in the database
+      parameters:
+        - name: tableName
+          in: path
+          description: The name of the table
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: JSON object with all fields from the specified table
+          content:
+            application/json:
+              schema:
+                type: object
+                # Adjust the schema based on the actual response format
+
+  /createEntry/{tableName}:
+    post:
+      summary: Create an entry in the specified table
+      description: Create a new entry in the specified table in the database
+      parameters:
+        - name: tableName
+          in: path
+          description: The name of the table
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: JSON object with data for creating the entry
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              # Add the properties based on the data format for creating an entry
+
+  /updateEntry/{tableName}/{entryId}:
+    put:
+      summary: Update an entry in the specified table
+      description: Update an existing entry in the specified table in the database
+      parameters:
+        - name: tableName
+          in: path
+          description: The name of the table
+          required: true
+          schema:
+            type: string
+        - name: entryId
+          in: path
+          description: The ID of the entry to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: JSON object with data for updating the entry
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              # Add the properties based on the data format for updating an entry
+
+  /deleteEntry/{tableName}/{entryId}:
+    delete:
+      summary: Delete an entry in the specified table
+      description: Delete an entry from the specified table in the database
+      parameters:
+        - name: tableName
+          in: path
+          description: The name of the table
+          required: true
+          schema:
+            type: string
+        - name: entryId
+          in: path
+          description: The ID of the entry to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Confirmation of entry deletion success
+          content:
+            application/json:
+              schema:
+                type: object
+                # Add properties if needed for the success response
