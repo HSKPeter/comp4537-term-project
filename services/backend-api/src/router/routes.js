@@ -1,6 +1,7 @@
 const API_ROUTE_PATHS = {
     ROOT: '/',
     LOGIN: '/login',
+    LOGOUT: '/logout',
     REGISTER: '/register',
     ROLE: '/role',
     SUMMARIZE_TEXT: '/summarize-text',
