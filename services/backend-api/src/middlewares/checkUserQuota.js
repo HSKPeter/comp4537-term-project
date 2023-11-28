@@ -1,3 +1,5 @@
+const { USER_MESSAGES } = require('../messages/userMessage');
+const { HTTP_STATUS_CODES } = require('../utils/httpUtils');
 const { getUserQuotaFromToken } = require('../utils/userAuthenticationUtils');
 
 const BEARER = 'Bearer';
@@ -22,18 +24,18 @@ function parseBearerToken(headers) {
 function checkUserQuota(req, res, next) {
   const token = req.cookies.token ?? parseBearerToken(req.headers);
   if (!token) {
-    return res.status(401).json({ error: 'Token not found' });
+    return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.auth.tokenNotFound });
   }
 
   getUserQuotaFromToken(token)
     .then((userQuota) => {
       if (userQuota <= 0) {
-        return res.status(401).json({ error: 'User quota exceeded' });
+        return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.auth.userQuotaExceeded });
       }
       next();
     })
     .catch((err) => {
-      return res.status(401).json({ error: 'Error occurred when validating token' });
+      return res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.auth.errorValidatingToken });
     });
 }
 

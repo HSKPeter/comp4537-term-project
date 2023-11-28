@@ -8,6 +8,11 @@ const USER_MESSAGES = {
     failedToGetNews: 'Failed to get news. Please try again later.',
     failedToRegisterUser: 'Failed to register. Please try again later.',
     invalidCredentials: 'Invalid credentials.',
+    auth: {
+        tokenNotFound: 'Token not found.',
+        userQuotaExceeded: 'User quota exceeded.',
+        errorValidatingToken: 'Error occurred when validating token.',
+    }
 };
 
 module.exports = {
