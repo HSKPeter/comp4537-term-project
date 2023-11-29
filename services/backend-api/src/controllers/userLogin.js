@@ -20,7 +20,7 @@ function userLoginController(req, res) {
       })
       .catch((err) => {
         console.error(vsprintf(SERVER_MESSAGES.failedToLoginUser, [err?.stack ?? err]))
-        res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.login.invalidCredentials });
+        res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.login.invalid });
       });
 
   } catch (err) {

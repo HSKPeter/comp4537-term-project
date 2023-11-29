@@ -17,7 +17,7 @@ function userRegistrationController(req, res) {
                 res.status(HTTP_STATUS_CODES.CREATED).json({ role });
             })
             .catch((_err) => {
-                res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.registration.invalidCredentials });
+                res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.registration.failure });
             });
     } catch (err) {
         console.error(err);

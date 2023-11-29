@@ -6,7 +6,6 @@ const USER_MESSAGES = {
     failedToSummarizeText: 'Failed to summarize text. Please try again later.',
     failedToGetNews: 'Failed to get news. Please try again later.',
     failedToRegisterUser: 'Failed to register. Please try again later.',
-    invalidCredentials: 'Invalid credentials.',
     auth: {
         tokenNotFound: 'Token not found.',
         userQuotaExceeded: 'User quota exceeded.',
@@ -18,12 +17,11 @@ const USER_MESSAGES = {
     },
     login: {
         missingFields: 'Missing email, username or password.',
-        invalidCredentials: 'Invalid credentials.',
+        invalid: 'Invalid login.',
         failure: 'Failed to login. Please try again later.',
     },
     registration: {
         missingFields: 'Missing email, username or password.',
-        invalidCredentials: 'Invalid credentials.',
         failure: 'Failed to register. Please try again later.',
         success: 'User registered successfully.',
 
