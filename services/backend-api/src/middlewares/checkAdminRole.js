@@ -1,5 +1,6 @@
 const { USER_MESSAGES } = require('../messages/userMessage');
 const { API_ROUTE_PATHS } = require('../router/routes');
+const { COOKIE_KEYS, COOKIE_CONFIG } = require('../utils/cookieUtils');
 const { HTTP_STATUS_CODES } = require('../utils/httpUtils');
 const { getRoleFromToken, USER_ROLES } = require('../utils/userAuthenticationUtils');
 
@@ -24,11 +25,13 @@ function checkAdminRole(req, res, next) {
   }
 
   getRoleFromToken(token)
-    .then((userRole) => {
-      if (userRole !== USER_ROLES.ADMIN) {
+    .then(({ role, token }) => {
+      if (role !== USER_ROLES.ADMIN) {
         res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.auth.notAdmin });
         return;
       }
+
+      res.cookie(COOKIE_KEYS.TOKEN, token, COOKIE_CONFIG);
       next();
     })
     .catch((_err) => {

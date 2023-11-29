@@ -82,7 +82,7 @@ const SECRET_KEY = process.env.JWT_SECRET_KEY;
 //         }
 
 //         const apiKey = authHeader.substring(BEARER_TOKEN_PREFIX.length);
-        
+
 //         // TODO: Find the API key in the database
 //         if (apiKey !== API_SECRET_KEY) {
 //             res.status(401).json({ error: 'Invalid token' });
@@ -170,7 +170,6 @@ function decodeToken(token) {
 function checkIfUserHasRemainingQuota(token) {
     // TODO: Get the information (e.g. user ID) from the token payload
     const decodedToken = decodeToken(token);
-    console.log(`Decoded token: ${JSON.stringify(decodedToken)}`);
     const userID = decodedToken.userID;
     const apiCalls = runSQLQuery('SELECT COUNT(*) AS callCount FROM APICall WHERE UserID = ?', [userID]);
 
@@ -195,7 +194,10 @@ app.post('/user', async (req, res) => {
 
         const hasRemainingQuota = checkIfUserHasRemainingQuota(token);
 
-        res.status(200).json({ hasRemainingQuota });
+        const { iat, exp, expiresIn, ...corePayload } = payload;
+        const newToken = jwt.sign(corePayload, SECRET_KEY, { expiresIn: DEFAULT_TOKEN_EXPIRES_IN });
+
+        res.status(200).json({ hasRemainingQuota, newToken });
     } catch (error) {
         console.error('Error authenticating token: ', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -210,8 +212,9 @@ app.post('/role', async (req, res) => {
             res.status(401).json({ error: 'Invalid token' });
             return;
         }
-        const { role } = payload;
-        const newToken = jwt.sign(payload, SECRET_KEY, { expiresIn: DEFAULT_TOKEN_EXPIRES_IN });
+        const { iat, exp, expiresIn, ...corePayload } = payload;
+        const { role } = corePayload;
+        const newToken = jwt.sign(corePayload, SECRET_KEY, { expiresIn: DEFAULT_TOKEN_EXPIRES_IN });
         res.status(200).json({ role, newToken });
     } catch (error) {
         console.error('Error retrieving role: ', error);
