@@ -50,6 +50,8 @@ const UserTypes = {
     Regular: 2,
 }
 
+const DEFAULT_TOKEN_EXPIRES_IN = 60 * 15; // 15 minutes
+
 const app = express();
 
 const swaggerPath = '/api-docs';
@@ -118,7 +120,7 @@ app.post('/register', async (req, res) => {
             role,
         };
 
-        const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
+        const token = jwt.sign(payload, SECRET_KEY, { expiresIn: DEFAULT_TOKEN_EXPIRES_IN });
         res.status(201).json({ message: 'User registered successfully', token, role });
     } catch (error) {
         console.error('Error registering user: ', error);
@@ -146,7 +148,7 @@ app.post('/login', async (req, res) => {
         const role = 'user'; // TODO: Get the role from database
 
         // Sign a JWT token
-        const token = jwt.sign({ userID: user[0].UserID, username: user[0].Name, role }, SECRET_KEY, { expiresIn: '1h' });
+        const token = jwt.sign({ userID: user[0].UserID, username: user[0].Name, role }, SECRET_KEY, { expiresIn: DEFAULT_TOKEN_EXPIRES_IN });
 
         res.status(200).json({ token, role });
     } catch (error) {
@@ -164,23 +166,6 @@ function decodeToken(token) {
     }
 }
 
-function checkIfTokenExpired(token) {
-    try {
-        const decodedToken = decodeToken(token);
-
-        const tokenExpirationEpoch = decodedToken?.exp;
-
-        if (!tokenExpirationEpoch) {
-            return false;
-        }
-
-        const currentEpoch = Math.floor(Date.now() / 1000);
-
-        return tokenExpirationEpoch < currentEpoch;
-    } catch (error) {
-        return false;
-    }
-}
 
 function checkIfUserHasRemainingQuota(token) {
     // TODO: Get the information (e.g. user ID) from the token payload
@@ -201,18 +186,10 @@ app.post('/user', async (req, res) => {
     try {
         const { token } = req.body;
 
-        // TODO: Remove the below commented code
-        const isTokenValid = decodeToken(token) !== null;
+        const payload = decodeToken(token);
 
-        if (!isTokenValid) {
+        if (!payload) {
             res.status(401).json({ error: 'Invalid token' });
-            return;
-        }
-
-        const isTokenExpired = checkIfTokenExpired(token);
-
-        if (isTokenExpired) {
-            res.status(401).json({ error: 'Token expired' });
             return;
         }
 
@@ -228,11 +205,16 @@ app.post('/user', async (req, res) => {
 app.post('/role', async (req, res) => {
     try {
         const { token } = req.body;
-        const decodedToken = jwt.verify(token, SECRET_KEY);
-        const { role } = decodedToken;
-        res.status(200).json({ role });
+        const payload = decodeToken(token);
+        if (!payload) {
+            res.status(401).json({ error: 'Invalid token' });
+            return;
+        }
+        const { role } = payload;
+        const newToken = jwt.sign(payload, SECRET_KEY, { expiresIn: DEFAULT_TOKEN_EXPIRES_IN });
+        res.status(200).json({ role, newToken });
     } catch (error) {
-        console.error('Error authenticating token: ', error);
+        console.error('Error retrieving role: ', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
