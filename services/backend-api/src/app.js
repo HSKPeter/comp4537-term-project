@@ -8,6 +8,7 @@ const { swaggerSpecs } = require('./router/swaggerDocs');
 const { CORS_OPTIONS } = require('./utils/corsUtils');
 const router = require('./router');
 const { IS_DEVELOPMENT_MODE } = require('./config');
+const { logging } = require('./middlewares/logging');
 
 const app = express();
 
@@ -22,6 +23,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Enable cookie parsing
 app.use(cookieParser());
+
+// Log all incoming requests
+app.use(logging);
 
 app.use(ROUTE_PATHS.ROOT, router);
 
