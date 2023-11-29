@@ -1,6 +1,7 @@
 const { HTTP_STATUS_CODES } = require('../utils/httpUtils');
 const { USER_MESSAGES } = require('../messages/userMessage');
 const { getRoleFromToken } = require('../utils/userAuthenticationUtils');
+const { COOKIE_KEYS, COOKIE_CONFIG } = require('../utils/cookieUtils');
 
 function roleValidationController(req, res) {
     try {
@@ -11,7 +12,8 @@ function roleValidationController(req, res) {
         }
 
         getRoleFromToken(token)
-            .then((role) => {
+            .then(({ role, token }) => {
+                res.cookie(COOKIE_KEYS.TOKEN, token, COOKIE_CONFIG);
                 res.status(HTTP_STATUS_CODES.OK).json({ role });
             })
             .catch((_err) => {

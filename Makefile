@@ -6,3 +6,6 @@ auth:
 
 react:
 	@(cd services/frontend && npm run start)
+
+dummy-users:
+	@(node services/authentication/src/addDummyData.js)

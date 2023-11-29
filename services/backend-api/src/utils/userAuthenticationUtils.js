@@ -49,15 +49,18 @@ async function loginUser({ email, username, password }) {
 }
 
 async function getUserQuotaFromToken(token) {
-    // const response = await authAxiosInstance.post(API_ENDPOINTS.VALIDATE, { token });
-    // if (response.status !== HTTP_STATUS_CODES.OK) {
-    //     const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
-    //     throw new Error(errorMessage);
-    // }
+    const response = await authAxiosInstance.post(API_ENDPOINTS.VALIDATE, { token });
+    if (response.status !== HTTP_STATUS_CODES.OK) {
+        const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
+        throw new Error(errorMessage);
+    }
 
-    // const { hasRemainingQuota } = response.data;
-    // return hasRemainingQuota ?? 0;
-    return 99;
+    const { hasRemainingQuota, newToken } = response.data;
+
+    return {
+        hasRemainingQuota: hasRemainingQuota ?? 0,
+        token: newToken ?? token
+    };
 }
 
 async function getRoleFromToken(token) {
@@ -66,8 +69,11 @@ async function getRoleFromToken(token) {
         const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
         throw new Error(errorMessage);
     }
-    const { role } = response.data;
-    return role;
+    const { role, newToken } = response.data;
+    return {
+        role,
+        token: newToken ?? token
+    }
 }
 
 module.exports = {

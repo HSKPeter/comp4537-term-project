@@ -2,6 +2,7 @@ const COOKIE_CONFIG = {
     httpOnly: true,
     sameSite: 'strict',
     secure: true,
+    overwrite: true,
 };
 
 const COOKIE_KEYS = {

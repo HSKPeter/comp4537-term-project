@@ -112,7 +112,7 @@ paths:
   /user:
     post:
       summary: Check user's eligibility based on the JWT token
-      description: Check if user is eligible to use the text summarization service
+      description: Check user's eligibility based on the JWT token
       requestBody:
         description: JSON object with the user data
         required: true
@@ -135,6 +135,9 @@ paths:
                   hasRemainingQuota:
                     type: boolean
                     description: Boolean indicating if the user has remaining quota to use the backend API
+                  newToken:
+                    type: string
+                    description: The new JWT token for authentication
         "401":
           description: JSON object with the error message due to unauthorized access
           content:
@@ -158,7 +161,7 @@ paths:
   /role:
     post:
       summary: Check user's role based on the JWT token
-      description: Check if user is eligible to use the text summarization service
+      description: Check user's role based on the JWT token
       requestBody:
         description: JSON object with the user data
         required: true
@@ -181,6 +184,9 @@ paths:
                   role:
                     type: string
                     description: The role of the user
+                  newToken:
+                    type: string
+                    description: The new JWT token for authentication
         "500":
           description: JSON object with the error message due to internal server error
           content:
