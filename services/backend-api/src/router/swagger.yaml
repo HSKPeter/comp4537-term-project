@@ -32,37 +32,34 @@ paths:
                         count:
                           type: integer
                           description: The number of API calls
-  /api-stats-by-user:
+  /users-info:
     get:
-      summary: Get API usage statistics by user
+      summary: Get users info
       tags:
         - API Statistics
-      description: Get the API usage statistics by user based on the JWT token in HttpOnly secure cookie
+      description: Get username, email, role, and API usage statistics of all users
       responses:
         "200":
-          description: JSON object with the API usage statistics by user
+          description: JSON object with the users info
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  usageStats:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        api-name:
-                          type: string
-                          description: The name of the API
-                        request-type:
-                          type: string
-                          description: The type of the API request
-                        count:
-                          type: integer
-                          description: The number of API calls
-                        user:
-                          type: string
-                          description: The user's email
+                type: array
+                items:
+                  type: object
+                  properties:
+                    username:
+                      type: string
+                      description: The username of the user
+                    email:
+                      type: string
+                      description: The email of the user
+                    role:
+                      type: string
+                      description: The role of the user
+                    apiConsumption:
+                      type: integer
+                      description: The API consumption of the user
         "400":
           description: JSON object with the error message
           content:
