@@ -7,7 +7,6 @@ const { ROUTE_PATHS } = require('./router/routes');
 const { swaggerSpecs } = require('./router/swaggerDocs');
 const { CORS_OPTIONS } = require('./utils/corsUtils');
 const router = require('./router');
-const { IS_DEVELOPMENT_MODE } = require('./config');
 const { logging } = require('./middlewares/logging');
 
 const app = express();

@@ -8,7 +8,7 @@ paths:
     get:
       summary: Get API usage statistics
       tags:
-        - User
+        - API Statistics
       description: Get the API usage statistics based on the JWT token in HttpOnly secure cookie
       responses:
         "200":
@@ -36,7 +36,7 @@ paths:
     get:
       summary: Get API usage statistics by user
       tags:
-        - User
+        - API Statistics
       description: Get the API usage statistics by user based on the JWT token in HttpOnly secure cookie
       responses:
         "200":
@@ -77,7 +77,7 @@ paths:
     get:
       summary: Get API consumption
       tags:
-        - User
+        - API Statistics
       description: Get the API consumption of the current user
       responses:
         "200":
@@ -359,8 +359,10 @@ paths:
                       type: string
                       description: The error message          
 tags:
+  - name: API Statistics
+    description: API endpoints for admin to retrieve API usage statistics
   - name: User
-    description: API endpoints for user management
+    description: API endpoints for user management logic
   - name: News
     description: API endpoints for news content
   - name: Machine Learning
