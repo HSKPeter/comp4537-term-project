@@ -51,7 +51,7 @@ function checkUserQuota(req, res, next) {
 
       next();
     })
-    .catch((_err) => {
+    .catch(() => {
       res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.auth.errorValidatingToken });
       return;
     });

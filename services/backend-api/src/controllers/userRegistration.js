@@ -16,7 +16,7 @@ function userRegistrationController(req, res) {
                 res.cookie(COOKIE_KEYS.TOKEN, token, COOKIE_CONFIG);
                 res.status(HTTP_STATUS_CODES.CREATED).json({ role });
             })
-            .catch((_err) => {
+            .catch(() => {
                 res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.registration.failure });
             });
     } catch (err) {

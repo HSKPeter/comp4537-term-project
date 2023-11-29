@@ -16,7 +16,7 @@ function roleValidationController(req, res) {
                 res.cookie(COOKIE_KEYS.TOKEN, token, COOKIE_CONFIG);
                 res.status(HTTP_STATUS_CODES.OK).json({ role });
             })
-            .catch((_err) => {
+            .catch(() => {
                 res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.role.roleNotFound });
             });
 
