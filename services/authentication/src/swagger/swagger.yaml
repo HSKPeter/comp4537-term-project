@@ -185,3 +185,51 @@ paths:
                   error:
                     type: string
                     description: The error message
+  /record:
+    post:
+      summary: Record the usage of API services
+      description: Record the usage of API services
+      requestBody:
+        description: JSON object with the user data
+        required: true
+        content:
+          application/json:
+            schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: The JWT token of user
+                  endpoint:
+                    type: string
+                    description: The endpoint of the API
+                    example: /news
+                  method:
+                    type: string
+                    description: The method of the API
+                    example: POST
+                  timestamp:
+                    type: number
+                    description: The timestamp of the API call in epoch time
+                    example: 1701216146000
+      responses:
+        "201":
+          description: JSON object with the success message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Message of successful recording
+        "500":
+          description: JSON object with the error message due to internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
