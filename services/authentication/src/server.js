@@ -96,6 +96,12 @@ const SECRET_KEY = process.env.JWT_SECRET_KEY;
 //     }
 // });
 
+function renewToken(payload) {
+    const { iat, exp, expiresIn, ...corePayload } = payload;
+    const newToken = jwt.sign(corePayload, SECRET_KEY, { expiresIn: DEFAULT_TOKEN_EXPIRES_IN });
+    return newToken;
+}
+
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
 
@@ -193,9 +199,7 @@ app.post('/user', async (req, res) => {
         }
 
         const hasRemainingQuota = checkIfUserHasRemainingQuota(token);
-
-        const { iat, exp, expiresIn, ...corePayload } = payload;
-        const newToken = jwt.sign(corePayload, SECRET_KEY, { expiresIn: DEFAULT_TOKEN_EXPIRES_IN });
+        const newToken = renewToken(payload);
 
         res.status(200).json({ hasRemainingQuota, newToken });
     } catch (error) {
@@ -212,9 +216,8 @@ app.post('/role', async (req, res) => {
             res.status(401).json({ error: 'Invalid token' });
             return;
         }
-        const { iat, exp, expiresIn, ...corePayload } = payload;
-        const { role } = corePayload;
-        const newToken = jwt.sign(corePayload, SECRET_KEY, { expiresIn: DEFAULT_TOKEN_EXPIRES_IN });
+        const { role } = payload;
+        const newToken = renewToken(payload);
         res.status(200).json({ role, newToken });
     } catch (error) {
         console.error('Error retrieving role: ', error);
