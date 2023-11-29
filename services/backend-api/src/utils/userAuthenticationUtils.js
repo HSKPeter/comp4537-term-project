@@ -24,8 +24,8 @@ authAxiosInstance.interceptors.request.use((config) => {
     return config;
 });
 
-async function registerUser({ username, password }) {
-    const response = await authAxiosInstance.post(API_ENDPOINTS.REGISTER, { username, password });
+async function registerUser({ email, username, password }) {
+    const response = await authAxiosInstance.post(API_ENDPOINTS.REGISTER, { email, username, password });
 
     if (response.status !== HTTP_STATUS_CODES.OK) {
         const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
@@ -36,8 +36,8 @@ async function registerUser({ username, password }) {
     return { token, role };
 }
 
-async function loginUser({ username, password }) {
-    const response = await authAxiosInstance.post(API_ENDPOINTS.LOGIN, { username, password });
+async function loginUser({ email, username, password }) {
+    const response = await authAxiosInstance.post(API_ENDPOINTS.LOGIN, { email, username, password });
 
     if (response.status !== HTTP_STATUS_CODES.OK) {
         const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;

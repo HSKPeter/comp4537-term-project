@@ -3,7 +3,6 @@ const USER_MESSAGES = {
     generalError: 'Something went wrong. Please try again later.',
     missingText: 'Missing text. Please provide text to summarize.',
     missingKeyword: 'Missing keyword in query. Please provide keyword to search for.',
-    missingEmailOrPassword: 'Missing email or password.',
     failedToSummarizeText: 'Failed to summarize text. Please try again later.',
     failedToGetNews: 'Failed to get news. Please try again later.',
     failedToRegisterUser: 'Failed to register. Please try again later.',
@@ -18,12 +17,12 @@ const USER_MESSAGES = {
         roleNotFound: 'Role not found.',
     },
     login: {
-        missingEmailOrPassword: 'Missing email or password.',
+        missingFields: 'Missing email, username or password.',
         invalidCredentials: 'Invalid credentials.',
         failure: 'Failed to login. Please try again later.',
     },
     registration: {
-        missingEmailOrPassword: 'Missing email or password.',
+        missingFields: 'Missing email, username or password.',
         invalidCredentials: 'Invalid credentials.',
         failure: 'Failed to register. Please try again later.',
         success: 'User registered successfully.',
