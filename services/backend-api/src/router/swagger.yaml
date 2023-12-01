@@ -426,9 +426,12 @@ paths:
             schema:
               type: object
               properties:
-                word:
+                originalWord:
                   type: string
-                  description: The bookmark word
+                  description: The original bookmark word
+                newWord:
+                  type: string
+                  description: The new bookmark word
       responses:
         "204":
           description: Successful update of bookmark word

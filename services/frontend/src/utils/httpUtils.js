@@ -13,6 +13,7 @@ export const API_PATHS = {
     register: '/register',
     role: '/role',
     news: '/news',
+    bookmarkWord: '/bookmark-word',
 }
 
 export const HTTP_STATUS_CODES = {

@@ -15,14 +15,24 @@ const styles = {
 
 const IndexPage = () => {
     const [keyword, setKeyword] = useState('');
-    const [bookmarkWords, setBookmarkWords] = useState(['elon', 'openai', 'javascript']); // TODO: fetch from API '/bookmarks
+    const [bookmarkWords, setBookmarkWords] = useState([]); // TODO: fetch from API '/bookmarks
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
 
     useEffect(() => {
-        navigateToLoginPageIfRoleNotFound(navigate, location);
+        async function syncBookmarkWordsWithBackend() {
+            const response = await axiosInstance.get(API_PATHS.bookmarkWord);
+            if (response.status === HTTP_STATUS_CODES.UNAUTHORIZED) {
+                navigate('/login', { state: { from: location } });
+                return;
+            }
+            setBookmarkWords(response.data.bookmarkWords);
+        }
+
+        navigateToLoginPageIfRoleNotFound(navigate, location)
+            .then(() => syncBookmarkWordsWithBackend());
     }, []);
 
     const fetchNews = async () => {
@@ -40,6 +50,18 @@ const IndexPage = () => {
         setLoading(false);
     };
 
+    const addBookmarkWord = async () => {
+        const wordToBookmark = keyword;
+        setBookmarkWords([...bookmarkWords, wordToBookmark]);
+        axiosInstance.post(API_PATHS.bookmarkWord, { word: wordToBookmark })
+            .then(() => {
+                console.log("Word added");
+            })
+            .catch((error) => {
+                console.error("Error adding word:", error);
+            });
+    }
+
     return (
         <>
             <Navbar />
@@ -50,7 +72,7 @@ const IndexPage = () => {
                     onChange={(e) => setKeyword(e.target.value)}
                     placeholder="Enter keyword"
                 />
-                <button disabled={bookmarkWords.length >= 3 || bookmarkWords.includes(keyword)} onClick={() => setBookmarkWords([...bookmarkWords, keyword])}>
+                <button disabled={bookmarkWords.length >= 2 || bookmarkWords.includes(keyword)} onClick={addBookmarkWord}>
                     Bookmark
                 </button>
                 <button onClick={fetchNews} disabled={loading}>
@@ -62,6 +84,15 @@ const IndexPage = () => {
                         <WordChip
                             key={index}
                             word={word}
+                            onEdit={(newWord) => {
+                                const newBookmarkWords = bookmarkWords.map((w) => {
+                                    if (w === word) {
+                                        return newWord;
+                                    }
+                                    return w;
+                                });
+                                setBookmarkWords(newBookmarkWords);
+                            }}
                             onClick={(word) => setKeyword(word)}
                             onDelete={() => setBookmarkWords(bookmarkWords.filter((w) => w !== word))}
                         />))}
