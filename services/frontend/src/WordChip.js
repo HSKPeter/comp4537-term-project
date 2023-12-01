@@ -46,15 +46,28 @@ const WordChip = ({ word, onDelete, onClick, onEdit }) => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [newWord, setNewWord] = useState(word);
 
+    const updateWord = (e) => {
+        e.stopPropagation();
+        setIsEditMode(false);
+        axiosInstance.put('/bookmark-word', { originalWord: word, newWord })
+            .then(() => {
+                console.log(`Word edited: ${word} to ${newWord}`)
+            })
+            .catch((error) => {
+                console.error(`Error editing word: ${word} to ${newWord}`, error);
+            });
+        onEdit(newWord);
+    }
+
     if (!isEditMode) {
         return (
-            <div style={styles.wordChip} onClick={() => onClick(word)}>
-                <span style={styles.word}>{word}</span>
-                <span style={styles.editButton} onClick={(e) => {
+            <div style={styles.wordChip}>
+                <span style={styles.word} onClick={() => onClick(word)}>{word}</span>
+                <button style={styles.editButton} onClick={(e) => {
                     e.stopPropagation();
                     setIsEditMode(true);
-                }}>✎</span>
-                <span
+                }}>✎</button>
+                <button
                     style={styles.deleteButton}
                     onClick={(e) => {
                         e.stopPropagation();
@@ -69,28 +82,16 @@ const WordChip = ({ word, onDelete, onClick, onEdit }) => {
                     }}
                 >
                     x
-                </span>
+                </button>
             </div>
         );
     }
 
 
     return (
-        <div style={styles.wordChip} onClick={() => onClick(word)}>
+        <div style={styles.wordChip}>
             <input style={styles.inputField} type="text" value={newWord} onChange={(e) => setNewWord(e.target.value)} />
-            <span style={styles.confirmButton} onClick={(e) => {
-                e.stopPropagation();
-                setIsEditMode(false);
-                axiosInstance.put('/bookmark-word', { originalWord: word, newWord })
-                    .then(() => {
-                        console.log(`Word edited: ${word} to ${newWord}`)
-                    })
-                    .catch((error) => {
-                        console.error(`Error editing word: ${word} to ${newWord}`, error);
-                    });
-                onEdit(newWord);
-            }
-            }> ✔</span>
+            <button style={styles.confirmButton} disabled={newWord === word} onClick={updateWord}>✔</button>
         </div>
     );
 }
