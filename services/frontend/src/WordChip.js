@@ -42,6 +42,12 @@ const styles = {
     }
 };
 
+const SYMBOLS = {
+    EDIT: '✎',
+    DELETE: 'x',
+    CONFIRM: '✔',
+};
+
 const WordChip = ({ word, onDelete, onClick, onEdit }) => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [newWord, setNewWord] = useState(word);
@@ -59,6 +65,18 @@ const WordChip = ({ word, onDelete, onClick, onEdit }) => {
         onEdit(newWord);
     }
 
+    const deleteWord = (e) => {
+        e.stopPropagation();
+        onDelete(word);
+        axiosInstance.delete('/bookmark-word', { data: { word } })
+            .then(() => {
+                console.log(`Word deleted: ${word}`)
+            })
+            .catch((error) => {
+                console.error(`Error deleting word: ${word}`, error);
+            });
+    }
+
     if (!isEditMode) {
         return (
             <div style={styles.wordChip}>
@@ -66,22 +84,9 @@ const WordChip = ({ word, onDelete, onClick, onEdit }) => {
                 <button style={styles.editButton} onClick={(e) => {
                     e.stopPropagation();
                     setIsEditMode(true);
-                }}>✎</button>
-                <button
-                    style={styles.deleteButton}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onDelete(word);
-                        axiosInstance.delete('/bookmark-word', { data: { word } })
-                            .then(() => {
-                                console.log(`Word deleted: ${word}`)
-                            })
-                            .catch((error) => {
-                                console.error(`Error deleting word: ${word}`, error);
-                            });
-                    }}
-                >
-                    x
+                }}>{SYMBOLS.EDIT}</button>
+                <button style={styles.deleteButton} onClick={deleteWord}>
+                    {SYMBOLS.DELETE}
                 </button>
             </div>
         );
@@ -91,7 +96,7 @@ const WordChip = ({ word, onDelete, onClick, onEdit }) => {
     return (
         <div style={styles.wordChip}>
             <input style={styles.inputField} type="text" value={newWord} onChange={(e) => setNewWord(e.target.value)} />
-            <button style={styles.confirmButton} disabled={newWord === word} onClick={updateWord}>✔</button>
+            <button style={styles.confirmButton} disabled={newWord === word} onClick={updateWord}>{SYMBOLS.CONFIRM}</button>
         </div>
     );
 }
