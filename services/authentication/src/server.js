@@ -4,6 +4,7 @@ const mysql = require('mysql2');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const swaggerUi = require('swagger-ui-express');
+const { vsprintf } = require('sprintf-js');
 require('dotenv').config({ path: './.env' });
 
 const { swaggerSpecs } = require('./swagger/swaggerDocs');
@@ -13,13 +14,14 @@ const dbPool = mysql.createPool({
     user: "root",
     password: "",
     database: "comp4537_project",
-    port: 3306
+    port: 3306 // default 3306
 });
 
 const CREATE_TABLE_QUERIES = {
     User: `
         CREATE TABLE IF NOT EXISTS User (
             UserID INT NOT NULL AUTO_INCREMENT,
+            Email VARCHAR(100) NOT NULL,
             Name VARCHAR(100) NOT NULL,
             Password VARCHAR(100) NOT NULL,
             UserType INT NOT NULL,
@@ -39,6 +41,8 @@ const CREATE_TABLE_QUERIES = {
             API_Call_ID INT NOT NULL AUTO_INCREMENT,
             UserID INT NOT NULL,
             Time DATETIME,
+            Method VARCHAR(255),
+            Endpoint VARCHAR(255),
             PRIMARY KEY (API_Call_ID),
             FOREIGN KEY (UserID) REFERENCES User(UserID)
         );
@@ -236,6 +240,90 @@ app.post('/role', async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+//Implement get API stats for admin
+app.get('/api-stats', async (req, res) => {
+    try {
+        // Fetch API stats
+        const apiStats = await getApiStatsFromDatabase();
+
+        // Return API stats
+        res.status(200).json({ usageStats: apiStats });
+
+    } catch (err) {
+        console.error(`Failed to get API stats from the database: ${err?.stack ?? err}`);
+        res.status(500).json({ error: 'Failed to fetch API stats from the database' });
+    }
+});
+
+async function getApiStatsFromDatabase() {
+    try {
+        // Query the database to get API stats
+        const apiStatsQuery = `
+            SELECT
+                Endpoint AS 'api-name',
+                Method AS 'request-type',
+                COUNT(*) AS 'count'
+            FROM APICall
+            GROUP BY Method, Endpoint;
+        `;
+
+        const apiStats = await runSQLQuery(apiStatsQuery);
+
+        return apiStats;
+    } catch (error) {
+        console.error('Error getting API stats from the database: ', error);
+        throw error;
+    }
+}
+
+
+//Implement get API stats by user for admin
+app.get('/users-info', async (req, res) => {
+    try {
+        // Fetch API stats
+        const apiStats = await getApiStatsByUserFromDatabase();
+
+        // Return API stats
+        res.status(200).json({ usageStats: apiStats });
+
+    } catch (err) {
+        console.error(`Failed to get API stats from the database: ${err?.stack ?? err}`);
+        res.status(500).json({ error: 'Failed to fetch API stats from the database' });
+    }
+});
+
+async function getApiStatsByUserFromDatabase() {
+    try {
+        const apiStatsByUserQuery = `
+            SELECT
+                User.Name AS 'username',
+                User.Email AS 'email',
+                UserType.UserAuthorization AS 'role',
+                COUNT(*) AS 'apiConsumption'
+            FROM APICall
+            JOIN User ON APICall.UserID = User.UserID
+            JOIN UserType ON User.UserType = UserType.UserTypeID
+            GROUP BY User.Name, User.Email, UserType.UserAuthorization;
+        `;
+
+        const apiStatsByUser = await runSQLQuery(apiStatsByUserQuery);
+
+        // Transform the result to the desired format
+        const formattedApiStats = apiStatsByUser.map(apiStat => ({
+            username: apiStat.username,
+            email: apiStat.email,
+            role: apiStat.role,
+            apiConsumption: apiStat.apiConsumption
+        }));
+
+        return formattedApiStats;
+    } catch (error) {
+        console.error('Error getting API stats by user from the database: ', error);
+        throw error;
+    }
+} 
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
