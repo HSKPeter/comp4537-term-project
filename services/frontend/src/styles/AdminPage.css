@@ -56,6 +56,6 @@ table tr:nth-child(even) {
     transition: background-color 0.3s ease;
 }
 
-,admin-page button:hover {
+.admin-page button:hover {
     background-color: #1177bb;
 }
