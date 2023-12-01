@@ -1,6 +1,7 @@
 // src/WordChip.js
 
-import React from 'react';
+import React, { useState } from 'react';
+import { axiosInstance } from './utils/httpUtils';
 
 const styles = {
     wordChip: {
@@ -24,21 +25,78 @@ const styles = {
         fontWeight: 'bold',
         margin: '0 5px',
     },
+    editButton: {
+        cursor: 'pointer',
+        color: 'blue',
+        fontWeight: 'bold',
+        margin: '0 5px',
+    },
+    confirmButton: {
+        cursor: 'pointer',
+        color: 'green',
+        fontWeight: 'bold',
+        margin: '0 5px',
+    },
+    inputField: {
+        marginRight: '5px',
+    }
 };
 
-const WordChip = ({ word, onDelete, onClick }) => {
+const SYMBOLS = {
+    EDIT: '✎',
+    DELETE: 'x',
+    CONFIRM: '✔',
+};
+
+const WordChip = ({ word, onDelete, onClick, onEdit }) => {
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [newWord, setNewWord] = useState(word);
+
+    const updateWord = (e) => {
+        e.stopPropagation();
+        setIsEditMode(false);
+        axiosInstance.put('/bookmark-word', { originalWord: word, newWord })
+            .then(() => {
+                console.log(`Word edited: ${word} to ${newWord}`)
+            })
+            .catch((error) => {
+                console.error(`Error editing word: ${word} to ${newWord}`, error);
+            });
+        onEdit(newWord);
+    }
+
+    const deleteWord = (e) => {
+        e.stopPropagation();
+        onDelete(word);
+        axiosInstance.delete('/bookmark-word', { data: { word } })
+            .then(() => {
+                console.log(`Word deleted: ${word}`)
+            })
+            .catch((error) => {
+                console.error(`Error deleting word: ${word}`, error);
+            });
+    }
+
+    if (!isEditMode) {
+        return (
+            <div style={styles.wordChip}>
+                <span style={styles.word} onClick={() => onClick(word)}>{word}</span>
+                <button style={styles.editButton} onClick={(e) => {
+                    e.stopPropagation();
+                    setIsEditMode(true);
+                }}>{SYMBOLS.EDIT}</button>
+                <button style={styles.deleteButton} onClick={deleteWord}>
+                    {SYMBOLS.DELETE}
+                </button>
+            </div>
+        );
+    }
+
+
     return (
-        <div style={styles.wordChip} onClick={() => onClick(word)}>
-            <span style={styles.word}>{word}</span>
-            <span
-                style={styles.deleteButton}
-                onClick={(e) => {
-                    e.stopPropagation(); // Prevents onClick from being called on parent div
-                    onDelete(word);
-                }}
-            >
-                x
-            </span>
+        <div style={styles.wordChip}>
+            <input style={styles.inputField} type="text" value={newWord} onChange={(e) => setNewWord(e.target.value)} />
+            <button style={styles.confirmButton} disabled={newWord === word} onClick={updateWord}>{SYMBOLS.CONFIRM}</button>
         </div>
     );
 }

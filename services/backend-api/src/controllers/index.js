@@ -6,6 +6,7 @@ const { userLogoutController } = require('./userLogout');
 const { apiConsumptionController } = require('./apiConsumption');
 const { apiStatsByUserController } = require('./apiStatsByUser');
 const { apiStatsController } = require('./apiStats');
+const { getBookmarkWordsController, addBookmarkWordController, editBookmarkWordController, deleteBookmarkWordController } = require('./bookmarkWord');
 
 module.exports = {
     userLoginController,
@@ -15,5 +16,9 @@ module.exports = {
     newsContentController,
     apiConsumptionController,
     apiStatsByUserController,
-    apiStatsController
+    apiStatsController,
+    getBookmarkWordsController,
+    addBookmarkWordController,
+    editBookmarkWordController,
+    deleteBookmarkWordController
 };

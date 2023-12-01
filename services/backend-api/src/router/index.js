@@ -8,7 +8,11 @@ const {
     userLogoutController,
     apiConsumptionController,
     apiStatsByUserController,
-    apiStatsController
+    apiStatsController,
+    getBookmarkWordsController,
+    addBookmarkWordController,
+    editBookmarkWordController,
+    deleteBookmarkWordController
 } = require('../controllers');
 const { checkUserQuota } = require('../middlewares/checkUserQuota');
 const { roleValidationController } = require('../controllers/roleValidation');
@@ -23,10 +27,17 @@ router.post(API_ROUTE_PATHS.LOGIN, userLoginController);
 router.post(API_ROUTE_PATHS.REGISTER, userRegistrationController);
 router.post(API_ROUTE_PATHS.LOGOUT, userLogoutController);
 router.get(API_ROUTE_PATHS.ROLE, roleValidationController);
-router.get(API_ROUTE_PATHS.NEWS_CONTENT, newsContentController);
-router.post(API_ROUTE_PATHS.SUMMARIZE_TEXT, textSummarizationController);
+
 router.get(API_ROUTE_PATHS.API_STATS, apiStatsController);
 router.get(API_ROUTE_PATHS.API_STATS_BY_USER, apiStatsByUserController);
 router.get(API_ROUTE_PATHS.API_CONSUMPTION, apiConsumptionController);
+
+router.get(API_ROUTE_PATHS.NEWS_CONTENT, newsContentController);
+router.post(API_ROUTE_PATHS.SUMMARIZE_TEXT, textSummarizationController);
+
+router.get(API_ROUTE_PATHS.BOOKMARK_WORD, getBookmarkWordsController);
+router.post(API_ROUTE_PATHS.BOOKMARK_WORD, addBookmarkWordController);
+router.put(API_ROUTE_PATHS.BOOKMARK_WORD, editBookmarkWordController);
+router.delete(API_ROUTE_PATHS.BOOKMARK_WORD, deleteBookmarkWordController);
 
 module.exports = router;

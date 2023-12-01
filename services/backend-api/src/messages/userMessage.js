@@ -24,8 +24,13 @@ const USER_MESSAGES = {
         missingFields: 'Missing email, username or password.',
         failure: 'Failed to register. Please try again later.',
         success: 'User registered successfully.',
-
-    }
+    },
+    wordBookmark: {
+        missingFields: 'Missing word.',
+        failure: 'Failed to add word. Please try again later.',
+        addSuccess: 'Word \'%s\' added successfully.',
+        editSuccess: 'Word \'%s\' edited to \'%s\' successfully.',
+    },
 };
 
 module.exports = {
