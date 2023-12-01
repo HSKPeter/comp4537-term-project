@@ -5,6 +5,7 @@ import { API_PATHS, HTTP_STATUS_CODES, axiosInstance } from '../utils/httpUtils'
 import Navbar from './components/Navbar';
 import { navigateToLoginPageIfRoleNotFound } from '../utils/securityUtils';
 import { BookmarkPanel } from './components/BookmarkPanel';
+import { NewsDisplayPanel } from './NewsDisplayPanel';
 
 export const BOOKMARK_WORD_LIMIT = 2;
 
@@ -103,23 +104,11 @@ const IndexPage = () => {
                     setIsClearingAllBookmarkWords={setIsClearingAllBookmarkWords}
                 />
 
-                <div>
-                    {news.length ? (
-                        news.map((article, index) => (
-                            <div key={index}>
-                                <h3>{article.title}</h3>
-                                <p>{article.content}</p>
-                                <a href={article.link} target="_blank" rel="noopener noreferrer">Read more</a>
-                                <p>Published: {article.published}</p>
-                            </div>
-                        ))
-                    ) : (
-                        <p>No news to display</p>
-                    )}
-                </div>
+                <NewsDisplayPanel news={news} />
             </div>
         </>
     );
 };
 
 export default IndexPage;
+

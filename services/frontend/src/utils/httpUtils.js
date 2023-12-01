@@ -20,6 +20,7 @@ export const API_PATHS = {
     trendingNews: '/trending-news',
     bookmarkWord: '/bookmark-word',
     bookmarkWords: '/bookmark-words',
+    summarizeText: '/summarize-text',
 }
 
 export const HTTP_STATUS_CODES = {

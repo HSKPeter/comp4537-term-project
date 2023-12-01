@@ -1,0 +1,123 @@
+import React, { useEffect, useState } from 'react';
+import { API_PATHS, axiosInstance } from '../utils/httpUtils';
+import styled from 'styled-components';
+
+// Styled components
+const Card = styled.div`
+  background-color: #2a2a2a;
+  color: white;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+  border: 1px solid #333;
+  &:hover {
+    border: 1px solid #4b8bec; // A bright color for contrast
+  }
+`
+
+const Content = styled.div`
+  transition: height 0.3s ease;
+  overflow: hidden;
+`;
+
+const Button = styled.button`
+  background-color: #4b8bec; 
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  
+  &:hover {
+    background-color: #6699cc; 
+  }
+`
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+`;
+
+const PublishedDate = styled.p`
+  font-size: 0.8em;
+  color: #999;
+`;
+
+const ReadMoreLink = styled.a`
+  color: #4b8bec;
+  text-decoration: none;
+`;
+
+export function NewsDisplayPanel({ news }) {
+    return (
+        <div>
+            {news.length ? (
+                news.map((article, index) => (
+                    <NewsItemCard key={index} article={article} />
+                ))
+            ) : (
+                <p>No news to display</p>
+            )}
+        </div>
+    );
+}
+
+
+function NewsItemCard({ article }) {
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [summary, setSummary] = useState();
+    const [showSummary, setShowSummary] = useState(false);
+    const [displayedText, setDisplayedText] = useState(article.content);
+
+    useEffect(() => {
+        // Check if summary is already stored in local storage
+        const storedSummary = JSON.parse(localStorage.getItem(article.title));
+        if (storedSummary) {
+            setSummary(storedSummary);
+        }
+    }, [article.title]);
+
+    const toggleExpand = () => {
+        setIsExpanded(!isExpanded);
+    };
+
+    const handleSummarize = async () => {
+        setShowSummary(!showSummary);
+        if (summary) {
+            return;
+        }
+
+        setSummary('loading');
+        try {
+            const text = article.content;
+            const response = await axiosInstance.post(API_PATHS.summarizeText, { text });
+            setSummary(response.data.summary);
+            setShowSummary(true);
+            localStorage.setItem(article.title, JSON.stringify(response.data.summary));
+        } catch (error) {
+            console.error('Error summarizing article:', error);
+        }
+    };
+
+    return (
+        <Card onClick={toggleExpand}>
+            <h3>{article.title}</h3>
+            <Content >
+                {summary === 'loading' ? (
+                    <p>Loading...</p> // Replace this with a spinner or loading animation
+                ) : (
+                    <p>{showSummary ? summary : (isExpanded ? article.content : `${article.content.substring(0, 100)}...`)}</p>
+                )}
+            </Content>
+            <ButtonContainer>
+                <Button onClick={handleSummarize}>{showSummary ? 'Show Full Article' : 'Summarize'}</Button>
+            </ButtonContainer>
+            <ReadMoreLink href={article.link} target="_blank" rel="noopener noreferrer">Read more</ReadMoreLink>
+            <PublishedDate>Published: {article.published}</PublishedDate>
+        </Card >
+    );
+}
+
