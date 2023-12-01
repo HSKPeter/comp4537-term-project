@@ -70,7 +70,6 @@ function NewsItemCard({ article }) {
     const [isExpanded, setIsExpanded] = useState(false);
     const [summary, setSummary] = useState();
     const [showSummary, setShowSummary] = useState(false);
-    const [displayedText, setDisplayedText] = useState(article.content);
 
     useEffect(() => {
         // Check if summary is already stored in local storage
