@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { navigateToLoginPageIfRoleNotFound } from './utils/securityUtils';
 import { API_PATHS, HTTP_STATUS_CODES, axiosInstance } from "./utils/httpUtils";
 import "./AdminPage.css";
+import axios from 'axios';
 
 function AdminPage() {
     const navigate = useNavigate();
@@ -13,8 +14,20 @@ function AdminPage() {
 
     useEffect(() => {
         navigateToLoginPageIfRoleNotFound(navigate, location);
-        // setApiUsageData(axiosInstance.get(API_PATHS.apiStats)); // comment back in when backend endoints are ready
-        // setUsersInfo(axiosInstance.get(API_PATHS.usersInfo));    // comment back in when backend endoints are ready
+        // axiosInstance.get(API_PATHS.apiStats).then((response) => {
+        //     if (response.status === HTTP_STATUS_CODES.OK) {
+        //         setApiUsageData(response.data);
+        //     } else {
+        //         alert('An error occurred. Was not able to get API usage data.');
+        //     }
+        // })
+        // axiosInstance.get(API_PATHS.usersInfo).then((response) => {
+        //     if (response.status === HTTP_STATUS_CODES.OK) {
+        //         setUsersInfo(response.data);
+        //     } else {
+        //         alert('An error occurred. Was not able to get users info.');
+        //     }
+        // })
         setApiUsageData(API_USAGE_DATA); // delete when backend endoints are ready
         setUsersInfo(USER_DATA);    // delete when backend endoints are ready
 
@@ -118,6 +131,7 @@ function UsersTable({ usersInfo }) {
 
 
 
+// Dummy Data
 const API_USAGE_DATA = {
     "usageStats": [
         {
