@@ -180,11 +180,11 @@ function decodeToken(token) {
 }
 
 
-function checkIfUserHasRemainingQuota(token) {
+async function checkIfUserHasRemainingQuota(token) {
     // TODO: Get the information (e.g. user ID) from the token payload
     const decodedToken = decodeToken(token);
     const userID = decodedToken.userID;
-    const apiCalls = runSQLQuery('SELECT COUNT(*) AS callCount FROM APICall WHERE UserID = ?', [userID]);
+    const apiCalls = await runSQLQuery('SELECT COUNT(*) AS callCount FROM APICall WHERE UserID = ?', [userID]);
 
     // TODO: Read database to determine if the user has remaining quota
     if (apiCalls > 20) {
@@ -205,7 +205,7 @@ app.post('/user', async (req, res) => {
             return;
         }
 
-        const hasRemainingQuota = checkIfUserHasRemainingQuota(token);
+        const hasRemainingQuota = await checkIfUserHasRemainingQuota(token);
         const newToken = renewToken(payload);
 
         res.status(200).json({ hasRemainingQuota, newToken });
@@ -233,23 +233,58 @@ app.post('/role', async (req, res) => {
 });
 
 app.get('/bookmark-words', async (req, res) => {
-    res.status(200).json({ bookmarkWords: ['hello', 'world'] });
+    runSQLQuery('SELECT 1')
+    .then(() => {
+        res.status(200).json({ bookmarkWords: ['hello', 'world'] });
+    })
+    .catch((err) => {
+        console.error('Error retrieving bookmarked words: ', err);
+        res.status(500).json({ error: 'Internal server error' });
+    });
 });
 
 app.post('/bookmark-word', async (req, res) => {
-    res.status(201).json({ message: 'Word bookmarked successfully' });
+    runSQLQuery('SELECT 1')
+    .then(() => {
+        res.status(201).json({ message: 'Word bookmarked successfully' });
+    })
+    .catch((err) => {
+        console.error('Error bookmarking word: ', err);
+        res.status(500).json({ error: 'Internal server error' });
+    });
 });
 
 app.put('/bookmark-word', async (req, res) => {
-    res.status(200).json({ message: 'Word edited successfully' });
+    runSQLQuery('SELECT 1')
+    .then(() => {
+        res.status(200).json({ message: 'Word updated successfully' });
+    })
+    .catch((err) => {
+        console.error('Error updating bookmarked word: ', err);
+        res.status(500).json({ error: 'Internal server error' });
+    });
 });
 
 app.delete('/bookmark-word', async (req, res) => {
-    res.status(200).json({ message: 'Word deleted successfully' });
+    runSQLQuery('SELECT 1')
+    .then(() => {
+        res.status(200).json({ message: 'Word deleted successfully' });
+    })
+    .catch((err) => {
+        console.error('Error deleting bookmarked word: ', err);
+        res.status(500).json({ error: 'Internal server error' });
+    });
 });
 
 app.delete('/bookmark-words', async (req, res) => {
-    res.status(200).json({ message: 'All words deleted successfully' });
+    runSQLQuery('SELECT 1')
+    .then(() => {
+        res.status(200).json({ message: 'Words deleted successfully' });
+    })
+    .catch((err) => {
+        console.error('Error deleting bookmarked words: ', err);
+        res.status(500).json({ error: 'Internal server error' });
+    });
 });
 
 app.listen(PORT, () => {
