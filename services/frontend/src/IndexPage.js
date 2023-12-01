@@ -6,6 +6,8 @@ import Navbar from './Navbar';
 import { navigateToLoginPageIfRoleNotFound } from './utils/securityUtils';
 import WordChip from './WordChip';
 
+const BOOKMARK_WORD_LIMIT = 2;
+
 const styles = {
     wordChipContainer: {
         display: 'flex',
@@ -15,11 +17,13 @@ const styles = {
 
 const IndexPage = () => {
     const [keyword, setKeyword] = useState('');
-    const [bookmarkWords, setBookmarkWords] = useState([]); // TODO: fetch from API '/bookmarks
+    const [bookmarkWords, setBookmarkWords] = useState([]);
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
+
+    const isBookmarkWordLimitReached = bookmarkWords.length >= BOOKMARK_WORD_LIMIT;
 
     useEffect(() => {
         async function syncBookmarkWordsWithBackend() {
@@ -72,12 +76,14 @@ const IndexPage = () => {
                     onChange={(e) => setKeyword(e.target.value)}
                     placeholder="Enter keyword"
                 />
-                <button disabled={bookmarkWords.length >= 2 || bookmarkWords.includes(keyword)} onClick={addBookmarkWord}>
+                <button disabled={isBookmarkWordLimitReached || bookmarkWords.includes(keyword)} onClick={addBookmarkWord}>
                     Bookmark
                 </button>
                 <button onClick={fetchNews} disabled={loading}>
                     {loading ? 'Loading...' : 'Get News'}
                 </button>
+
+                {isBookmarkWordLimitReached && <div>You can only bookmark {BOOKMARK_WORD_LIMIT} words. Please delete a word to add a new one.</div>}
 
                 <div style={styles.wordChipContainer}>
                     {bookmarkWords.map((word, index) => (
