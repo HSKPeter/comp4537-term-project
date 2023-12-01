@@ -329,37 +329,155 @@ paths:
                     type: string
                     description: The error message
   /role:
-      get:
-        summary: Get user role
-        tags:
-          - User
-        description: Get the user role based on the JWT token in HttpOnly secure cookie
-        responses:
-          "200":
-            description: JSON object with the user data
-            content:
-              application/json:
-                schema:
+    get:
+      summary: Get user role
+      tags:
+        - User
+      description: Get the user role based on the JWT token in HttpOnly secure cookie
+      responses:
+        "200":
+          description: JSON object with the user data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  role:
+                    type: string
+                    description: The user's role
+        "400":
+          description: JSON object with the error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message    
+  /bookmark-word:
+    get:
+      summary: Get bookmark words
+      tags:
+        - Bookmark words
+      description: Get the bookmark words of the current user
+      responses:
+        "200":
+          description: JSON object with the bookmark words
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
                   type: object
                   properties:
-                    role:
+                    word:
                       type: string
-                      description: The user's role
-          "400":
-            description: JSON object with the error message
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    error:
-                      type: string
-                      description: The error message          
+                      description: The bookmark word
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+    post:
+      summary: Add bookmark word
+      tags:
+        - Bookmark words
+      description: Add the given bookmark word to the current user
+      requestBody:
+        description: JSON object with the bookmark word
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                word:
+                  type: string
+                  description: The bookmark word
+      responses:
+        "201":
+          description: Successful addition of bookmark word
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+    put:
+      summary: Edit bookmark word
+      tags:
+        - Bookmark words
+      description: Edit the given bookmark word of the current user
+      requestBody:
+        description: JSON object with the bookmark word
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                word:
+                  type: string
+                  description: The bookmark word
+      responses:
+        "204":
+          description: Successful update of bookmark word
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+    delete:
+      summary: Delete bookmark word
+      tags:
+        - Bookmark words
+      description: Delete the given bookmark word from the current user
+      requestBody:
+        description: JSON object with the bookmark word
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                word:
+                  type: string
+                  description: The bookmark word
+      responses:
+        "204":
+          description: Successful deletion of bookmark word
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message    
 tags:
   - name: API Statistics
     description: API endpoints for admin to retrieve API usage statistics
   - name: User
     description: API endpoints for user management logic
+  - name: Bookmark words
+    description: API endpoints for bookmark words
   - name: News
     description: API endpoints for news content
   - name: Machine Learning
