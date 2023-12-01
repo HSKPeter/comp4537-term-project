@@ -102,6 +102,13 @@ function renewToken(payload) {
     return newToken;
 }
 
+app.use((req, res, next) => {
+    const method = req.method;
+    const url = req.url;
+    console.log(`[${method}] ${url}`);
+    next();
+})
+
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
 
@@ -223,6 +230,26 @@ app.post('/role', async (req, res) => {
         console.error('Error retrieving role: ', error);
         res.status(500).json({ error: 'Internal server error' });
     }
+});
+
+app.get('/bookmark-words', async (req, res) => {
+    res.status(200).json({ bookmarkWords: ['hello', 'world'] });
+});
+
+app.post('/bookmark-word', async (req, res) => {
+    res.status(201).json({ message: 'Word bookmarked successfully' });
+});
+
+app.put('/bookmark-word', async (req, res) => {
+    res.status(200).json({ message: 'Word edited successfully' });
+});
+
+app.delete('/bookmark-word', async (req, res) => {
+    res.status(200).json({ message: 'Word deleted successfully' });
+});
+
+app.delete('/bookmark-words', async (req, res) => {
+    res.status(200).json({ message: 'All words deleted successfully' });
 });
 
 app.listen(PORT, () => {
