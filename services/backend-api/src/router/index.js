@@ -35,9 +35,10 @@ router.get(API_ROUTE_PATHS.API_CONSUMPTION, apiConsumptionController);
 router.get(API_ROUTE_PATHS.NEWS_CONTENT, newsContentController);
 router.post(API_ROUTE_PATHS.SUMMARIZE_TEXT, textSummarizationController);
 
-router.get(API_ROUTE_PATHS.BOOKMARK_WORD, getBookmarkWordsController);
+router.get(API_ROUTE_PATHS.BOOKMARK_WORDS, getBookmarkWordsController);
 router.post(API_ROUTE_PATHS.BOOKMARK_WORD, addBookmarkWordController);
 router.put(API_ROUTE_PATHS.BOOKMARK_WORD, editBookmarkWordController);
 router.delete(API_ROUTE_PATHS.BOOKMARK_WORD, deleteBookmarkWordController);
+router.delete(API_ROUTE_PATHS.BOOKMARK_WORDS, deleteBookmarkWordController);
 
 module.exports = router;

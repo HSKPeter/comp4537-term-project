@@ -10,6 +10,7 @@ const API_ROUTE_PATHS = {
     API_STATS_BY_USER: '/api-stats-by-user',
     API_CONSUMPTION: '/api-consumption',
     BOOKMARK_WORD: '/bookmark-word',
+    BOOKMARK_WORDS: '/bookmark-words'
 };
 
 const ROUTE_PATHS = {
