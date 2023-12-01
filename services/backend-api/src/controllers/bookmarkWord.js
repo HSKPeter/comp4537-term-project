@@ -1,3 +1,5 @@
+const { vsprintf } = require("sprintf-js");
+const { USER_MESSAGES } = require("../messages/userMessage");
 const { HTTP_STATUS_CODES } = require("../utils/httpUtils");
 
 function getBookmarkWordsController(req, res) {
@@ -10,24 +12,24 @@ function addBookmarkWordController(req, res) {
     console.log("Adding word: ", word)
 
     if (!word) {
-        res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: 'Missing word' });
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.wordBookmark.missingFields });
         return;
     }
 
-    res.status(HTTP_STATUS_CODES.CREATED).json({ message: 'Word added' });
+    res.status(HTTP_STATUS_CODES.CREATED).json({ message: vsprintf(USER_MESSAGES.wordBookmark.addSuccess, [word]) });
 }
 
 function editBookmarkWordController(req, res) {
     const { originalWord, newWord } = req.body;
 
     if (!originalWord || !newWord) {
-        res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: 'Missing word' });
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.wordBookmark.missingFields });
         return;
     }
 
     console.log(`Editing word: ${originalWord} to ${newWord}`);
 
-    res.status(HTTP_STATUS_CODES.OK).json({ message: 'Word edited' });
+    res.status(HTTP_STATUS_CODES.OK).json({ message: vsprintf(USER_MESSAGES.wordBookmark.editSuccess, [originalWord, newWord]) });
 }
 
 function deleteBookmarkWordController(req, res) {
@@ -36,11 +38,12 @@ function deleteBookmarkWordController(req, res) {
     console.log(`Deleting word: ${word}`);
 
     if (!word) {
-        res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: 'Missing word' });
+        res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.wordBookmark.missingFields });
         return;
     }
 
-    res.status(HTTP_STATUS_CODES.OK).json({ message: 'Word deleted' });
+    res.status(HTTP_STATUS_CODES.NO_CONTENT);
+    res.end();
 }
 
 module.exports = {
