@@ -17,8 +17,6 @@ const styles = {
         cursor: 'pointer',
         color: 'red',
         fontWeight: 'bold',
-        // margin: '0 5px',
-
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -27,7 +25,6 @@ const styles = {
         padding: '5px',
         margin: '5px',
         width: 'fit-content',
-        // color: '#333',
     }
 }
 
