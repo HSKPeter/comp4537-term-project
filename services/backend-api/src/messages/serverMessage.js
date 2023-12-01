@@ -5,10 +5,13 @@ const SERVER_MESSAGES = {
     requestReceived: '%s request received for %s',
     newsDataApiKeyNotSet: 'News Data API key not set',
     failedToSummarizeText: 'Failed to summarize text. %s',
-    failedToGetNews: 'Failed to get news. %s',
     failedToRegisterUser: 'Failed to register user. %s',
     failedToLoginUser: 'Failed to login user. %s',
     failedToGetQuotaFromToken: 'Failed to get quota from token. %s',
+    news: {
+        failedToSearchNews: 'Failed to get news. %s',
+        failedToGetTrendingNews: 'Failed to get trending news. %s',
+    },
     models: {
         useHfApi: 'Using Hugging Face API to summarize text',
         useSelfHostedModel: 'Using self-hosted model to summarize text',

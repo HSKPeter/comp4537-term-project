@@ -1,24 +1,17 @@
 const { textSummarizationController } = require('./summarizeText');
-const { newsContentController } = require('./newsContent');
 const { userLoginController } = require('./userLogin');
 const { userRegistrationController } = require('./userRegistration');
 const { userLogoutController } = require('./userLogout');
-const { apiConsumptionController } = require('./apiConsumption');
-const { apiStatsByUserController } = require('./apiStatsByUser');
-const { apiStatsController } = require('./apiStats');
-const { getBookmarkWordsController, addBookmarkWordController, editBookmarkWordController, deleteBookmarkWordController } = require('./bookmarkWord');
+const newsControllers = require('./newsContent');
+const apiStatsControllers = require('./apiStats');
+const bookmarkWordControllers = require('./bookmarkWord');
 
 module.exports = {
     userLoginController,
     userLogoutController,
     userRegistrationController,
     textSummarizationController,
-    newsContentController,
-    apiConsumptionController,
-    apiStatsByUserController,
-    apiStatsController,
-    getBookmarkWordsController,
-    addBookmarkWordController,
-    editBookmarkWordController,
-    deleteBookmarkWordController
+    ...newsControllers,
+    ...apiStatsControllers,
+    ...bookmarkWordControllers
 };

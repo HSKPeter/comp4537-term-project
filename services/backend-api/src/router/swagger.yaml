@@ -282,12 +282,50 @@ paths:
                   error:
                     type: string
                     description: The error message
-  /news:
+  /trending-news:
     get:
-      summary: Get news
+      summary: Get trending news
       tags:
         - News
-      description: Get news from the news API
+      description: Get trending news from the news API
+      responses:
+        "200":
+          description: JSON object with the trending news
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      description: The title of the article
+                    link:
+                      type: string
+                      description: The link to the article
+                    content:
+                      type: string
+                      description: The content of the article
+                    published:
+                      type: string
+                      description: The date the article was published
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+  /search-news:
+    get:
+      summary: Search news by specific keyword
+      tags:
+        - News
+      description: Search news by specific keyword from the news API
       parameters:
         - name: keyword
           in: query
@@ -355,12 +393,12 @@ paths:
                   error:
                     type: string
                     description: The error message    
-  /bookmark-word:
+  /bookmark-words:
     get:
       summary: Get bookmark words
       tags:
         - Bookmark words
-      description: Get the bookmark words of the current user
+      description: Get the all bookmark words of the current user
       responses:
         "200":
           description: JSON object with the bookmark words
@@ -373,7 +411,7 @@ paths:
                   properties:
                     word:
                       type: string
-                      description: The bookmark word
+                      description: Words bookmarked by the user
         "500":
           description: Internal server error
           content:
@@ -384,8 +422,27 @@ paths:
                   error:
                     type: string
                     description: The error message
+    delete:
+      summary: Delete all bookmark words
+      tags:
+        - Bookmark words
+      description: Delete all bookmark words of the current user
+      responses:
+        "204":
+          description: Successful deletion of all bookmark word
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+  /bookmark-word:
     post:
-      summary: Add bookmark word
+      summary: Add a bookmark word
       tags:
         - Bookmark words
       description: Add the given bookmark word to the current user
@@ -414,7 +471,7 @@ paths:
                     type: string
                     description: The error message
     put:
-      summary: Edit bookmark word
+      summary: Edit a bookmark word
       tags:
         - Bookmark words
       description: Edit the given bookmark word of the current user
@@ -446,7 +503,7 @@ paths:
                     type: string
                     description: The error message
     delete:
-      summary: Delete bookmark word
+      summary: Delete a bookmark word
       tags:
         - Bookmark words
       description: Delete the given bookmark word from the current user

@@ -13,6 +13,19 @@ const styles = {
         display: 'flex',
         flexWrap: 'wrap',
     },
+    clearAllBookmarkWordsButton: {
+        cursor: 'pointer',
+        color: 'red',
+        fontWeight: 'bold',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: '#e0e0e0',
+        borderRadius: '5px',
+        padding: '5px',
+        margin: '5px',
+        width: 'fit-content',
+    }
 }
 
 const IndexPage = () => {
@@ -20,29 +33,35 @@ const IndexPage = () => {
     const [bookmarkWords, setBookmarkWords] = useState([]);
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [isClearingAllBookmarkWords, setIsClearingAllBookmarkWords] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
 
+    const keywordNotEmpty = keyword.trim() !== "";
     const isBookmarkWordLimitReached = bookmarkWords.length >= BOOKMARK_WORD_LIMIT;
 
     useEffect(() => {
         async function syncBookmarkWordsWithBackend() {
-            const response = await axiosInstance.get(API_PATHS.bookmarkWord);
-            if (response.status === HTTP_STATUS_CODES.UNAUTHORIZED) {
-                navigate('/login', { state: { from: location } });
-                return;
+            try {
+                const response = await axiosInstance.get(API_PATHS.bookmarkWords);
+                setBookmarkWords(response.data.bookmarkWords);
+            } catch (error) {
+                console.error("Error fetching bookmark words:", error);
             }
-            setBookmarkWords(response.data.bookmarkWords);
         }
 
         navigateToLoginPageIfRoleNotFound(navigate, location)
-            .then(() => syncBookmarkWordsWithBackend());
+            .then(() => {
+                syncBookmarkWordsWithBackend();
+            });
     }, []);
 
     const fetchNews = async () => {
         setLoading(true);
         try {
-            const response = await axiosInstance.get(`${API_PATHS.news}?keyword=${keyword}`);
+            const url = keywordNotEmpty ? `${API_PATHS.searchNews}?keyword=${keyword}` : API_PATHS.trendingNews;
+
+            const response = await axiosInstance.get(url);
             if (response.status === HTTP_STATUS_CODES.UNAUTHORIZED) {
                 navigate('/login', { state: { from: location } });
                 return;
@@ -53,6 +72,22 @@ const IndexPage = () => {
         }
         setLoading(false);
     };
+
+    const clearAllBookmarkWords = async () => {
+        try {
+            const hasConfirmed = window.confirm("Confirm to clear all bookmarked words?");
+            if (hasConfirmed) {
+                setIsClearingAllBookmarkWords(true);
+                await axiosInstance.delete(API_PATHS.bookmarkWords);
+                setBookmarkWords([]);
+                setIsClearingAllBookmarkWords(false);
+            }
+        } catch (error) {
+            console.error("Error clearing bookmark words:", error);
+            alert("Error clearing bookmark words. Please try again later.");
+            setIsClearingAllBookmarkWords(false);
+        }
+    }
 
     const addBookmarkWord = async () => {
         const wordToBookmark = keyword;
@@ -79,13 +114,19 @@ const IndexPage = () => {
                 <button disabled={isBookmarkWordLimitReached || bookmarkWords.includes(keyword)} onClick={addBookmarkWord}>
                     Bookmark
                 </button>
-                <button onClick={fetchNews} disabled={loading}>
-                    {loading ? 'Loading...' : 'Get News'}
-                </button>
+                {keywordNotEmpty
+                    ? <button onClick={fetchNews} disabled={loading}>
+                        {loading ? 'Loading...' : 'Search News'}
+                    </button>
+                    : <button onClick={fetchNews} disabled={loading}>
+                        {loading ? 'Loading...' : 'Get Trending News'}
+                    </button>
+                }
 
-                {isBookmarkWordLimitReached && <div>You can only bookmark {BOOKMARK_WORD_LIMIT} words. Please delete a word to add a new one.</div>}
+                {isBookmarkWordLimitReached && !isClearingAllBookmarkWords && <div>You can only bookmark {BOOKMARK_WORD_LIMIT} words. Please delete a word to add a new one.</div>}
+                {isClearingAllBookmarkWords && <p>Clearing all bookmarked words...</p>}
 
-                <div style={styles.wordChipContainer}>
+                {!isClearingAllBookmarkWords && <div style={styles.wordChipContainer}>
                     {bookmarkWords.map((word, index) => (
                         <WordChip
                             key={index}
@@ -102,7 +143,13 @@ const IndexPage = () => {
                             onClick={(word) => setKeyword(word)}
                             onDelete={() => setBookmarkWords(bookmarkWords.filter((w) => w !== word))}
                         />))}
-                </div>
+
+                        {
+                            bookmarkWords.length === 0 
+                            ? <p>No bookmarked words to display</p>
+                            : <button style={styles.clearAllBookmarkWordsButton} onClick={clearAllBookmarkWords}>Clear all bookmarked words</button>
+                        }
+                </div>}
 
                 <div>
                     {news.length ? (

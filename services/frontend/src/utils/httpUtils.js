@@ -12,8 +12,10 @@ export const API_PATHS = {
     login: '/login',
     register: '/register',
     role: '/role',
-    news: '/news',
+    searchNews: '/search-news',
+    trendingNews: '/trending-news',
     bookmarkWord: '/bookmark-word',
+    bookmarkWords: '/bookmark-words',
 }
 
 export const HTTP_STATUS_CODES = {

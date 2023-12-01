@@ -4,8 +4,11 @@ const USER_MESSAGES = {
     missingText: 'Missing text. Please provide text to summarize.',
     missingKeyword: 'Missing keyword in query. Please provide keyword to search for.',
     failedToSummarizeText: 'Failed to summarize text. Please try again later.',
-    failedToGetNews: 'Failed to get news. Please try again later.',
     failedToRegisterUser: 'Failed to register. Please try again later.',
+    news: {
+        failedToGetTrendingNews: 'Failed to get trending news. Please try again later.',
+        failedToSearchNews: 'Failed to search news. Please try again later.',
+    },
     auth: {
         tokenNotFound: 'Token not found.',
         userQuotaExceeded: 'User quota exceeded.',
