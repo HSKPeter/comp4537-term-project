@@ -1,7 +1,6 @@
-const axios = require('axios');
-const { AUTH_SERVER_ORIGIN } = require('../config');
 const { SERVER_MESSAGES } = require('../messages/serverMessage');
 const { HTTP_STATUS_CODES } = require('./httpUtils');
+const { authAxiosInstance } = require('./httpUtils');
 
 const USER_ROLES = {
     ADMIN: "admin",
@@ -14,15 +13,6 @@ const API_ENDPOINTS = {
     VALIDATE: "/user",
     ROLE: "/role"
 }
-
-const authAxiosInstance = axios.create({
-    baseURL: AUTH_SERVER_ORIGIN
-});
-
-authAxiosInstance.interceptors.request.use((config) => {
-    config.headers['Authorization'] = `Bearer abcd`;
-    return config;
-});
 
 async function registerUser({ email, username, password }) {
     const response = await authAxiosInstance.post(API_ENDPOINTS.REGISTER, { email, username, password });
