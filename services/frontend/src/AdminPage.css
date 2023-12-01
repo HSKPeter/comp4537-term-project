@@ -1,0 +1,61 @@
+/* Base styles for the whole admin page */
+.admin-page {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 6px;
+}
+
+/* Styles for the main heading */
+.admin-page h1 {
+    text-align: center;
+    color: #569cd6;
+}
+
+/* General table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+/* Table header styles */
+table th {
+    background-color: #252526;
+    color: #9cdcfe;
+    padding: 10px;
+    border-bottom: 1px solid #3c3c3c;
+}
+
+/* Table body styles */
+table td {
+    padding: 10px;
+    border-bottom: 1px solid #3c3c3c;
+}
+
+/* Row styling */
+table tr:nth-child(odd) {
+    background-color: #2d2d2d;
+}
+
+table tr:nth-child(even) {
+    background-color: #252526;
+}
+
+/* Button styles */
+button {
+    background-color: #0e639c;
+    color: #dcdcdc;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #1177bb;
+}

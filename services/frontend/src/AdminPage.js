@@ -1,29 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { navigateToLoginPageIfRoleNotFound } from './utils/securityUtils';
 import { API_PATHS, HTTP_STATUS_CODES, axiosInstance } from "./utils/httpUtils";
-
+import "./AdminPage.css";
 
 function AdminPage() {
     const navigate = useNavigate();
     const location = useLocation();
+    const [apiUsageData, setApiUsageData] = useState([]);
+    const [usersInfo, setUsersInfo] = useState([]);
 
     useEffect(() => {
         navigateToLoginPageIfRoleNotFound(navigate, location);
+        // setApiUsageData(axiosInstance.get(API_PATHS.apiStats)); // comment back in when backend endoints are ready
+        // setUsersInfo(axiosInstance.get(API_PATHS.usersInfo));    // comment back in when backend endoints are ready
+        setApiUsageData(API_USAGE_DATA); // delete when backend endoints are ready
+        setUsersInfo(USER_DATA);    // delete when backend endoints are ready
+
     }, []);
 
     return (
         <div className='admin-page'>
             <h1>Admin Page</h1>
-            <ApiUsageTable apiUsageData={API_USAGE_DATA} />
-
+            <ApiUsageTable apiUsageData={apiUsageData.usageStats} />
+            <UsersTable usersInfo={usersInfo['users-info']} />
         </div>
     )
 }
 
 
-function ApiUsageTable(apiUsageData) {
+function ApiUsageTable({ apiUsageData }) {
+    console.log(apiUsageData)
+    if (!apiUsageData) {
+        // return table with loading wheel
+        return (
+            <div className='api-usage-table'> LOADING </div>
+
+        )
+    }
     return (
         <div className='api-usage-table'>
             <table>
@@ -35,7 +50,7 @@ function ApiUsageTable(apiUsageData) {
                     </tr>
                 </thead>
                 <tbody>
-                    {apiUsageData.usageStats.map((apiUsage) => (
+                    {apiUsageData.map((apiUsage) => (
                         <tr key={apiUsage['api-name']}>
                             <td>{apiUsage['api-name']}</td>
                             <td>{apiUsage['request-type']}</td>
@@ -49,19 +64,28 @@ function ApiUsageTable(apiUsageData) {
 
 }
 
-function UsersTable(userData) {
 
-    function removeUser() {
-        axiosInstance.delete(API_PATHS.usersInfo, { data: { username: userData.username } })
+function UsersTable({ usersInfo }) {
+    function removeUser(username) {
+        axiosInstance.delete(API_PATHS.deleteUser, { username: username })
             .then((response) => {
-                if (response.status !== HTTP_STATUS_CODES.OK) {
-                    throw new Error('An error occurred.');
+                if (response.status === HTTP_STATUS_CODES.OK) {
+                    alert('User deleted successfully.');
+                } else {
+                    alert('An error occurred. Was not able to delete user.');
                 }
             })
             .catch((error) => {
-                console.log(error);
+                alert('An error occurred when connecting to server.', error.message);
             });
 
+    }
+    if (!usersInfo) {
+        // return table with loading wheel
+        return (
+            <div className='users-table'> LOADING </div>
+
+        )
     }
     return (
         <div className='users-table'>
@@ -72,16 +96,17 @@ function UsersTable(userData) {
                         <th>Email</th>
                         <th>Role</th>
                         <th>API Consumption</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {userData.usersInfo.map((user) => (
+                    {usersInfo.map((user) => (
                         <tr key={user.username}>
                             <td>{user.username}</td>
                             <td>{user.email}</td>
                             <td>{user.role}</td>
                             <td>{user.apiConsumption}</td>
-                            <td><button onClick={removeUser}>Remove</button></td>
+                            <td><button onClick={() => removeUser(user.username)}>Remove</button></td>
                         </tr>
                     ))}
                 </tbody>
@@ -92,7 +117,8 @@ function UsersTable(userData) {
 }
 
 
-API_USAGE_DATA = {
+
+const API_USAGE_DATA = {
     "usageStats": [
         {
             "api-name": "API 1",
@@ -117,7 +143,7 @@ API_USAGE_DATA = {
     ]
 }
 
-USER_DATA = {
+const USER_DATA = {
     "users-info": [
         {
             "username": "user1",
