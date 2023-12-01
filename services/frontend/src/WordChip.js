@@ -1,6 +1,7 @@
 // src/WordChip.js
 
 import React, { useState } from 'react';
+import { axiosInstance } from './utils/httpUtils';
 
 const styles = {
     wordChip: {
@@ -58,6 +59,13 @@ const WordChip = ({ word, onDelete, onClick, onEdit }) => {
                     onClick={(e) => {
                         e.stopPropagation();
                         onDelete(word);
+                        axiosInstance.delete('/bookmark-word', { data: { word } })
+                            .then(() => {
+                                console.log(`Word deleted: ${word}`)
+                            })
+                            .catch((error) => {
+                                console.error(`Error deleting word: ${word}`, error);
+                            });
                     }}
                 >
                     x
@@ -73,6 +81,13 @@ const WordChip = ({ word, onDelete, onClick, onEdit }) => {
             <span style={styles.confirmButton} onClick={(e) => {
                 e.stopPropagation();
                 setIsEditMode(false);
+                axiosInstance.put('/bookmark-word', { originalWord: word, newWord })
+                    .then(() => {
+                        console.log(`Word edited: ${word} to ${newWord}`)
+                    })
+                    .catch((error) => {
+                        console.error(`Error editing word: ${word} to ${newWord}`, error);
+                    });
                 onEdit(newWord);
             }
             }> ✔</span>
