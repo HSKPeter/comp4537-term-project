@@ -49,8 +49,10 @@ function deleteBookmarkWordController(req, res) {
 function deleteAllBookmarkWordsController(req, res) {
     console.log("Deleting all bookmark words");
 
-    res.status(HTTP_STATUS_CODES.NO_CONTENT);
-    res.end();
+    setTimeout(() => {
+        res.status(HTTP_STATUS_CODES.NO_CONTENT);
+        res.end();
+    }, 2000);
 }
 
 module.exports = {

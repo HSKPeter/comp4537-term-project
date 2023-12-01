@@ -13,7 +13,8 @@ const {
     getBookmarkWordsController,
     addBookmarkWordController,
     editBookmarkWordController,
-    deleteBookmarkWordController
+    deleteBookmarkWordController,
+    deleteAllBookmarkWordsController
 } = require('../controllers');
 const { checkUserQuota } = require('../middlewares/checkUserQuota');
 const { roleValidationController } = require('../controllers/roleValidation');
@@ -41,6 +42,6 @@ router.get(API_ROUTE_PATHS.BOOKMARK_WORDS, getBookmarkWordsController);
 router.post(API_ROUTE_PATHS.BOOKMARK_WORD, addBookmarkWordController);
 router.put(API_ROUTE_PATHS.BOOKMARK_WORD, editBookmarkWordController);
 router.delete(API_ROUTE_PATHS.BOOKMARK_WORD, deleteBookmarkWordController);
-router.delete(API_ROUTE_PATHS.BOOKMARK_WORDS, deleteBookmarkWordController);
+router.delete(API_ROUTE_PATHS.BOOKMARK_WORDS, deleteAllBookmarkWordsController);
 
 module.exports = router;
