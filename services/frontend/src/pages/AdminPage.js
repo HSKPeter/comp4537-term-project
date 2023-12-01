@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { navigateToLoginPageIfRoleNotFound } from './utils/securityUtils';
-import { API_PATHS, HTTP_STATUS_CODES, axiosInstance } from "./utils/httpUtils";
-import "./AdminPage.css";
+import { navigateToLoginPageIfRoleNotFound } from '../utils/securityUtils';
+import { API_PATHS, HTTP_STATUS_CODES, axiosInstance } from "../utils/httpUtils";
+import "../styles/AdminPage.css";
 import axios from 'axios';
 
 function AdminPage() {
@@ -102,7 +102,7 @@ function UsersTable({ usersInfo }) {
     }
     return (
         <div className='users-table'>
-            <table>
+            <table className="admin-page-table">
                 <thead>
                     <tr>
                         <th>Username</th>

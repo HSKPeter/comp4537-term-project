@@ -16,14 +16,14 @@
 }
 
 /* General table styles */
-table {
+.admin-page table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
 }
 
 /* Table header styles */
-table th {
+.admin-page table th {
     background-color: #252526;
     color: #9cdcfe;
     padding: 10px;
@@ -46,7 +46,7 @@ table tr:nth-child(even) {
 }
 
 /* Button styles */
-button {
+.admin-page button {
     background-color: #0e639c;
     color: #dcdcdc;
     border: none;
@@ -56,6 +56,6 @@ button {
     transition: background-color 0.3s ease;
 }
 
-button:hover {
+,admin-page button:hover {
     background-color: #1177bb;
 }

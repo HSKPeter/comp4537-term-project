@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login, register } from './auth';
-import { updateUserRoleInCache } from './utils/userRoleUtils';
+import { login, register } from '../auth';
+import { updateUserRoleInCache } from '../utils/userRoleUtils';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
