@@ -3,19 +3,29 @@ const { AUTH_SERVER_ORIGIN } = require('../config');
 const { SERVER_MESSAGES } = require('../messages/serverMessage');
 const { HTTP_STATUS_CODES } = require('./httpUtils');
 
-// TODO: Remove this when the auth server is ready
-const jwt = require('jsonwebtoken');
-const secret = "abcd1234";
-
-
-const API_ENDPOINTS = {
-    REGISTER: `${AUTH_SERVER_ORIGIN}/register`,
-    LOGIN: `${AUTH_SERVER_ORIGIN}/login`,
-    VALIDATE: `${AUTH_SERVER_ORIGIN}/user`,
+const USER_ROLES = {
+    ADMIN: "admin",
+    USER: "user"
 }
 
-async function registerUser({ username, password }) {
-    const response = await axios.post(API_ENDPOINTS.REGISTER, { username, password });
+const API_ENDPOINTS = {
+    REGISTER: "/register",
+    LOGIN: "/login",
+    VALIDATE: "/user",
+    ROLE: "/role"
+}
+
+const authAxiosInstance = axios.create({
+    baseURL: AUTH_SERVER_ORIGIN
+});
+
+authAxiosInstance.interceptors.request.use((config) => {
+    config.headers['Authorization'] = `Bearer abcd`;
+    return config;
+});
+
+async function registerUser({ email, username, password }) {
+    const response = await authAxiosInstance.post(API_ENDPOINTS.REGISTER, { email, username, password });
 
     if (response.status !== HTTP_STATUS_CODES.OK) {
         const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
@@ -26,8 +36,8 @@ async function registerUser({ username, password }) {
     return { token, role };
 }
 
-async function loginUser({ username, password }) {
-    const response = await axios.post(API_ENDPOINTS.LOGIN, { username, password });
+async function loginUser({ email, username, password }) {
+    const response = await authAxiosInstance.post(API_ENDPOINTS.LOGIN, { email, username, password });
 
     if (response.status !== HTTP_STATUS_CODES.OK) {
         const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
@@ -39,19 +49,37 @@ async function loginUser({ username, password }) {
 }
 
 async function getUserQuotaFromToken(token) {
-    // const response = await axios.post(API_ENDPOINTS.VALIDATE, { token });
-    // if (response.status !== HTTP_STATUS_CODES.OK) {
-    //     const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
-    //     throw new Error(errorMessage);
-    // }
+    const response = await authAxiosInstance.post(API_ENDPOINTS.VALIDATE, { token });
+    if (response.status !== HTTP_STATUS_CODES.OK) {
+        const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
+        throw new Error(errorMessage);
+    }
 
-    // const { hasRemainingQuota } = response.data;
-    // return hasRemainingQuota ?? 0;
-    return 99;
+    const { hasRemainingQuota, newToken } = response.data;
+
+    return {
+        hasRemainingQuota: hasRemainingQuota ?? 0,
+        token: newToken ?? token
+    };
+}
+
+async function getRoleFromToken(token) {
+    const response = await authAxiosInstance.post(API_ENDPOINTS.ROLE, { token });
+    if (response.status !== HTTP_STATUS_CODES.OK) {
+        const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
+        throw new Error(errorMessage);
+    }
+    const { role, newToken } = response.data;
+    return {
+        role,
+        token: newToken ?? token
+    }
 }
 
 module.exports = {
     registerUser,
     loginUser,
-    getUserQuotaFromToken
+    getUserQuotaFromToken,
+    getRoleFromToken,
+    USER_ROLES
 }

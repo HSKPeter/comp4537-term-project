@@ -5,13 +5,14 @@ import { updateUserRoleInCache } from './utils/userRoleUtils';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
     const handleLogin = async (event) => {
         try {
-            const role = await login(email, password);
+            const role = await login(email, username, password);
             updateUserRoleInCache(role);
             navigate('/');
         } catch (error) {
@@ -21,7 +22,7 @@ export default function LoginPage() {
 
     const handleRegistration = async (event) => {
         try {
-            const role = await register(email, password);
+            const role = await register(email, username, password);
             updateUserRoleInCache(role);
             navigate('/');
         } catch (error) {
@@ -39,6 +40,13 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     style={styles.input}
                 />
+                <input
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    style={styles.input}
+                />                
                 <input
                     type="password"
                     placeholder="Password"

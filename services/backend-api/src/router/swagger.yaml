@@ -46,7 +46,7 @@ paths:
     get:
       summary: Get API usage statistics
       tags:
-        - User
+        - API Statistics
       description: Get the API usage statistics based on the JWT token in HttpOnly secure cookie
       responses:
         "200":
@@ -70,37 +70,34 @@ paths:
                         count:
                           type: integer
                           description: The number of API calls
-  /api-stats-by-user:
+  /users-info:
     get:
-      summary: Get API usage statistics by user
+      summary: Get users info
       tags:
-        - User
-      description: Get the API usage statistics by user based on the JWT token in HttpOnly secure cookie
+        - API Statistics
+      description: Get username, email, role, and API usage statistics of all users
       responses:
         "200":
-          description: JSON object with the API usage statistics by user
+          description: JSON object with the users info
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  usageStats:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        api-name:
-                          type: string
-                          description: The name of the API
-                        request-type:
-                          type: string
-                          description: The type of the API request
-                        count:
-                          type: integer
-                          description: The number of API calls
-                        user:
-                          type: string
-                          description: The user's email
+                type: array
+                items:
+                  type: object
+                  properties:
+                    username:
+                      type: string
+                      description: The username of the user
+                    email:
+                      type: string
+                      description: The email of the user
+                    role:
+                      type: string
+                      description: The role of the user
+                    apiConsumption:
+                      type: integer
+                      description: The API consumption of the user
         "400":
           description: JSON object with the error message
           content:
@@ -115,7 +112,7 @@ paths:
     get:
       summary: Get API consumption
       tags:
-        - User
+        - API Statistics
       description: Get the API consumption of the current user
       responses:
         "200":
@@ -323,12 +320,50 @@ paths:
                   error:
                     type: string
                     description: The error message
-  /news:
+  /trending-news:
     get:
-      summary: Get news
+      summary: Get trending news
       tags:
         - News
-      description: Get news from the news API
+      description: Get trending news from the news API
+      responses:
+        "200":
+          description: JSON object with the trending news
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      description: The title of the article
+                    link:
+                      type: string
+                      description: The link to the article
+                    content:
+                      type: string
+                      description: The content of the article
+                    published:
+                      type: string
+                      description: The date the article was published
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+  /search-news:
+    get:
+      summary: Search news by specific keyword
+      tags:
+        - News
+      description: Search news by specific keyword from the news API
       parameters:
         - name: keyword
           in: query
@@ -370,35 +405,177 @@ paths:
                     type: string
                     description: The error message
   /role:
-      get:
-        summary: Get user role
-        tags:
-          - User
-        description: Get the user role based on the JWT token in HttpOnly secure cookie
-        responses:
-          "200":
-            description: JSON object with the user data
-            content:
-              application/json:
-                schema:
+    get:
+      summary: Get user role
+      tags:
+        - User
+      description: Get the user role based on the JWT token in HttpOnly secure cookie
+      responses:
+        "200":
+          description: JSON object with the user data
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  role:
+                    type: string
+                    description: The user's role
+        "400":
+          description: JSON object with the error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message    
+  /bookmark-words:
+    get:
+      summary: Get bookmark words
+      tags:
+        - Bookmark words
+      description: Get the all bookmark words of the current user
+      responses:
+        "200":
+          description: JSON object with the bookmark words
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
                   type: object
                   properties:
-                    role:
+                    word:
                       type: string
-                      description: The user's role
-          "400":
-            description: JSON object with the error message
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    error:
-                      type: string
-                      description: The error message          
+                      description: Words bookmarked by the user
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+    delete:
+      summary: Delete all bookmark words
+      tags:
+        - Bookmark words
+      description: Delete all bookmark words of the current user
+      responses:
+        "204":
+          description: Successful deletion of all bookmark word
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+  /bookmark-word:
+    post:
+      summary: Add a bookmark word
+      tags:
+        - Bookmark words
+      description: Add the given bookmark word to the current user
+      requestBody:
+        description: JSON object with the bookmark word
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                word:
+                  type: string
+                  description: The bookmark word
+      responses:
+        "201":
+          description: Successful addition of bookmark word
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+    put:
+      summary: Edit a bookmark word
+      tags:
+        - Bookmark words
+      description: Edit the given bookmark word of the current user
+      requestBody:
+        description: JSON object with the bookmark word
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                originalWord:
+                  type: string
+                  description: The original bookmark word
+                newWord:
+                  type: string
+                  description: The new bookmark word
+      responses:
+        "204":
+          description: Successful update of bookmark word
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+    delete:
+      summary: Delete a bookmark word
+      tags:
+        - Bookmark words
+      description: Delete the given bookmark word from the current user
+      requestBody:
+        description: JSON object with the bookmark word
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                word:
+                  type: string
+                  description: The bookmark word
+      responses:
+        "204":
+          description: Successful deletion of bookmark word
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message    
 tags:
+  - name: API Statistics
+    description: API endpoints for admin to retrieve API usage statistics
   - name: User
-    description: API endpoints for user management
+    description: API endpoints for user management logic
+  - name: Bookmark words
+    description: API endpoints for bookmark words
   - name: News
     description: API endpoints for news content
   - name: Machine Learning

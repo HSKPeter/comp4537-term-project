@@ -2,25 +2,46 @@ const { Router } = require('express');
 const { API_ROUTE_PATHS } = require('./routes');
 const {
     textSummarizationController,
-    newsContentController,
+    searchNewsController,
+    getTrendingNewsController,
     userLoginController,
     userRegistrationController,
-    userLogoutController
+    userLogoutController,
+    apiConsumptionController,
+    apiStatsByUserController,
+    apiStatsController,
+    getBookmarkWordsController,
+    addBookmarkWordController,
+    editBookmarkWordController,
+    deleteBookmarkWordController,
+    deleteAllBookmarkWordsController
 } = require('../controllers');
 const { checkUserQuota } = require('../middlewares/checkUserQuota');
 const { roleValidationController } = require('../controllers/roleValidation');
+const { checkAdminRole } = require('../middlewares/checkAdminRole');
 
 const router = Router();
 
-router.post(API_ROUTE_PATHS.LOGIN, userLoginController);
-router.post(API_ROUTE_PATHS.REGISTER, userRegistrationController);
-router.get(API_ROUTE_PATHS.ROLE, roleValidationController);
-
+router.use(checkAdminRole);
 router.use(checkUserQuota);
 
-// In production, the routes below require a valid token to be present either in the Authorization header or in the cookies
-router.get(API_ROUTE_PATHS.NEWS_CONTENT, newsContentController);
-router.post(API_ROUTE_PATHS.SUMMARIZE_TEXT, textSummarizationController);
+router.post(API_ROUTE_PATHS.LOGIN, userLoginController);
+router.post(API_ROUTE_PATHS.REGISTER, userRegistrationController);
 router.post(API_ROUTE_PATHS.LOGOUT, userLogoutController);
+router.get(API_ROUTE_PATHS.ROLE, roleValidationController);
+
+router.get(API_ROUTE_PATHS.API_STATS, apiStatsController);
+router.get(API_ROUTE_PATHS.API_STATS_BY_USER, apiStatsByUserController);
+router.get(API_ROUTE_PATHS.API_CONSUMPTION, apiConsumptionController);
+
+router.get(API_ROUTE_PATHS.SEARCH_NEWS, searchNewsController);
+router.get(API_ROUTE_PATHS.TRENDING_NEWS, getTrendingNewsController);
+router.post(API_ROUTE_PATHS.SUMMARIZE_TEXT, textSummarizationController);
+
+router.get(API_ROUTE_PATHS.BOOKMARK_WORDS, getBookmarkWordsController);
+router.post(API_ROUTE_PATHS.BOOKMARK_WORD, addBookmarkWordController);
+router.put(API_ROUTE_PATHS.BOOKMARK_WORD, editBookmarkWordController);
+router.delete(API_ROUTE_PATHS.BOOKMARK_WORD, deleteBookmarkWordController);
+router.delete(API_ROUTE_PATHS.BOOKMARK_WORDS, deleteAllBookmarkWordsController);
 
 module.exports = router;

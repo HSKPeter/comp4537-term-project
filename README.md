@@ -4,8 +4,10 @@
 ## Development Guide
 
 ### React Frontend
-- TODO
-
+1. Run `cd services/frontend`
+2. Run `npm install`
+3. Run `npm start`to start the react app
+4. Open browser and visit `http://localhost:3000` to see the app
 ### Express Backend API
 1. Run `cd services/backend-api` to change directory to the backend-api
 2. Run `cp .env.example .env` to create a .env file
@@ -16,3 +18,4 @@
 
 ### Express Authentication Service
 - TODO
+

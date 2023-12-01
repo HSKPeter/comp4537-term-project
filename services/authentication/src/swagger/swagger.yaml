@@ -18,6 +18,9 @@ paths:
             schema:
               type: object
               properties:
+                email:
+                  type: string
+                  description: The email address
                 username:
                   type: string
                   description: The username
@@ -63,6 +66,9 @@ paths:
             schema:
               type: object
               properties:
+                email:
+                  type: string
+                  description: The email address
                 username:
                   type: string
                   description: The username
@@ -106,7 +112,7 @@ paths:
   /user:
     post:
       summary: Check user's eligibility based on the JWT token
-      description: Check if user is eligible to use the text summarization service
+      description: Check user's eligibility based on the JWT token
       requestBody:
         description: JSON object with the user data
         required: true
@@ -129,6 +135,9 @@ paths:
                   hasRemainingQuota:
                     type: boolean
                     description: Boolean indicating if the user has remaining quota to use the backend API
+                  newToken:
+                    type: string
+                    description: The new JWT token for authentication
         "401":
           description: JSON object with the error message due to unauthorized access
           content:
@@ -152,7 +161,7 @@ paths:
   /role:
     post:
       summary: Check user's role based on the JWT token
-      description: Check if user is eligible to use the text summarization service
+      description: Check user's role based on the JWT token
       requestBody:
         description: JSON object with the user data
         required: true
@@ -175,6 +184,57 @@ paths:
                   role:
                     type: string
                     description: The role of the user
+                  newToken:
+                    type: string
+                    description: The new JWT token for authentication
+        "500":
+          description: JSON object with the error message due to internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+  /record:
+    post:
+      summary: Record the usage of API services
+      description: Record the usage of API services
+      requestBody:
+        description: JSON object with the user data
+        required: true
+        content:
+          application/json:
+            schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: The JWT token of user
+                  endpoint:
+                    type: string
+                    description: The endpoint of the API
+                    example: /news
+                  method:
+                    type: string
+                    description: The method of the API
+                    example: POST
+                  timestamp:
+                    type: number
+                    description: The timestamp of the API call in epoch time
+                    example: 1701216146000
+      responses:
+        "201":
+          description: JSON object with the success message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Message of successful recording
         "500":
           description: JSON object with the error message due to internal server error
           content:

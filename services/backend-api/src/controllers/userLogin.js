@@ -7,22 +7,20 @@ const { loginUser } = require('../utils/userAuthenticationUtils');
 
 function userLoginController(req, res) {
   try {
-    const { email, password } = req.body;
-    if (email === undefined || password === undefined) {
-      res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.login.missingEmailOrPassword });
+    const { email, username, password } = req.body;
+    if (email === undefined || password === undefined || username === undefined) {
+      res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.login.missingFields });
       return;
     }
     
-    const username = email; // TODO: Need to further discuss with the team
-
-    loginUser({ username, password })
+    loginUser({ email, username, password })
       .then(({ token, role }) => {
         res.cookie(COOKIE_KEYS.TOKEN, token, COOKIE_CONFIG);
         res.status(HTTP_STATUS_CODES.OK).json({ role });
       })
       .catch((err) => {
         console.error(vsprintf(SERVER_MESSAGES.failedToLoginUser, [err?.stack ?? err]))
-        res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.login.invalidCredentials });
+        res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.login.invalid });
       });
 
   } catch (err) {
