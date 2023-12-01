@@ -2,12 +2,20 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { API_PATHS, HTTP_STATUS_CODES, axiosInstance } from './utils/httpUtils';
-import { getUserRoleFromCache, getUserRole } from './utils/userRoleUtils';
 import Navbar from './Navbar';
 import { navigateToLoginPageIfRoleNotFound } from './utils/securityUtils';
+import WordChip from './WordChip';
+
+const styles = {
+    wordChipContainer: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+}
 
 const IndexPage = () => {
     const [keyword, setKeyword] = useState('');
+    const [bookmarkWords, setBookmarkWords] = useState(['elon', 'openai', 'javascript']); // TODO: fetch from API '/bookmarks
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(false);
     const location = useLocation();
@@ -42,9 +50,22 @@ const IndexPage = () => {
                     onChange={(e) => setKeyword(e.target.value)}
                     placeholder="Enter keyword"
                 />
+                <button disabled={bookmarkWords.length >= 3 || bookmarkWords.includes(keyword)} onClick={() => setBookmarkWords([...bookmarkWords, keyword])}>
+                    Bookmark
+                </button>
                 <button onClick={fetchNews} disabled={loading}>
                     {loading ? 'Loading...' : 'Get News'}
                 </button>
+
+                <div style={styles.wordChipContainer}>
+                    {bookmarkWords.map((word, index) => (
+                        <WordChip
+                            key={index}
+                            word={word}
+                            onClick={(word) => setKeyword(word)}
+                            onDelete={() => setBookmarkWords(bookmarkWords.filter((w) => w !== word))}
+                        />))}
+                </div>
 
                 <div>
                     {news.length ? (
