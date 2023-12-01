@@ -282,12 +282,50 @@ paths:
                   error:
                     type: string
                     description: The error message
-  /news:
+  /trending-news:
     get:
-      summary: Get news of specific keyword
+      summary: Get trending news
       tags:
         - News
-      description: Get news from the news API
+      description: Get trending news from the news API
+      responses:
+        "200":
+          description: JSON object with the trending news
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                      description: The title of the article
+                    link:
+                      type: string
+                      description: The link to the article
+                    content:
+                      type: string
+                      description: The content of the article
+                    published:
+                      type: string
+                      description: The date the article was published
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+  /search-news:
+    get:
+      summary: Search news by specific keyword
+      tags:
+        - News
+      description: Search news by specific keyword from the news API
       parameters:
         - name: keyword
           in: query

@@ -2,7 +2,8 @@ const { Router } = require('express');
 const { API_ROUTE_PATHS } = require('./routes');
 const {
     textSummarizationController,
-    newsContentController,
+    searchNewsController,
+    getTrendingNewsController,
     userLoginController,
     userRegistrationController,
     userLogoutController,
@@ -32,7 +33,8 @@ router.get(API_ROUTE_PATHS.API_STATS, apiStatsController);
 router.get(API_ROUTE_PATHS.API_STATS_BY_USER, apiStatsByUserController);
 router.get(API_ROUTE_PATHS.API_CONSUMPTION, apiConsumptionController);
 
-router.get(API_ROUTE_PATHS.NEWS_CONTENT, newsContentController);
+router.get(API_ROUTE_PATHS.SEARCH_NEWS, searchNewsController);
+router.get(API_ROUTE_PATHS.TRENDING_NEWS, getTrendingNewsController);
 router.post(API_ROUTE_PATHS.SUMMARIZE_TEXT, textSummarizationController);
 
 router.get(API_ROUTE_PATHS.BOOKMARK_WORDS, getBookmarkWordsController);

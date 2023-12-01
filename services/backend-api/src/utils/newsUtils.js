@@ -10,6 +10,7 @@ const NEWS_API = "https://newsdata.io/api/1/news";
 const EN_LOCALE = 'en';
 
 const SAMPLE_NEWS_RESPONSE_JSON_FILE_PATH = path.join(__dirname, 'sampleNewsResponse.json');
+const SAMPLE_TRENDING_NEWS_RESPONSE_JSON_FILE_PATH = path.join(__dirname, 'sampleTrendingNewsResponse.json');
 
 const SEARCH_PARAMS = {
   QUERY: 'q',
@@ -18,21 +19,33 @@ const SEARCH_PARAMS = {
 }
 
 
-async function getNews(query) {
+async function searchNews(query) {
   const url = new URL(NEWS_API);
   url.searchParams.append(SEARCH_PARAMS.QUERY, query);
   url.searchParams.append(SEARCH_PARAMS.API_KEY, NEWS_DATA_API_KEY);
   url.searchParams.append(SEARCH_PARAMS.LANGUAGE, EN_LOCALE);
 
   const response = IS_DEVELOPMENT_MODE
-    ? readSampleResponseFromLocalFile()
+    ? readSampleResponseFromLocalFile(SAMPLE_NEWS_RESPONSE_JSON_FILE_PATH)
     : await axios.get(url);
 
   return response.data.results.map(mapNewsResult);
 }
 
-function readSampleResponseFromLocalFile() {
-  const jsonFileContent = fs.readFileSync(SAMPLE_NEWS_RESPONSE_JSON_FILE_PATH);
+async function getTrendingNews() {
+  const url = new URL(NEWS_API);
+  url.searchParams.append(SEARCH_PARAMS.API_KEY, NEWS_DATA_API_KEY);
+  url.searchParams.append(SEARCH_PARAMS.LANGUAGE, EN_LOCALE);
+
+  const response = IS_DEVELOPMENT_MODE
+    ? readSampleResponseFromLocalFile(SAMPLE_TRENDING_NEWS_RESPONSE_JSON_FILE_PATH)
+    : await axios.get(url);
+
+  return response.data.results.map(mapNewsResult);
+}
+
+function readSampleResponseFromLocalFile(filepath) {
+  const jsonFileContent = fs.readFileSync(filepath);
   const data = JSON.parse(jsonFileContent);
   return { data };
 }
@@ -47,5 +60,6 @@ function mapNewsResult(newsResult) {
 }
 
 module.exports = {
-  getNews
+  searchNews,
+  getTrendingNews
 }
