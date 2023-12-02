@@ -125,7 +125,7 @@ app.use((req, res, next) => {
 })
 
 app.post('/register', async (req, res) => {
-    const { username, password, email } = req.body;
+    const { email, username, password } = req.body;
 
     try {
         // Check if the username already exists
@@ -169,7 +169,7 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+    const { email, username, password } = req.body;
 
     try {
         // Check if the username exists
@@ -181,11 +181,34 @@ app.post('/login', async (req, res) => {
         // Compare the provided password with the hashed password in the database
         const passwordMatch = await bcrypt.compare(password, user[0].Password);
 
+        console.log('passwordMatch: ', passwordMatch);
+
         if (!passwordMatch) {
-            return res.status(401).json({ error: 'Invalid username or password' });
+            return res.status(401).json({ error: 'Invalid username, password or email' });
         }
 
-        const role = 'user'; // TODO: Get the role from database
+        // Compare the provided email with the email in the database
+        const emailMatch = email === user[0].Email;
+
+        console.log('emailMatch: ', emailMatch);
+
+        if (!emailMatch) {
+            return res.status(401).json({ error: 'Invalid username, password or email' });
+        }
+
+        // Obtain the user type from the database        
+        let queryResult = await runSQLQuery(`
+            SELECT UserAuthorization 
+            FROM UserType 
+            WHERE UserTypeID = (
+                SELECT UserType AS SelectedUserType 
+                FROM User 
+                WHERE Name = ?
+            )`,
+            [username]
+        );
+        
+        const role = queryResult[0].UserAuthorization;
 
         // Sign a JWT token
         const token = jwt.sign({ userID: user[0].UserID, username: user[0].Name, role }, SECRET_KEY, { expiresIn: DEFAULT_TOKEN_EXPIRES_IN });
