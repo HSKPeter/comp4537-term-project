@@ -1,42 +1,12 @@
 [
-    {
-        "username": "admin",
-        "password": "111"
-    },
-    {
-        "username": "john",
-        "password": "123"
-    },
-    {
-        "username": "Alice Johnson",
-        "password": "password3"
-    },
-    {
-        "username": "Bob White",
-        "password": "password4"
-    },
-    {
-        "username": "Eva Brown",
-        "password": "password5"
-    },
-    {
-        "username": "John Smith",
-        "password": "password6"
-    },
-    {
-        "username": "Mary Davis",
-        "password": "password7"
-    },
-    {
-        "username": "Michael Miller",
-        "password": "password8"
-    },
-    {
-        "username": "Robert Wilson",
-        "password": "password9"
-    },
-    {
-        "username": "William Moore",
-        "password": "password10"
-    }
+    {"username": "Admin", "password": "passwordAdmin"},
+    {"username": "John", "password": "passwordJohn"},
+    {"username": "Alice", "password": "passwordAlice"},
+    {"username": "Bob", "password": "passwordBob"},
+    {"username": "Eva", "password": "passwordEva"},
+    {"username": "John", "password": "passwordJohn"},
+    {"username": "Mary", "password": "passwordMary"},
+    {"username": "Michael", "password": "passwordMichael"},
+    {"username": "Robert", "password": "passwordRobert"},
+    {"username": "William", "password": "passwordWilliam"}
 ]
