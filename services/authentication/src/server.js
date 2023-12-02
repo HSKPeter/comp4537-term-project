@@ -24,6 +24,7 @@ const CREATE_TABLE_QUERIES = {
             Password VARCHAR(100) NOT NULL,
             UserType INT NOT NULL,
             Email VARCHAR(100) NOT NULL,
+            TotalRequests INT NOT NULL DEFAULT 0,
             PRIMARY KEY (UserID),
             FOREIGN KEY (UserType) REFERENCES UserType(UserTypeID)
         );
@@ -141,6 +142,9 @@ app.post('/register', async (req, res) => {
         // Insert the user into the database
         await runSQLQuery('INSERT INTO User (Name, Password, UserType, Email) VALUES (?, ?, ?, ?)', [username, hashedPassword, UserTypes.Regular, email]);
 
+        // Select the user from the database
+        const user = await runSQLQuery('SELECT * FROM User WHERE Name = ?', [username]);
+
         // Obtain the user type from the database        
         let queryResult = await runSQLQuery(`
             SELECT UserAuthorization 
@@ -154,11 +158,6 @@ app.post('/register', async (req, res) => {
         );
         
         const role = queryResult[0].UserAuthorization;
-
-        const payload = {
-            username,
-            role,
-        };
 
         const token = jwt.sign({ userID: user[0].UserID, username: user[0].Name, role }, SECRET_KEY, { expiresIn: DEFAULT_TOKEN_EXPIRES_IN });
         res.status(201).json({ message: 'User registered successfully', token, role });
