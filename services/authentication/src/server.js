@@ -42,7 +42,15 @@ const CREATE_TABLE_QUERIES = {
             PRIMARY KEY (API_Call_ID),
             FOREIGN KEY (UserID) REFERENCES User(UserID)
         );
-    `
+    `,
+    BookmarkWords: `
+        CREATE TABLE IF NOT EXISTS BookmarkWord (
+            WordID INT NOT NULL AUTO_INCREMENT,
+            UserID INT NOT NULL,
+            Word VARCHAR(100) NOT NULL,
+            PRIMARY KEY (WordID),
+            FOREIGN KEY (UserID) REFERENCES User(UserID)
+        );`
 }
 
 const UserTypes = {
@@ -101,6 +109,13 @@ function renewToken(payload) {
     const newToken = jwt.sign(corePayload, SECRET_KEY, { expiresIn: DEFAULT_TOKEN_EXPIRES_IN });
     return newToken;
 }
+
+app.use((req, res, next) => {
+    const method = req.method;
+    const url = req.url;
+    console.log(`[${method}] ${url}`);
+    next();
+})
 
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
@@ -173,11 +188,10 @@ function decodeToken(token) {
 }
 
 
-function checkIfUserHasRemainingQuota(token) {
-    // TODO: Get the information (e.g. user ID) from the token payload
+async function checkIfUserHasRemainingQuota(token) {
     const decodedToken = decodeToken(token);
     const userID = decodedToken.userID;
-    const apiCalls = runSQLQuery('SELECT COUNT(*) AS callCount FROM APICall WHERE UserID = ?', [userID]);
+    const apiCalls = await runSQLQuery('SELECT COUNT(*) AS callCount FROM APICall WHERE UserID = ?', [userID]);
 
     // TODO: Read database to determine if the user has remaining quota
     if (apiCalls > 20) {
@@ -198,7 +212,7 @@ app.post('/user', async (req, res) => {
             return;
         }
 
-        const hasRemainingQuota = checkIfUserHasRemainingQuota(token);
+        const hasRemainingQuota = await checkIfUserHasRemainingQuota(token);
         const newToken = renewToken(payload);
 
         res.status(200).json({ hasRemainingQuota, newToken });
@@ -221,6 +235,111 @@ app.post('/role', async (req, res) => {
         res.status(200).json({ role, newToken });
     } catch (error) {
         console.error('Error retrieving role: ', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.get('/bookmark-words/:userID', async (req, res) => {
+    try {
+        const {userID} = req.params;
+        runSQLQuery('SELECT word FROM BookmarkWord WHERE UserID = ?', [userID])
+        .then((wordsQueryResults) => {
+            const words = wordsQueryResults.map((wordQueryResult) => wordQueryResult.word);
+            res.status(200).json({ words });
+        })
+        .catch((err) => {
+            console.error('Error retrieving bookmarked words: ', err);
+            res.status(500).json({ error: 'Internal server error' });
+        });
+    } catch (error) {
+        console.error('Error retrieving bookmarked words: ', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.post('/bookmark-words/:userID', async (req, res) => {
+    try {
+        const {userID} = req.params;
+    
+        const { word } = req.body;
+    
+        runSQLQuery('SELECT * FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word])
+        .then((wordExists) => {
+            if (wordExists.length > 0) {
+                res.status(400).json({ error: 'Word already bookmarked' });
+                return;
+            }
+    
+            runSQLQuery('INSERT INTO BookmarkWord (UserID, Word) VALUES (?, ?)', [userID, word])
+            .then(() => {
+                res.status(201).json({ message: 'Word bookmarked successfully' });
+            })
+            .catch((err) => {
+                console.error('Error bookmarking word: ', err);
+                res.status(500).json({ error: 'Internal server error' });
+            });
+        });
+    } catch (error) {
+        console.error('Error bookmarking word: ', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.put('/bookmark-words/:userID', async (req, res) => {
+    try {
+        const {userID} = req.params;
+
+        const { originalWord, newWord } = req.body;
+    
+        runSQLQuery('UPDATE BookmarkWord SET Word = ? WHERE UserID = ? AND Word = ?', [newWord, userID, originalWord])
+        .then(() => {
+            res.status(200).json({ message: 'Word updated successfully' });
+        })
+        .catch((err) => {
+            console.error('Error updating bookmarked word: ', err);
+            res.status(500).json({ error: 'Internal server error' });
+        });
+    } catch (error) {
+        console.error('Error updating bookmarked word: ', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+app.delete('/bookmark-words/:userID', async (req, res) => {
+    try {
+        const {userID} = req.params;
+
+        const toDeleteAll = req.query.all === 'true';
+    
+        if (toDeleteAll) {
+            runSQLQuery('DELETE FROM BookmarkWord WHERE UserID = ?', [userID])
+            .then(() => {
+                res.status(200).json({ message: 'All words deleted successfully' });
+            })
+            .catch((err) => {
+                console.error('Error deleting all bookmarked words: ', err);
+                res.status(500).json({ error: 'Internal server error' });
+            });
+            return;
+        } 
+    
+        const { word } = req.body;
+    
+        if (!word) {
+            res.status(400).json({ error: 'Word is required' });
+            return;
+        }
+    
+        runSQLQuery('DELETE FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word])
+        .then(() => {
+            res.status(200).json({ message: 'Word deleted successfully' });
+        })
+        .catch((err) => {
+            console.error('Error deleting bookmarked word: ', err);
+            res.status(500).json({ error: 'Internal server error' });
+        });
+    } catch (error) {
+        console.error('Error deleting bookmarked word: ', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
@@ -254,7 +373,7 @@ async function setupDatabase() {
         await runSQLQuery(CREATE_TABLE_QUERIES.UserType);
         await runSQLQuery(CREATE_TABLE_QUERIES.User);
         await runSQLQuery(CREATE_TABLE_QUERIES.APICall);
-
+        await runSQLQuery(CREATE_TABLE_QUERIES.BookmarkWords);
         console.log('Database setup complete');
     } catch (err) {
         console.error('Error setting up database: ', err);

@@ -11,7 +11,7 @@ export const BookmarkPanel = ({ bookmarkWords, setBookmarkWords, keyword, setKey
             const hasConfirmed = window.confirm("Confirm to clear all bookmarked words?");
             if (hasConfirmed) {
                 setIsClearingAllBookmarkWords(true);
-                await axiosInstance.delete(API_PATHS.bookmarkWords);
+                await axiosInstance.delete(API_PATHS.bookmarkWords + `?all=true`);
                 setBookmarkWords([]);
                 setIsClearingAllBookmarkWords(false);
             }
@@ -25,7 +25,7 @@ export const BookmarkPanel = ({ bookmarkWords, setBookmarkWords, keyword, setKey
     const addBookmarkWord = async () => {
         const wordToBookmark = keyword;
         setBookmarkWords([...bookmarkWords, wordToBookmark]);
-        axiosInstance.post(API_PATHS.bookmarkWord, { word: wordToBookmark })
+        axiosInstance.post(API_PATHS.bookmarkWords, { word: wordToBookmark })
             .then(() => {
                 console.log("Word added");
             })

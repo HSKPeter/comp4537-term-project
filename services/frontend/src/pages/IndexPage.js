@@ -39,13 +39,12 @@ const IndexPage = () => {
     const navigate = useNavigate();
 
     const keywordNotEmpty = keyword.trim() !== "";
-    const isBookmarkWordLimitReached = bookmarkWords.length >= BOOKMARK_WORD_LIMIT;
 
     useEffect(() => {
         async function syncBookmarkWordsWithBackend() {
             try {
                 const response = await axiosInstance.get(API_PATHS.bookmarkWords);
-                setBookmarkWords(response.data.bookmarkWords);
+                setBookmarkWords(response.data.words ?? []);
             } catch (error) {
                 console.error("Error fetching bookmark words:", error);
             }

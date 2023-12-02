@@ -18,7 +18,6 @@ export const API_PATHS = {
     deleteUser: '/delete-user',
     searchNews: '/search-news',
     trendingNews: '/trending-news',
-    bookmarkWord: '/bookmark-word',
     bookmarkWords: '/bookmark-words',
     summarizeText: '/summarize-text',
 }
