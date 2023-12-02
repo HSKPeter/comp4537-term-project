@@ -54,6 +54,10 @@ const CREATE_TABLE_QUERIES = {
             PRIMARY KEY (WordID),
             FOREIGN KEY (UserID) REFERENCES User(UserID)
         );`
+};
+
+const INSERT_QUERIES = {
+    UserType: `INSERT INTO UserType (UserAuthorization) VALUES ('Admin'), ('Regular');`
 }
 
 const UserTypes = {
@@ -121,7 +125,7 @@ app.use((req, res, next) => {
 })
 
 app.post('/register', async (req, res) => {
-    const { username, password } = req.body;
+    const { username, password, email } = req.body;
 
     try {
         // Check if the username already exists
@@ -135,10 +139,21 @@ app.post('/register', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Insert the user into the database
-        await runSQLQuery('INSERT INTO User (Name, Password, UserType) VALUES (?, ?, ?)', [username, hashedPassword, UserTypes.Regular]);
+        await runSQLQuery('INSERT INTO User (Name, Password, UserType, Email) VALUES (?, ?, ?, ?)', [username, hashedPassword, UserTypes.Regular, email]);
 
         // Obtain the user type from the database        
-        const role = await runSQLQuery('SELECT UserType FROM User WHERE Name = ?', [username]);
+        let queryResult = await runSQLQuery(`
+            SELECT UserAuthorization 
+            FROM UserType 
+            WHERE UserTypeID = (
+                SELECT UserType AS SelectedUserType 
+                FROM User 
+                WHERE Name = ?
+            )`,
+            [username]
+        );
+        
+        const role = queryResult[0].UserAuthorization;
 
         const payload = {
             username,
@@ -378,6 +393,12 @@ async function setupDatabase() {
         await runSQLQuery(CREATE_TABLE_QUERIES.User);
         await runSQLQuery(CREATE_TABLE_QUERIES.APICall);
         await runSQLQuery(CREATE_TABLE_QUERIES.BookmarkWords);
+
+        // Execute the INSERT queries
+        let results = await runSQLQuery('SELECT * FROM UserType');
+        if (results.length === 0) {
+            await runSQLQuery(INSERT_QUERIES.UserType);
+        }
         console.log('Database setup complete');
     } catch (err) {
         console.error('Error setting up database: ', err);

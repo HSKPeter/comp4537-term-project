@@ -3,7 +3,7 @@ const axios = require('axios');
 const REGISTER_JSON = require('./dummyData/register.json');
 
 // Specify the endpoint URL
-const ENDPOINT_URL = 'https://patrickcammayo.com/COMP4537/project/api/v1/authentication/';
+const ENDPOINT_URL = 'http://localhost:8000/';
 
 const RESOURCES = {
     USER: 'user',
@@ -19,7 +19,7 @@ function makePostRequest(endpointUrl, requestBody) {
             console.log('Response:', response.data);
         })
         .catch(error => {
-            console.error('Error:', error.message);
+            console.error('Error:', error.response.data);
         });
 }
 
