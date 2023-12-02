@@ -365,15 +365,22 @@ app.put('/bookmark-words/:userID', async (req, res) => {
         const {userID} = req.params;
 
         const { originalWord, newWord } = req.body;
+
+        // Check if original word exists
+        let wordExists = await runSQLQuery('SELECT * FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, originalWord]);
+        if (wordExists.length === 0) {
+            res.status(400).json({ error: `Word '${originalWord}' not found` });
+            return;
+        }
     
-        runSQLQuery('UPDATE BookmarkWord SET Word = ? WHERE UserID = ? AND Word = ?', [newWord, userID, originalWord])
-        .then(() => {
-            res.status(200).json({ message: 'Word updated successfully' });
-        })
-        .catch((err) => {
-            console.error('Error updating bookmarked word: ', err);
-            res.status(500).json({ error: 'Internal server error' });
-        });
+        let rows = runSQLQuery('UPDATE BookmarkWord SET Word = ? WHERE UserID = ? AND Word = ?', [newWord, userID, originalWord])
+            .then(() => {
+                res.status(200).json({ message: 'Word updated successfully' });
+            })
+            .catch((err) => {
+                console.error('Error updating bookmarked word: ', err);
+                res.status(500).json({ error: 'Internal server error' });
+            });
     } catch (error) {
         console.error('Error updating bookmarked word: ', error);
         res.status(500).json({ error: 'Internal server error' });
