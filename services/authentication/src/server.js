@@ -23,6 +23,7 @@ const CREATE_TABLE_QUERIES = {
             Name VARCHAR(100) NOT NULL,
             Password VARCHAR(100) NOT NULL,
             UserType INT NOT NULL,
+            Email VARCHAR(100) NOT NULL,
             PRIMARY KEY (UserID),
             FOREIGN KEY (UserType) REFERENCES UserType(UserTypeID)
         );
@@ -39,6 +40,8 @@ const CREATE_TABLE_QUERIES = {
             API_Call_ID INT NOT NULL AUTO_INCREMENT,
             UserID INT NOT NULL,
             Time DATETIME,
+            Method VARCHAR(100) NOT NULL,
+            Endpoint VARCHAR(100) NOT NULL,
             PRIMARY KEY (API_Call_ID),
             FOREIGN KEY (UserID) REFERENCES User(UserID)
         );
@@ -134,7 +137,8 @@ app.post('/register', async (req, res) => {
         // Insert the user into the database
         await runSQLQuery('INSERT INTO User (Name, Password, UserType) VALUES (?, ?, ?)', [username, hashedPassword, UserTypes.Regular]);
 
-        const role = 'user'; // TODO: Get the role from database
+        // Obtain the user type from the database        
+        const role = await runSQLQuery('SELECT UserType FROM User WHERE Name = ?', [username]);
 
         const payload = {
             username,
