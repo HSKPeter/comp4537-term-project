@@ -1,28 +1,26 @@
 const { authAxiosInstance } = require('./httpUtils');
 
-async function getBookmarkWords() {
-    const result = await authAxiosInstance.get('/bookmark-words');
-    return result.data.bookmarkWords;
+async function getBookmarkWords(userId) {
+    const result = await authAxiosInstance.get('/bookmark-words' + `/${userId}`);
+    return result.data.words;
 }
 
-async function addBookmarkWord(word) {
-    const result = await authAxiosInstance.post('/bookmark-word', { word });
+async function addBookmarkWord({word, userId}) {
+    const result = await authAxiosInstance.post('/bookmark-words' + `/${userId}`, { word });
     return result.data.message;
 }
 
-async function editBookmarkWord(originalWord, newWord) {
-    const result = await authAxiosInstance.put('/bookmark-word', { originalWord, newWord });
+async function editBookmarkWord({originalWord, newWord, userId}) {
+    const result = await authAxiosInstance.put('/bookmark-words' + `/${userId}`, { originalWord, newWord });
     return result.data.message;
 }
 
-async function deleteBookmarkWord(word) {
-    const result = await authAxiosInstance.delete('/bookmark-word', { data: { word } });
-    return result.data.message;
+async function deleteBookmarkWord({word, userId}) {
+    await authAxiosInstance.delete('/bookmark-words' + `/${userId}`, { data: { word } });
 }
 
-async function deleteAllBookmarkWords() {
-    const result = await authAxiosInstance.delete('/bookmark-words');
-    return result.data.message;
+async function deleteAllBookmarkWords(userId) {
+    await authAxiosInstance.delete('/bookmark-words' + `/${userId}` + '?all=true')
 }
 
 module.exports = {

@@ -30,6 +30,7 @@ const USER_MESSAGES = {
     },
     wordBookmark: {
         missingFields: 'Missing word.',
+        readFailure: 'Failed to retrieve words. Please try again later.',
         addSuccess: 'Word \'%s\' added successfully.',
         addFailure: 'Failed to add word. Please try again later.',
         editSuccess: 'Word \'%s\' edited to \'%s\' successfully.',

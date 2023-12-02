@@ -44,16 +44,15 @@ const IndexPage = () => {
         async function syncBookmarkWordsWithBackend() {
             try {
                 const response = await axiosInstance.get(API_PATHS.bookmarkWords);
-                setBookmarkWords(response.data.bookmarkWords);
+                console.log(response)
+                setBookmarkWords(response?.data?.words ?? []);
             } catch (error) {
                 console.error("Error fetching bookmark words:", error);
             }
         }
 
         navigateToLoginPageIfRoleNotFound(navigate, location)
-            .then(() => {
-                syncBookmarkWordsWithBackend();
-            });
+            .then(() => syncBookmarkWordsWithBackend());
     }, []);
 
     const fetchNews = async () => {
@@ -78,7 +77,7 @@ const IndexPage = () => {
             const hasConfirmed = window.confirm("Confirm to clear all bookmarked words?");
             if (hasConfirmed) {
                 setIsClearingAllBookmarkWords(true);
-                await axiosInstance.delete(API_PATHS.bookmarkWords);
+                await axiosInstance.delete(API_PATHS.bookmarkWords + `?all=true`);
                 setBookmarkWords([]);
                 setIsClearingAllBookmarkWords(false);
             }
@@ -92,7 +91,7 @@ const IndexPage = () => {
     const addBookmarkWord = async () => {
         const wordToBookmark = keyword;
         setBookmarkWords([...bookmarkWords, wordToBookmark]);
-        axiosInstance.post(API_PATHS.bookmarkWord, { word: wordToBookmark })
+        axiosInstance.post(API_PATHS.bookmarkWords, { word: wordToBookmark })
             .then(() => {
                 console.log("Word added");
             })

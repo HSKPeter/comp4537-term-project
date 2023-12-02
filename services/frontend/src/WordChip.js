@@ -55,7 +55,7 @@ const WordChip = ({ word, onDelete, onClick, onEdit }) => {
     const updateWord = (e) => {
         e.stopPropagation();
         setIsEditMode(false);
-        axiosInstance.put('/bookmark-word', { originalWord: word, newWord })
+        axiosInstance.put('/bookmark-words', { originalWord: word, newWord })
             .then(() => {
                 console.log(`Word edited: ${word} to ${newWord}`)
             })
@@ -68,7 +68,7 @@ const WordChip = ({ word, onDelete, onClick, onEdit }) => {
     const deleteWord = (e) => {
         e.stopPropagation();
         onDelete(word);
-        axiosInstance.delete('/bookmark-word', { data: { word } })
+        axiosInstance.delete('/bookmark-words', { data: { word } })
             .then(() => {
                 console.log(`Word deleted: ${word}`)
             })

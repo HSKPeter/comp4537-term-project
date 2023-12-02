@@ -16,7 +16,7 @@ const authAxiosInstance = axios.create({
 });
 
 authAxiosInstance.interceptors.request.use((config) => {
-    config.headers['Authorization'] = `Bearer abcd`;
+    config.headers['Authorization'] = `Bearer abcd`; // TODO: Use api key
     return config;
 });
 

@@ -42,7 +42,15 @@ const CREATE_TABLE_QUERIES = {
             PRIMARY KEY (API_Call_ID),
             FOREIGN KEY (UserID) REFERENCES User(UserID)
         );
-    `
+    `,
+    BookmarkWords: `
+        CREATE TABLE IF NOT EXISTS BookmarkWord (
+            WordID INT NOT NULL AUTO_INCREMENT,
+            UserID INT NOT NULL,
+            Word VARCHAR(100) NOT NULL,
+            PRIMARY KEY (WordID),
+            FOREIGN KEY (UserID) REFERENCES User(UserID)
+        );`
 }
 
 const UserTypes = {
@@ -181,7 +189,6 @@ function decodeToken(token) {
 
 
 async function checkIfUserHasRemainingQuota(token) {
-    // TODO: Get the information (e.g. user ID) from the token payload
     const decodedToken = decodeToken(token);
     const userID = decodedToken.userID;
     const apiCalls = await runSQLQuery('SELECT COUNT(*) AS callCount FROM APICall WHERE UserID = ?', [userID]);
@@ -232,59 +239,109 @@ app.post('/role', async (req, res) => {
     }
 });
 
-app.get('/bookmark-words', async (req, res) => {
-    runSQLQuery('SELECT 1')
-    .then(() => {
-        res.status(200).json({ bookmarkWords: ['hello', 'world'] });
-    })
-    .catch((err) => {
-        console.error('Error retrieving bookmarked words: ', err);
+app.get('/bookmark-words/:userID', async (req, res) => {
+    try {
+        const {userID} = req.params;
+        runSQLQuery('SELECT word FROM BookmarkWord WHERE UserID = ?', [userID])
+        .then((wordsQueryResults) => {
+            const words = wordsQueryResults.map((wordQueryResult) => wordQueryResult.word);
+            res.status(200).json({ words });
+        })
+        .catch((err) => {
+            console.error('Error retrieving bookmarked words: ', err);
+            res.status(500).json({ error: 'Internal server error' });
+        });
+    } catch (error) {
+        console.error('Error retrieving bookmarked words: ', error);
         res.status(500).json({ error: 'Internal server error' });
-    });
+    }
 });
 
-app.post('/bookmark-word', async (req, res) => {
-    runSQLQuery('SELECT 1')
-    .then(() => {
-        res.status(201).json({ message: 'Word bookmarked successfully' });
-    })
-    .catch((err) => {
-        console.error('Error bookmarking word: ', err);
+app.post('/bookmark-words/:userID', async (req, res) => {
+    try {
+        const {userID} = req.params;
+    
+        const { word } = req.body;
+    
+        runSQLQuery('SELECT * FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word])
+        .then((wordExists) => {
+            if (wordExists.length > 0) {
+                res.status(400).json({ error: 'Word already bookmarked' });
+                return;
+            }
+    
+            runSQLQuery('INSERT INTO BookmarkWord (UserID, Word) VALUES (?, ?)', [userID, word])
+            .then(() => {
+                res.status(201).json({ message: 'Word bookmarked successfully' });
+            })
+            .catch((err) => {
+                console.error('Error bookmarking word: ', err);
+                res.status(500).json({ error: 'Internal server error' });
+            });
+        });
+    } catch (error) {
+        console.error('Error bookmarking word: ', error);
         res.status(500).json({ error: 'Internal server error' });
-    });
+    }
 });
 
-app.put('/bookmark-word', async (req, res) => {
-    runSQLQuery('SELECT 1')
-    .then(() => {
-        res.status(200).json({ message: 'Word updated successfully' });
-    })
-    .catch((err) => {
-        console.error('Error updating bookmarked word: ', err);
+app.put('/bookmark-words/:userID', async (req, res) => {
+    try {
+        const {userID} = req.params;
+
+        const { originalWord, newWord } = req.body;
+    
+        runSQLQuery('UPDATE BookmarkWord SET Word = ? WHERE UserID = ? AND Word = ?', [newWord, userID, originalWord])
+        .then(() => {
+            res.status(200).json({ message: 'Word updated successfully' });
+        })
+        .catch((err) => {
+            console.error('Error updating bookmarked word: ', err);
+            res.status(500).json({ error: 'Internal server error' });
+        });
+    } catch (error) {
+        console.error('Error updating bookmarked word: ', error);
         res.status(500).json({ error: 'Internal server error' });
-    });
+    }
 });
 
-app.delete('/bookmark-word', async (req, res) => {
-    runSQLQuery('SELECT 1')
-    .then(() => {
-        res.status(200).json({ message: 'Word deleted successfully' });
-    })
-    .catch((err) => {
-        console.error('Error deleting bookmarked word: ', err);
-        res.status(500).json({ error: 'Internal server error' });
-    });
-});
+app.delete('/bookmark-words/:userID', async (req, res) => {
+    try {
+        const {userID} = req.params;
 
-app.delete('/bookmark-words', async (req, res) => {
-    runSQLQuery('SELECT 1')
-    .then(() => {
-        res.status(200).json({ message: 'Words deleted successfully' });
-    })
-    .catch((err) => {
-        console.error('Error deleting bookmarked words: ', err);
+        const toDeleteAll = req.query.all === 'true';
+    
+        if (toDeleteAll) {
+            runSQLQuery('DELETE FROM BookmarkWord WHERE UserID = ?', [userID])
+            .then(() => {
+                res.status(200).json({ message: 'All words deleted successfully' });
+            })
+            .catch((err) => {
+                console.error('Error deleting all bookmarked words: ', err);
+                res.status(500).json({ error: 'Internal server error' });
+            });
+            return;
+        } 
+    
+        const { word } = req.body;
+    
+        if (!word) {
+            res.status(400).json({ error: 'Word is required' });
+            return;
+        }
+    
+        runSQLQuery('DELETE FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word])
+        .then(() => {
+            res.status(200).json({ message: 'Word deleted successfully' });
+        })
+        .catch((err) => {
+            console.error('Error deleting bookmarked word: ', err);
+            res.status(500).json({ error: 'Internal server error' });
+        });
+    } catch (error) {
+        console.error('Error deleting bookmarked word: ', error);
         res.status(500).json({ error: 'Internal server error' });
-    });
+    }
 });
 
 app.listen(PORT, () => {
@@ -316,7 +373,7 @@ async function setupDatabase() {
         await runSQLQuery(CREATE_TABLE_QUERIES.UserType);
         await runSQLQuery(CREATE_TABLE_QUERIES.User);
         await runSQLQuery(CREATE_TABLE_QUERIES.APICall);
-
+        await runSQLQuery(CREATE_TABLE_QUERIES.BookmarkWords);
         console.log('Database setup complete');
     } catch (err) {
         console.error('Error setting up database: ', err);
