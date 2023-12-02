@@ -332,24 +332,28 @@ app.post('/bookmark-words/:userID', async (req, res) => {
     try {
         const {userID} = req.params;
     
-        const { word } = req.body;
-    
-        runSQLQuery('SELECT * FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word])
-        .then((wordExists) => {
+        const { words } = req.body;
+
+        for (let i = 0; i < words.length; i++) {
+            const word = words[i];
+            let wordExists = await runSQLQuery('SELECT * FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word]);
             if (wordExists.length > 0) {
-                res.status(400).json({ error: 'Word already bookmarked' });
+                res.status(400).json({ error: `Word '${word}' already bookmarked` });
                 return;
-            }
+            }      
+
+            console.log(`Bookmarking word: ${word}`)
     
             runSQLQuery('INSERT INTO BookmarkWord (UserID, Word) VALUES (?, ?)', [userID, word])
-            .then(() => {
-                res.status(201).json({ message: 'Word bookmarked successfully' });
-            })
-            .catch((err) => {
-                console.error('Error bookmarking word: ', err);
-                res.status(500).json({ error: 'Internal server error' });
-            });
-        });
+                .catch((err) => {
+                    console.error('Error bookmarking word: ', err);
+                    res.status(500).json({ error: 'Internal server error' });
+                    return;
+                });
+        }
+
+        res.status(201).json({ message: 'Words bookmarked successfully' });
+        
     } catch (error) {
         console.error('Error bookmarking word: ', error);
         res.status(500).json({ error: 'Internal server error' });
