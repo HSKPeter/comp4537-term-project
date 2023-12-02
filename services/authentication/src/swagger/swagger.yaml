@@ -245,3 +245,221 @@ paths:
                   error:
                     type: string
                     description: The error message
+  /bookmark-words/{userID}:
+    get:
+      summary: Get bookmarked words
+      description: Get bookmarked words
+      parameters:
+        - name: userID
+          in: path
+          description: The user ID
+          required: true
+          schema:
+            type: number
+            example: 1
+      responses:
+        "200":
+          description: JSON object with the bookmarked words
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  words:
+                    type: array
+                    items:
+                      type: string
+                    description: The bookmarked words
+        "401":
+          description: JSON object with the error message due to unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+        "500":
+          description: JSON object with the error message due to internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message   
+    post:
+      summary: Add bookmarked words
+      description: Add bookmarked words
+      parameters:
+        - name: userID
+          in: path
+          description: The user ID
+          required: true
+          schema:
+            type: number
+            example: 1
+      requestBody:
+        description: JSON object with the bookmarked words
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                words:
+                  type: array
+                  items:
+                    type: string
+                  description: The bookmarked words
+      responses:
+        "201":
+          description: JSON object with the success message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Message of successful adding
+        "401":
+          description: JSON object with the error message due to unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+        "500":
+          description: JSON object with the error message due to internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+    put:                 
+      summary: Update bookmarked words
+      description: Update bookmarked words
+      parameters:
+        - name: userID
+          in: path
+          description: The user ID
+          required: true
+          schema:
+            type: number
+            example: 1
+      requestBody:
+        description: JSON object with the bookmarked words
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                originalWord:
+                  type: string
+                  description: The original word
+                newWord:
+                  type: string
+                  description: The new word
+      responses:
+        "200":
+          description: JSON object with the success message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Message of successful updating
+        "401":
+          description: JSON object with the error message due to unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+        "500":
+          description: JSON object with the error message due to internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+    delete:
+      summary: Delete bookmarked words
+      description: Delete bookmarked words
+      parameters:
+        - name: userID
+          in: path
+          description: The user ID
+          required: true
+          schema:
+            type: number
+            example: 1
+        - name: all
+          in: query
+          description: Boolean indicating if all bookmarked words should be deleted
+          required: false
+          schema:
+            type: boolean
+            example: true
+      requestBody:
+        description: JSON object with the bookmarked words
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                words:
+                  type: array
+                  items:
+                    type: string
+                  description: The bookmarked words
+      responses:
+        "200":
+          description: JSON object with the success message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Message of successful deleting
+        "401":
+          description: JSON object with the error message due to unauthorized access
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+        "500":
+          description: JSON object with the error message due to internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
