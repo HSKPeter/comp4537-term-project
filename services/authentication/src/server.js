@@ -125,9 +125,9 @@ app.use((req, res, next) => {
 })
 
 app.post('/register', async (req, res) => {
-    const { email, username, password } = req.body;
-
     try {
+        const { email, username, password } = req.body;
+
         // Check if the username already exists
         const userExists = await runSQLQuery(`SELECT * FROM User WHERE Name = ?`, [username]);
 
@@ -169,9 +169,9 @@ app.post('/register', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    const { email, username, password } = req.body;
-
     try {
+        const { email, username, password } = req.body;
+
         // Check if the username exists
         const user = await runSQLQuery('SELECT * FROM User WHERE Name = ?', [username]);
         if (user.length === 0) {
