@@ -3,3 +3,4 @@ node_modules
 .vscode
 .aws-sam
 .env
+services/frontend/package-lock.json
