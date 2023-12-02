@@ -1,12 +1,12 @@
 [
-    {"username": "Admin", "password": "passwordAdmin"},
-    {"username": "John", "password": "passwordJohn"},
-    {"username": "Alice", "password": "passwordAlice"},
-    {"username": "Bob", "password": "passwordBob"},
-    {"username": "Eva", "password": "passwordEva"},
-    {"username": "John", "password": "passwordJohn"},
-    {"username": "Mary", "password": "passwordMary"},
-    {"username": "Michael", "password": "passwordMichael"},
-    {"username": "Robert", "password": "passwordRobert"},
-    {"username": "William", "password": "passwordWilliam"}
+    {"email": "admin@email.com", "username": "Admin", "password": "passwordAdmin"},
+    {"email": "john@email.com", "username": "John", "password": "passwordJohn"},
+    {"email": "alice@email.com", "username": "Alice", "password": "passwordAlice"},
+    {"email": "bob@email.com", "username": "Bob", "password": "passwordBob"},
+    {"email": "eva@email.com", "username": "Eva", "password": "passwordEva"},
+    {"email": "john@email.com", "username": "John", "password": "passwordJohn"},
+    {"email": "mary@email.com", "username": "Mary", "password": "passwordMary"},
+    {"email": "michael@email.com", "username": "Michael", "password": "passwordMichael"},
+    {"email": "robert@email.com", "username": "Robert", "password": "passwordRobert"},
+    {"email": "william@email.com", "username": "William", "password": "passwordWilliam"}
 ]
