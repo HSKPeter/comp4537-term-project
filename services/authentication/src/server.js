@@ -10,10 +10,10 @@ const { swaggerSpecs } = require('./swagger/swaggerDocs');
 
 const dbPool = mysql.createPool({
     host: "localhost",
-    user: "root",
-    password: "",
-    database: "comp4537_project",
-    port: 3306
+    user: "root", // Change this upon hosting
+    password: "", // Change this upon hosting
+    database: "comp4537_project", // Change this upon hosting
+    port: 3306 // Feel free to remove this
 });
 
 const CREATE_TABLE_QUERIES = {
