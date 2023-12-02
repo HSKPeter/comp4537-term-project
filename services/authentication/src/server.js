@@ -302,6 +302,9 @@ app.post('/record', async (req, res) => {
         // Insert the API call into the database
         await runSQLQuery('INSERT INTO APICall (UserID, Time, Method, Endpoint) VALUES (?, ?, ?, ?)', [userID, time, method, endpoint]);
 
+        // Update the total requests for the user
+        await runSQLQuery('UPDATE User SET TotalRequests = TotalRequests + 1 WHERE UserID = ?', [userID]);
+
         res.status(201).json({ message: 'API call recorded successfully' });
     } catch (error) {
         console.error('Error recording API call: ', error);
