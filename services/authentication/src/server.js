@@ -405,21 +405,32 @@ app.delete('/bookmark-words/:userID', async (req, res) => {
             return;
         } 
     
-        const { word } = req.body;
-    
-        if (!word) {
-            res.status(400).json({ error: 'Word is required' });
+        const { words } = req.body;
+
+        // Check if the words array is empty
+        if (!words || words.length === 0) {
+            res.status(400).json({ error: 'Words are required' });
             return;
         }
-    
-        runSQLQuery('DELETE FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word])
-        .then(() => {
-            res.status(200).json({ message: 'Word deleted successfully' });
-        })
-        .catch((err) => {
-            console.error('Error deleting bookmarked word: ', err);
-            res.status(500).json({ error: 'Internal server error' });
-        });
+
+        for (let i = 0; i < words.length; i++) {
+            const word = words[i];
+            let wordExists = await runSQLQuery('SELECT * FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word]);
+            if (wordExists.length === 0) {
+                res.status(400).json({ error: `Word '${word}' not found` });
+                return;
+            }
+
+            console.log(`Deleting word: ${word}`)
+
+            runSQLQuery('DELETE FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word])
+                .catch((err) => {
+                    console.error('Error deleting bookmarked word: ', err);
+                    res.status(500).json({ error: 'Internal server error' });
+                });
+        }
+
+        res.status(200).json({ message: 'Words deleted successfully' });
     } catch (error) {
         console.error('Error deleting bookmarked word: ', error);
         res.status(500).json({ error: 'Internal server error' });
