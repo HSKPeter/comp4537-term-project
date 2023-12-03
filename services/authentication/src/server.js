@@ -334,27 +334,30 @@ app.post('/bookmark-words/:userID', async (req, res) => {
     try {
         const {userID} = req.params;
     
-        const { words } = req.body;
+        const { word } = req.body;
 
-        for (let i = 0; i < words.length; i++) {
-            const word = words[i];
-            let wordExists = await runSQLQuery('SELECT * FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word]);
-            if (wordExists.length > 0) {
-                res.status(400).json({ error: `Word '${word}' already bookmarked` });
-                return;
-            }      
-
-            console.log(`Bookmarking word: ${word}`)
-    
-            runSQLQuery('INSERT INTO BookmarkWord (UserID, Word) VALUES (?, ?)', [userID, word])
-                .catch((err) => {
-                    console.error('Error bookmarking word: ', err);
-                    res.status(500).json({ error: 'Internal server error' });
-                    return;
-                });
+        if (word.length === 0) {
+            res.status(409).json({ error: 'Word is required' });
+            return;
         }
 
-        res.status(201).json({ message: 'Words bookmarked successfully' });
+        // Check if word exists in the database
+        let wordExists = await runSQLQuery('SELECT * FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word]);
+        if (wordExists.length > 0) {
+            res.status(409).json({ error: `Word '${word}' already bookmarked` });
+            return;
+        }
+
+        console.log(`Bookmarking word: ${word}`);
+
+        runSQLQuery('INSERT INTO BookmarkWord (UserID, Word) VALUES (?, ?)', [userID, word])
+            .catch((err) => {
+                console.error('Error bookmarking word: ', err);
+                res.status(500).json({ error: 'Internal server error' });
+                return;
+            });
+
+        res.status(201).json({ message: `"${word}" bookmarked successfully` });
         
     } catch (error) {
         console.error('Error bookmarking word: ', error);
