@@ -1,6 +1,6 @@
 const COOKIE_CONFIG = {
     httpOnly: true,
-    sameSite: 'strict',
+    sameSite: 'None',
     secure: true,
     overwrite: true,
     maxAge: 1000 * 60 * 15 // 15 minutes
