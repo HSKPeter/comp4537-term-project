@@ -51,8 +51,10 @@ const IndexPage = () => {
         }
 
         navigateToLoginPageIfRoleNotFound(navigate, location)
-            .then(() => {
-                syncBookmarkWordsWithBackend();
+            .then((isRoleFound) => {
+                if (isRoleFound) {
+                    syncBookmarkWordsWithBackend();
+                }
             });
     }, []);
 
