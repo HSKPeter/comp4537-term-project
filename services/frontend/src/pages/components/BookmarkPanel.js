@@ -47,7 +47,7 @@ export const BookmarkPanel = ({ bookmarkWords, setBookmarkWords, keyword, setKey
                 Bookmark
             </button>
             {isBookmarkWordLimitReached && !isLoadingBookmarkWords && <div>You can only bookmark {BOOKMARK_WORD_LIMIT} words. Please delete a word to add a new one.</div>}
-            {isLoadingBookmarkWords && <p>Loading...</p>}
+            {isLoadingBookmarkWords && <p>Loading bookmarked words...</p>}
 
             {!isLoadingBookmarkWords && (
                 <div style={styles.wordChipContainer}>
