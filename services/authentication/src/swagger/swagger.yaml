@@ -400,8 +400,8 @@ paths:
                     type: string
                     description: The error message
     delete:
-      summary: Delete bookmarked words
-      description: Delete bookmarked words
+      summary: Delete bookmarked word(s)
+      description: Delete bookmarked word(s)
       parameters:
         - name: userID
           in: path
@@ -419,17 +419,15 @@ paths:
             example: true
       requestBody:
         description: JSON object with the bookmarked words
-        required: true
+        required: false
         content:
           application/json:
             schema:
               type: object
               properties:
-                words:
-                  type: array
-                  items:
-                    type: string
-                  description: The bookmarked words
+                word:
+                  type: string
+                  description: The bookmarked word
       responses:
         "200":
           description: JSON object with the success message

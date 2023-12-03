@@ -5,14 +5,16 @@ async function navigateToLoginPageIfRoleNotFound(navigate, location) {
 
     if (!role) {
         navigate('/login', { state: { from: location } });
-        return;
+        return false;
     }
 
     role = await getUserRole();
     if (!role) {
         navigate('/login', { state: { from: location } });
-        return;
+        return false;
     }
+
+    return true;
 }
 
 export { navigateToLoginPageIfRoleNotFound };
