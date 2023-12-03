@@ -13,7 +13,7 @@ const dbPool = mysql.createPool({
     user: "root", // Change this upon hosting
     password: "", // Change this upon hosting
     database: "comp4537_project", // Change this upon hosting
-    port: 4306 // Feel free to remove this
+    port: 3306 // Feel free to remove this
 });
 
 const CREATE_TABLE_QUERIES = {
