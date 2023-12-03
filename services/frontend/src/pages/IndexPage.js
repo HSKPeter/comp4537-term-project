@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import { navigateToLoginPageIfRoleNotFound } from '../utils/securityUtils';
 import { BookmarkPanel } from './components/BookmarkPanel';
 import { NewsDisplayPanel } from './NewsDisplayPanel';
+import { LoadingBookmarkWordsContext } from '../context/LoadingBookmarkWords';
 
 export const BOOKMARK_WORD_LIMIT = 2;
 
@@ -34,7 +35,7 @@ const IndexPage = () => {
     const [bookmarkWords, setBookmarkWords] = useState([]);
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [isClearingAllBookmarkWords, setIsClearingAllBookmarkWords] = useState(false);
+    const [isLoadingBookmarkWords, setIsLoadingBookmarkWords] = useState(true);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -45,6 +46,7 @@ const IndexPage = () => {
             try {
                 const response = await axiosInstance.get(API_PATHS.bookmarkWords);
                 setBookmarkWords(response.data.words ?? []);
+                setIsLoadingBookmarkWords(false);
             } catch (error) {
                 console.error("Error fetching bookmark words:", error);
             }
@@ -95,15 +97,14 @@ const IndexPage = () => {
                         {loading ? 'Loading...' : 'Get Trending News'}
                     </button>
                 }
-
-                <BookmarkPanel
-                    bookmarkWords={bookmarkWords}
-                    setBookmarkWords={setBookmarkWords}
-                    keyword={keyword}
-                    setKeyword={setKeyword}
-                    isClearingAllBookmarkWords={isClearingAllBookmarkWords}
-                    setIsClearingAllBookmarkWords={setIsClearingAllBookmarkWords}
-                />
+                <LoadingBookmarkWordsContext.Provider value={{ isLoadingBookmarkWords, setIsLoadingBookmarkWords }}>
+                    <BookmarkPanel
+                        bookmarkWords={bookmarkWords}
+                        setBookmarkWords={setBookmarkWords}
+                        keyword={keyword}
+                        setKeyword={setKeyword}
+                    />
+                </LoadingBookmarkWordsContext.Provider>
 
                 <NewsDisplayPanel news={news} />
             </div>

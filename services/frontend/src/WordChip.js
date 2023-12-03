@@ -1,7 +1,8 @@
 // src/WordChip.js
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { axiosInstance } from './utils/httpUtils';
+import { LoadingBookmarkWordsContext } from './context/LoadingBookmarkWords';
 
 const styles = {
     wordChip: {
@@ -51,29 +52,38 @@ const SYMBOLS = {
 const WordChip = ({ word, onDelete, onClick, onEdit }) => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [newWord, setNewWord] = useState(word);
+    const { setIsLoadingBookmarkWords } = useContext(LoadingBookmarkWordsContext);
 
     const updateWord = (e) => {
         e.stopPropagation();
         setIsEditMode(false);
+        setIsLoadingBookmarkWords(true);
         axiosInstance.put('/bookmark-words', { originalWord: word, newWord })
             .then(() => {
                 console.log(`Word edited: ${word} to ${newWord}`)
+                onEdit(newWord);
             })
             .catch((error) => {
                 console.error(`Error editing word: ${word} to ${newWord}`, error);
+            })
+            .finally(() => {
+                setIsLoadingBookmarkWords(false);
             });
-        onEdit(newWord);
     }
 
     const deleteWord = (e) => {
         e.stopPropagation();
-        onDelete(word);
+        setIsLoadingBookmarkWords(true);
         axiosInstance.delete('/bookmark-words', { data: { word } })
             .then(() => {
                 console.log(`Word deleted: ${word}`)
+                onDelete(word);
             })
             .catch((error) => {
                 console.error(`Error deleting word: ${word}`, error);
+            })
+            .finally(() => {
+                setIsLoadingBookmarkWords(false);
             });
     }
 

@@ -18,11 +18,17 @@ const {
 const { checkUserQuota } = require('../middlewares/checkUserQuota');
 const { roleValidationController } = require('../controllers/roleValidation');
 const { checkAdminRole } = require('../middlewares/checkAdminRole');
+const { IS_DEVELOPMENT_MODE } = require('../config');
+const { mimicNetworkLatency } = require('../middlewares/mimicNetworkLatency');
 
 const router = Router();
 
 router.use(checkAdminRole);
 router.use(checkUserQuota);
+
+if (IS_DEVELOPMENT_MODE) {
+    router.use(mimicNetworkLatency);
+}
 
 router.post(API_ROUTE_PATHS.LOGIN, userLoginController);
 router.post(API_ROUTE_PATHS.REGISTER, userRegistrationController);
