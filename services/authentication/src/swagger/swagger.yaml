@@ -309,11 +309,9 @@ paths:
             schema:
               type: object
               properties:
-                words:
-                  type: array
-                  items:
-                    type: string
-                  description: The bookmarked words
+                word:
+                  type: string
+                  description: The bookmarked word
       responses:
         "201":
           description: JSON object with the success message
