@@ -2,7 +2,7 @@ import { API_PATHS, axiosInstance } from "./httpUtils";
 import { LOCAL_STORAGE_KEYS } from "./locaStorageUtils";
 
 export function removeUserRoleFromCache() {
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.token);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.role);
 }
 
 export function updateUserRoleInCache(role) {
