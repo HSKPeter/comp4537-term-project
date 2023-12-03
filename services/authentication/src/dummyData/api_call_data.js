@@ -12,3 +12,6 @@
 
 // INSERT INTO APICall (UserID, Time, Method, Endpoint)
 // VALUES (1, NOW(), 'POT', '/API/v1/register');
+
+// INSERT INTO APICall (UserID, Time, Method, Endpoint)
+// VALUES (3, NOW(), 'GET', '/API/v1/news');

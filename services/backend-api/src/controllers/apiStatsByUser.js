@@ -1,9 +1,9 @@
 const { vsprintf } = require('sprintf-js');
 const { SERVER_MESSAGES } = require('../messages/serverMessage');
 const { HTTP_STATUS_CODES } = require('../utils/httpUtils');
-const { COOKIE_CONFIG, COOKIE_KEYS } = require('../utils/cookieUtils');
-const { loginUser } = require('../utils/userAuthenticationUtils');
-const { getApiStats } = require('../utils/adminUtils');
+const { getUserToken, getRoleFromToken, USER_ROLES } = require('../utils/tokenUtils');
+const { runSQLQuery } = require('../utils/databaseUtils');
+const { getApiStatsFromUser } = require('../utils/adminUtils');
 
 async function apiStatsByUserController(req, res) {
     try {

@@ -189,7 +189,6 @@ function checkIfTokenExpired(token) {
 function checkIfUserHasRemainingQuota(token) {
     // TODO: Get the information (e.g. user ID) from the token payload
     const decodedToken = decodeToken(token);
-    console.log(`Decoded token: ${JSON.stringify(decodedToken)}`);
     const userID = decodedToken.userID;
     const apiCalls = runSQLQuery('SELECT COUNT(*) AS callCount FROM APICall WHERE UserID = ?', [userID]);
 
@@ -324,6 +323,72 @@ async function getApiStatsByUserFromDatabase() {
         throw error;
     }
 } 
+
+
+// Implement get API consumption for user by admin
+app.post('/api-consumption', async (req, res) => {
+    try {
+        const { token } = req.body;
+
+        // Assuming you have a function to retrieve the user ID from the token
+        const username = getCurrentUsernameFromToken(token);
+
+        if (!username) {
+            res.status(401).json({ error: 'Invalid username in the token' });
+            return;
+        }
+
+        // Fetch API consumption stats for the specified user ID
+        const apiStats = await getApiConsumptionForCurrentUser(username);
+
+        // Return API consumption stats
+        res.status(200).json({ usageStats: apiStats });
+
+    } catch (err) {
+        console.error(`Failed to get API consumption stats from the database: ${err?.stack ?? err}`);
+        res.status(500).json({ error: 'Failed to fetch API consumption stats from the database' });
+    }
+});
+
+async function getApiConsumptionForCurrentUser(username) {
+    try {
+        const apiConsumptionQuery = `
+            SELECT
+                Endpoint AS 'api-name',
+                Method AS 'request-type',
+                COUNT(*) AS 'count'
+            FROM APICall
+            JOIN User ON APICall.UserID = User.UserID
+            WHERE User.Name = ?
+            GROUP BY Method, Endpoint;
+        `;
+
+        const apiConsumption = await runSQLQuery(apiConsumptionQuery, [username]);
+
+        // Transform the result to the desired format
+        const formattedApiConsumption = apiConsumption.map(apiStat => ({
+            'api-name': apiStat['api-name'],
+            'request-type': apiStat['request-type'],
+            'count': apiStat['count']
+        }));
+
+        return formattedApiConsumption;
+    } catch (error) {
+        console.error('Error getting API consumption for the specified user from the database: ', error);
+        throw error;
+    }
+}
+
+
+function getCurrentUsernameFromToken(token) {
+    try {
+        const decodedToken = decodeToken(token);
+        return decodedToken.username; // Assuming the user ID is stored in the token
+    } catch (error) {
+        console.error('Error decoding token to get user ID: ', error);
+        return null;
+    }
+}
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
