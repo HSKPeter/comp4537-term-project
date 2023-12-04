@@ -111,6 +111,7 @@ router.get(API_ROUTE_PATHS.SEARCH_NEWS, searchNewsController);
 router.get(API_ROUTE_PATHS.TRENDING_NEWS, getTrendingNewsController);
 router.post(API_ROUTE_PATHS.SUMMARIZE_TEXT, textSummarizationController);
 
+// TODO: Add one more endpoint for getting recommended bookmark words
 router.get(API_ROUTE_PATHS.BOOKMARK_WORDS, getBookmarkWordsController);
 router.post(API_ROUTE_PATHS.BOOKMARK_WORDS, addBookmarkWordController);
 router.put(API_ROUTE_PATHS.BOOKMARK_WORDS, editBookmarkWordController);
