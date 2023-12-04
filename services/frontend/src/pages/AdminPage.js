@@ -75,20 +75,6 @@ function ApiUsageTable({ apiUsageData }) {
 
 
 function UsersTable({ usersInfo }) {
-    function removeUser(username) {
-        axiosInstance.delete(API_PATHS.deleteUser, { username: username })
-            .then((response) => {
-                if (response.status === HTTP_STATUS_CODES.OK) {
-                    alert('User deleted successfully.');
-                } else {
-                    alert('An error occurred. Was not able to delete user.');
-                }
-            })
-            .catch((error) => {
-                alert('An error occurred when connecting to server.', error.message);
-            });
-
-    }
     if (!usersInfo) {
         // return table with loading wheel
         return (
@@ -105,7 +91,6 @@ function UsersTable({ usersInfo }) {
                         <th>Email</th>
                         <th>Role</th>
                         <th>API Consumption</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -115,7 +100,6 @@ function UsersTable({ usersInfo }) {
                             <td>{user.email}</td>
                             <td>{user.role}</td>
                             <td>{user.apiConsumption}</td>
-                            <td><button onClick={() => removeUser(user.username)}>Remove</button></td>
                         </tr>
                     ))}
                 </tbody>
