@@ -1,6 +1,6 @@
 const { USER_MESSAGES } = require('../messages/userMessage');
 const { API_ROUTE_PATHS } = require('../router/routes');
-const { HTTP_STATUS_CODES } = require('../utils/httpUtils');
+const { HTTP_STATUS_CODES, CUSTOM_HEADERS } = require('../utils/httpUtils');
 const { COOKIE_KEYS, COOKIE_CONFIG } = require('../utils/cookieUtils');
 const { getUserQuotaFromToken } = require('../utils/userAuthenticationUtils');
 
@@ -46,8 +46,7 @@ function checkUserQuota(req, res, next) {
   getUserQuotaFromToken(token)
     .then(({ userQuota, token }) => {
       if (userQuota <= 0) {
-        res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.auth.userQuotaExceeded });
-        return;
+        res.setHeader(CUSTOM_HEADERS.API_LIMIT_EXCEEDED, true);
       }
 
       res.cookie(COOKIE_KEYS.TOKEN, token, COOKIE_CONFIG);

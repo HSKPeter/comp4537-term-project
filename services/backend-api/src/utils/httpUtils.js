@@ -11,6 +11,10 @@ const HTTP_STATUS_CODES = {
     INTERNAL_SERVER_ERROR: 500,
 };
 
+const CUSTOM_HEADERS = {
+    API_LIMIT_EXCEEDED: 'X-API-Limit-Exceeded'
+};
+
 const authAxiosInstance = axios.create({
     baseURL: AUTH_SERVER_ORIGIN
 });
@@ -22,5 +26,6 @@ authAxiosInstance.interceptors.request.use((config) => {
 
 module.exports = {
     HTTP_STATUS_CODES,
+    CUSTOM_HEADERS,
     authAxiosInstance
 };
