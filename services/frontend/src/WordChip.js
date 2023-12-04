@@ -3,6 +3,7 @@
 import React, { useState, useContext } from 'react';
 import { axiosInstance } from './utils/httpUtils';
 import { LoadingBookmarkWordsContext } from './context/LoadingBookmarkWords';
+import { displayWarningIfExceedApiLimit } from './utils/warningUtils';
 
 const styles = {
     wordChip: {
@@ -59,8 +60,9 @@ const WordChip = ({ word, onDelete, onClick, onEdit }) => {
         setIsEditMode(false);
         setIsLoadingBookmarkWords(true);
         axiosInstance.put('/bookmark-words', { originalWord: word, newWord })
-            .then(() => {
+            .then((response) => {
                 console.log(`Word edited: ${word} to ${newWord}`)
+                displayWarningIfExceedApiLimit(response);
                 onEdit(newWord);
             })
             .catch((error) => {
@@ -75,8 +77,9 @@ const WordChip = ({ word, onDelete, onClick, onEdit }) => {
         e.stopPropagation();
         setIsLoadingBookmarkWords(true);
         axiosInstance.delete('/bookmark-words', { data: { word } })
-            .then(() => {
+            .then((response) => {
                 console.log(`Word deleted: ${word}`)
+                displayWarningIfExceedApiLimit(response);
                 onDelete(word);
             })
             .catch((error) => {

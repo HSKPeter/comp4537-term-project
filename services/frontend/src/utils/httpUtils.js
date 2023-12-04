@@ -17,7 +17,7 @@ export const API_PATHS = {
     apiStats: '/api-stats',
     usersInfo: '/users-info',
     apiConsumption: '/api-consumption',
-    deleteUser: '/delete-user',
+    deleteUser: '/delete-user', // TODO: Remove this and all its usages
     searchNews: '/search-news',
     trendingNews: '/trending-news',
     bookmarkWords: '/bookmark-words',

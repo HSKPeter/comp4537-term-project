@@ -1,6 +1,5 @@
 require('dotenv').config();  // Read .env file if it exists
 
-// TODO: Update production configs
 const PRODUCTION_CONFIGS = {
     backendOrigin: 'https://bqw91brfqd.execute-api.us-east-2.amazonaws.com/Prod',
     frontendOrigin: 'https://sepehrzohoorirad.com',
@@ -39,6 +38,7 @@ const WHITE_LIST_ORIGINS = [FRONTEND_ORIGIN, BACKEND_ORIGIN];
 
 const HUGGINGFACE_API_TOKEN = process.env.HUGGINGFACE_API_TOKEN;
 const NEWS_DATA_API_KEY = process.env.NEWS_DATA_API_KEY;
+const AUTH_SERVER_API_KEY = 'ab108a37-fb2c-4822-9e7c-6f9606de82fc'
 
 module.exports = {
     PORT,
@@ -49,6 +49,7 @@ module.exports = {
     IS_DEVELOPMENT_MODE,
     IS_PRODUCTION_MODE,
     HUGGINGFACE_API_TOKEN,
-    NEWS_DATA_API_KEY
+    NEWS_DATA_API_KEY,
+    AUTH_SERVER_API_KEY
 };
     

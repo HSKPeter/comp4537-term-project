@@ -1,23 +1,15 @@
 const { SERVER_MESSAGES } = require('../messages/serverMessage');
-const { HTTP_STATUS_CODES } = require('./httpUtils');
-const { authAxiosInstance } = require('./httpUtils');
+const { HTTP_STATUS_CODES, AUTH_SERVER_API_ENDPOINTS, authAxiosInstance } = require('./httpUtils');
 
 const USER_ROLES = {
     ADMIN: "admin",
     USER: "user"
 }
 
-const API_ENDPOINTS = {
-    REGISTER: "/register",
-    LOGIN: "/login",
-    VALIDATE: "/user",
-    ROLE: "/role"
-}
-
 async function registerUser({ email, username, password }) {
-    const response = await authAxiosInstance.post(API_ENDPOINTS.REGISTER, { email, username, password });
+    const response = await authAxiosInstance.post(AUTH_SERVER_API_ENDPOINTS.REGISTER, { email, username, password });
 
-    if (response.status !== HTTP_STATUS_CODES.OK) {
+    if (response.status !== HTTP_STATUS_CODES.CREATED) {
         const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
         throw new Error(errorMessage);
     }
@@ -27,7 +19,7 @@ async function registerUser({ email, username, password }) {
 }
 
 async function loginUser({ email, username, password }) {
-    const response = await authAxiosInstance.post(API_ENDPOINTS.LOGIN, { email, username, password });
+    const response = await authAxiosInstance.post(AUTH_SERVER_API_ENDPOINTS.LOGIN, { email, username, password });
 
     if (response.status !== HTTP_STATUS_CODES.OK) {
         const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
@@ -39,7 +31,7 @@ async function loginUser({ email, username, password }) {
 }
 
 async function getUserQuotaFromToken(token) {
-    const response = await authAxiosInstance.post(API_ENDPOINTS.VALIDATE, { token });
+    const response = await authAxiosInstance.post(AUTH_SERVER_API_ENDPOINTS.VALIDATE, { token });
     if (response.status !== HTTP_STATUS_CODES.OK) {
         const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
         throw new Error(errorMessage);
@@ -54,7 +46,7 @@ async function getUserQuotaFromToken(token) {
 }
 
 async function getRoleFromToken(token) {
-    const response = await authAxiosInstance.post(API_ENDPOINTS.ROLE, { token });
+    const response = await authAxiosInstance.post(AUTH_SERVER_API_ENDPOINTS.ROLE, { token });
     if (response.status !== HTTP_STATUS_CODES.OK) {
         const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
         throw new Error(errorMessage);

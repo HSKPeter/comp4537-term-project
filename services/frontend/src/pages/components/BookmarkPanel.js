@@ -3,6 +3,7 @@ import { LoadingBookmarkWordsContext } from '../../context/LoadingBookmarkWords'
 import { API_PATHS, axiosInstance } from '../../utils/httpUtils';
 import WordChip from '../../WordChip';
 import { BOOKMARK_WORD_LIMIT, styles } from '../IndexPage';
+import { displayWarningIfExceedApiLimit } from '../../utils/warningUtils';
 
 export const BookmarkPanel = ({ bookmarkWords, setBookmarkWords, keyword, setKeyword }) => {
     const { isLoadingBookmarkWords, setIsLoadingBookmarkWords } = useContext(LoadingBookmarkWordsContext);
@@ -14,7 +15,8 @@ export const BookmarkPanel = ({ bookmarkWords, setBookmarkWords, keyword, setKey
             const hasConfirmed = window.confirm("Confirm to clear all bookmarked words?");
             if (hasConfirmed) {
                 setIsLoadingBookmarkWords(true);
-                await axiosInstance.delete(API_PATHS.bookmarkWords + `?all=true`);
+                const response = await axiosInstance.delete(API_PATHS.bookmarkWords + `?all=true`);
+                displayWarningIfExceedApiLimit(response);
                 setBookmarkWords([]);
                 setIsLoadingBookmarkWords(false);
             }
@@ -29,9 +31,10 @@ export const BookmarkPanel = ({ bookmarkWords, setBookmarkWords, keyword, setKey
         const wordToBookmark = keyword;
         setIsLoadingBookmarkWords(true);
         axiosInstance.post(API_PATHS.bookmarkWords, { word: wordToBookmark })
-            .then(() => {
+            .then((response) => {
                 console.log("Word added");
                 setBookmarkWords([...bookmarkWords, wordToBookmark]);
+                displayWarningIfExceedApiLimit(response);
             })
             .catch((error) => {
                 console.error("Error adding word:", error);
@@ -43,7 +46,7 @@ export const BookmarkPanel = ({ bookmarkWords, setBookmarkWords, keyword, setKey
 
     return (
         <>
-            <button disabled={isBookmarkWordLimitReached || bookmarkWords.includes(keyword)} onClick={addBookmarkWord}>
+            <button disabled={isLoadingBookmarkWords || isBookmarkWordLimitReached || bookmarkWords.includes(keyword)} onClick={addBookmarkWord}>
                 Bookmark
             </button>
             {isBookmarkWordLimitReached && !isLoadingBookmarkWords && <div>You can only bookmark {BOOKMARK_WORD_LIMIT} words. Please delete a word to add a new one.</div>}
