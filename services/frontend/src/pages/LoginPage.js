@@ -8,25 +8,44 @@ export default function LoginPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
+    const isValidInput = () => {
+        // Add input validation logic here (e.g., check for empty fields, valid email format)
+        if (!email || !username || !password) {
+            setErrorMessage('Please fill in all fields.');
+            return false;
+        }
+        // Add more validation rules as required
+        return true;
+    };
+
     const handleLogin = async (event) => {
+        if (!isValidInput()) return;
+        setIsLoading(true);
         try {
             const role = await login(email, username, password);
             updateUserRoleInCache(role);
             navigate('/');
         } catch (error) {
             setErrorMessage("" + error.message + " Please try again.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const handleRegistration = async (event) => {
+        if (!isValidInput()) return;
+        setIsLoading(true);
         try {
             const role = await register(email, username, password);
             updateUserRoleInCache(role);
             navigate('/');
         } catch (error) {
             setErrorMessage("" + error.message + " Please try again.");
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -39,6 +58,7 @@ export default function LoginPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     style={styles.input}
+                    disabled={isLoading}
                 />
                 <input
                     type="text"
@@ -46,6 +66,7 @@ export default function LoginPage() {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     style={styles.input}
+                    disabled={isLoading}
                 />                
                 <input
                     type="password"
@@ -53,10 +74,12 @@ export default function LoginPage() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     style={styles.input}
+                    disabled={isLoading}
                 />
-                <button style={styles.loginButton} onClick={handleLogin}>Login</button>
-                <button style={styles.registrationButton} onClick={handleRegistration}>Registration</button>
+                <button style={styles.loginButton} onClick={handleLogin} disabled={isLoading}>Login</button>
+                <button style={styles.registrationButton} onClick={handleRegistration} disabled={isLoading}>Registration</button>
                 {errorMessage && <div style={styles.errorMessage}>{errorMessage}</div>}
+                {isLoading && <div>Loading...</div>}
             </div>
         </div>
     );
