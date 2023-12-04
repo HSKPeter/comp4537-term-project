@@ -28,9 +28,19 @@ authAxiosInstance.interceptors.request.use((config) => {
     return config;
 });
 
+const AUTH_SERVER_API_ENDPOINTS = {
+    REGISTER: "/register",
+    LOGIN: "/login",
+    VALIDATE: "/user",
+    ROLE: "/role",
+    RECORD: "/record",
+    BOOKMARK_WORDS: "/bookmark-words",
+}
+
 module.exports = {
     HTTP_STATUS_CODES,
     STANDARD_HEADERS,
     CUSTOM_HEADERS,
+    AUTH_SERVER_API_ENDPOINTS,
     authAxiosInstance
 };
