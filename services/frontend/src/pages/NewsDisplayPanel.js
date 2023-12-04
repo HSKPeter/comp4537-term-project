@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { API_PATHS, axiosInstance } from '../utils/httpUtils';
 import styled from 'styled-components';
+import { USER_MESSAGES_EN } from '../utils/userMessages';
+
 
 // Styled components
 const Card = styled.div`
@@ -59,7 +61,7 @@ export function NewsDisplayPanel({ news }) {
                     <NewsItemCard key={index} article={article} />
                 ))
             ) : (
-                <p>No news to display</p>
+                <p>{USER_MESSAGES_EN.news_display_panel_no_news}</p>
             )}
         </div>
     );
@@ -106,16 +108,16 @@ function NewsItemCard({ article }) {
             <h3>{article.title}</h3>
             <Content >
                 {summary === 'loading' ? (
-                    <p>Loading...</p> // Replace this with a spinner or loading animation
+                    <p>{USER_MESSAGES_EN.news_item_card_loading}</p> // Or replace with a spinner or loading animation
                 ) : (
                     <p>{showSummary ? summary : (isExpanded ? article.content : `${article.content.substring(0, 100)}...`)}</p>
                 )}
             </Content>
             <ButtonContainer>
-                <Button onClick={handleSummarize}>{showSummary ? 'Show Full Article' : 'Summarize'}</Button>
+                <Button onClick={handleSummarize}>{showSummary ? USER_MESSAGES_EN.news_item_card_button_show_full_article : USER_MESSAGES_EN.news_item_card_button_summarize}</Button>
             </ButtonContainer>
-            <ReadMoreLink href={article.link} target="_blank" rel="noopener noreferrer">Read more</ReadMoreLink>
-            <PublishedDate>Published: {article.published}</PublishedDate>
+            <ReadMoreLink href={article.link} target="_blank" rel="noopener noreferrer">{USER_MESSAGES_EN.news_item_card_read_more_link}</ReadMoreLink>
+            <PublishedDate>{USER_MESSAGES_EN.news_item_card_published_date_prefix} {article.published}</PublishedDate>
         </Card >
     );
 }

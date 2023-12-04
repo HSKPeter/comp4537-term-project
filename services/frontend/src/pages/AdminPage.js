@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { navigateToLoginPageIfRoleNotFound } from '../utils/securityUtils';
 import { API_PATHS, HTTP_STATUS_CODES, axiosInstance } from "../utils/httpUtils";
 import "../styles/AdminPage.css";
+import { USER_MESSAGES_EN } from '../utils/userMessages';
 
 function AdminPage() {
     const navigate = useNavigate();
@@ -17,26 +18,27 @@ function AdminPage() {
             if (response.status === HTTP_STATUS_CODES.OK) {
                 setApiUsageData(response.data);
             } else {
-                alert('An error occurred. Was not able to get API usage data.');
+                alert(USER_MESSAGES_EN.admin_page_error_api_usage);
             }
         })
         axiosInstance.get(API_PATHS.usersInfo).then((response) => {
             if (response.status === HTTP_STATUS_CODES.OK) {
                 setUsersInfo(response.data);
             } else {
-                alert('An error occurred. Was not able to get users info.');
+                alert(USER_MESSAGES_EN.admin_page_error_users_info);
             }
         })
     }, []);
 
     return (
         <div className='admin-page'>
-            <h1>Admin Page</h1>
+            <h1>{USER_MESSAGES_EN.admin_page_title}</h1>
             <ApiUsageTable apiUsageData={apiUsageData.usageStats} />
             <UsersTable usersInfo={usersInfo['users-info']} />
         </div>
     )
 }
+
 
 
 function ApiUsageTable({ apiUsageData }) {

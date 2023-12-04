@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getUserRoleFromCache, removeUserRoleFromCache } from '../../utils/userRoleUtils';
 import { axiosInstance } from '../../utils/httpUtils';
+import { USER_MESSAGES_EN } from '../../utils/userMessages';
+
 
 const Navbar = () => {
     const [apiUsage, setApiUsage] = useState();
@@ -27,13 +29,11 @@ const Navbar = () => {
     console.log(userRole);
     return (
         <nav className="navbar">
-            {userRole && <p>Logged in. API usage: {apiUsage}</p>}
-            {!userRole && <Link to="/">Home</Link>}
-            {userRole && <Link to="/">Search</Link>}
-            {userRole === 'Admin' && <Link to="/admin">Admin</Link>}
-            {userRole && <button onClick={onLogout}>Logout</button>}
-
-            {/* Additional logic for showing different elements based on route and user role */}
+            {userRole && <p>{USER_MESSAGES_EN.navbar_logged_in_api_usage}{apiUsage}</p>}
+            {!userRole && <Link to="/">{USER_MESSAGES_EN.navbar_link_home}</Link>}
+            {userRole && <Link to="/">{USER_MESSAGES_EN.navbar_link_search}</Link>}
+            {userRole === 'Admin' && <Link to="/admin">{USER_MESSAGES_EN.navbar_link_admin}</Link>}
+            {userRole && <button onClick={onLogout}>{USER_MESSAGES_EN.navbar_button_logout}</button>}
         </nav>
     );
 };
