@@ -1,27 +1,34 @@
-const { vsprintf } = require("sprintf-js");
-const { authAxiosInstance, AUTH_SERVER_API_ENDPOINTS, HTTP_STATUS_CODES } = require("../utils/httpUtils");
-const { SERVER_MESSAGES } = require("../messages/serverMessage");
 const { API_ROUTE_PATHS } = require("../router/routes");
-const { USER_MESSAGES } = require("../messages/userMessage");
+const { recordUsageOfApi } = require("../utils/recordApiUsageUtils");
+
+const pathsRequiringRecordingOfApiUsage = [
+    API_ROUTE_PATHS.LOGIN,
+    API_ROUTE_PATHS.REGISTER,
+    API_ROUTE_PATHS.LOGOUT,
+    API_ROUTE_PATHS.SEARCH_NEWS,
+    API_ROUTE_PATHS.TRENDING_NEWS,
+    API_ROUTE_PATHS.SUMMARIZE_TEXT,
+    API_ROUTE_PATHS.BOOKMARK_WORDS
+];
 
 function recordApiUsage(req, res, next) {
+    if (!pathsRequiringRecordingOfApiUsage.includes(req.path)) {
+        next();
+        return;
+    }
+
+    if (req.path === API_ROUTE_PATHS.LOGIN || req.path === API_ROUTE_PATHS.REGISTER) {
+        next();  // Record API usage only after the user has been authenticated for login or registration
+        return;
+    }
+
     const token = req.cookies.token;
     const endpoint = API_ROUTE_PATHS.ROOT + req.path;
     const method = req.method;
     const timestamp = Date.now();
-    authAxiosInstance.post(AUTH_SERVER_API_ENDPOINTS.RECORD, {
-        token,
-        endpoint,
-        method,
-        timestamp
-    })
+    recordUsageOfApi({ token, endpoint, method, timestamp })
     .then(() => {
-        console.log(vsprintf(SERVER_MESSAGES.recordedApiUsage.success, [method, endpoint]));
         next();
-    })
-    .catch(() => {
-        console.log(vsprintf(SERVER_MESSAGES.recordedApiUsage.error, [method, endpoint]));
-        res.status(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR).json({ error: USER_MESSAGES.generalError });
     });
 }
 

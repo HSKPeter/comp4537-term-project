@@ -1,6 +1,7 @@
 const SERVER_MESSAGES = {
     portListening: 'Server listening on port %d in %s mode',
     swaggerDocs: 'Swagger docs available at %s',
+    corsNotAllowed: 'CORS not allowed',
     huggingFaceTokenNotSet: 'Hugging Face token not set',
     requestReceived: '%s request received for %s',
     newsDataApiKeyNotSet: 'News Data API key not set',

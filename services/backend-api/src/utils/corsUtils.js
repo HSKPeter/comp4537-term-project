@@ -1,4 +1,5 @@
 const { WHITE_LIST_ORIGINS } = require('../config');
+const { SERVER_MESSAGES } = require('../messages/serverMessage');
 
 const CORS_OPTIONS = {
     credentials: true,
@@ -6,7 +7,7 @@ const CORS_OPTIONS = {
         if (WHITE_LIST_ORIGINS.indexOf(origin) !== -1 || !origin) {
             callback(null, true)
         } else {
-            callback(new Error('Not allowed by CORS'))
+            callback(new Error(SERVER_MESSAGES.corsNotAllowed))
         }
     }
 }
