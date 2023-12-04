@@ -8,7 +8,10 @@ const SERVER_MESSAGES = {
     failedToRegisterUser: 'Failed to register user. %s',
     failedToLoginUser: 'Failed to login user. %s',
     failedToGetQuotaFromToken: 'Failed to get quota from token. %s',
-    recordedApiUsage: 'Recorded API usage for %s request to %s',
+    recordedApiUsage: {
+        success: 'Recorded API usage for %s request to %s',
+        error: 'Error recording API usage for %s request to %s',
+    },
     news: {
         failedToSearchNews: 'Failed to get news. %s',
         failedToGetTrendingNews: 'Failed to get trending news. %s',
