@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const productionApiUrl = 'https://bqw91brfqd.execute-api.us-east-2.amazonaws.com/Prod';
+const productionApiUrl = 'https://bqw91brfqd.execute-api.us-east-2.amazonaws.com/Prod/api/v1';
 const apiUrl = process.env.REACT_APP_SERVER_URL ?? productionApiUrl;
 
 export const axiosInstance = axios.create({

@@ -1,5 +1,5 @@
 const API_ROUTE_PATHS = {
-    ROOT: '/',
+    ROOT: '/api/v1',
     LOGIN: '/login',
     LOGOUT: '/logout',
     REGISTER: '/register',
