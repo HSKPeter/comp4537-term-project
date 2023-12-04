@@ -21,6 +21,7 @@ const { roleValidationController } = require('../controllers/roleValidation');
 const { checkAdminRole } = require('../middlewares/checkAdminRole');
 const { IS_DEVELOPMENT_MODE } = require('../config');
 const { mimicNetworkLatency } = require('../middlewares/mimicNetworkLatency');
+const { recordApiUsage } = require('../middlewares/recordApiUsage');
 
 const router = Router();
 
@@ -103,10 +104,14 @@ router.get(API_ROUTE_PATHS.API_STATS_BY_USER, (req, res) => {
 
 router.get(API_ROUTE_PATHS.API_CONSUMPTION, apiConsumptionController);
 
+
+router.use(recordApiUsage);  // The usage of the APIs below this middleware will be recorded
+
 router.get(API_ROUTE_PATHS.SEARCH_NEWS, searchNewsController);
 router.get(API_ROUTE_PATHS.TRENDING_NEWS, getTrendingNewsController);
 router.post(API_ROUTE_PATHS.SUMMARIZE_TEXT, textSummarizationController);
 
+// TODO: Add one more endpoint for getting recommended bookmark words
 router.get(API_ROUTE_PATHS.BOOKMARK_WORDS, getBookmarkWordsController);
 router.post(API_ROUTE_PATHS.BOOKMARK_WORDS, addBookmarkWordController);
 router.put(API_ROUTE_PATHS.BOOKMARK_WORDS, editBookmarkWordController);
