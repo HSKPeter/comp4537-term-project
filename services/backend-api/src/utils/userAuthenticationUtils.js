@@ -9,7 +9,7 @@ const USER_ROLES = {
 async function registerUser({ email, username, password }) {
     const response = await authAxiosInstance.post(AUTH_SERVER_API_ENDPOINTS.REGISTER, { email, username, password });
 
-    if (response.status !== HTTP_STATUS_CODES.OK) {
+    if (response.status !== HTTP_STATUS_CODES.CREATED) {
         const errorMessage = response.data.error ?? SERVER_MESSAGES.callingAuthServer.unknownError;
         throw new Error(errorMessage);
     }
