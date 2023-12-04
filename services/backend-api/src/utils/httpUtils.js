@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { AUTH_SERVER_ORIGIN } = require('../config');
+const { AUTH_SERVER_ORIGIN, AUTH_SERVER_API_KEY } = require('../config');
 
 const HTTP_STATUS_CODES = {
     OK: 200,
@@ -16,7 +16,7 @@ const authAxiosInstance = axios.create({
 });
 
 authAxiosInstance.interceptors.request.use((config) => {
-    config.headers['Authorization'] = `Bearer abcd`; // TODO: Use api key
+    config.headers['Authorization'] = `Bearer ${AUTH_SERVER_API_KEY}`;
     return config;
 });
 
