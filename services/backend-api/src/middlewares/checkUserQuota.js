@@ -4,25 +4,6 @@ const { HTTP_STATUS_CODES, CUSTOM_HEADERS, STANDARD_HEADERS } = require('../util
 const { COOKIE_KEYS, COOKIE_CONFIG } = require('../utils/cookieUtils');
 const { getUserQuotaFromToken } = require('../utils/userAuthenticationUtils');
 
-const BEARER = 'Bearer';
-
-function parseBearerToken(headers) {
-  try {
-    const authHeader = headers.authorization;
-    if (authHeader === undefined) {
-      return undefined;
-    }
-
-    const [bearer, token] = authHeader.split(' ');
-    if (bearer !== BEARER) {
-      return undefined;
-    }
-    return token;
-  } catch (err) {
-    return undefined;
-  }
-}
-
 const pathsRequiringUserQuota = [
   API_ROUTE_PATHS.SEARCH_NEWS,
   API_ROUTE_PATHS.TRENDING_NEWS,
@@ -38,7 +19,7 @@ function checkUserQuota(req, res, next) {
     return;
   }
 
-  const token = req.cookies.token ?? parseBearerToken(req.headers); // TODO: Remove parsing of Authorization header after development is done
+  const token = req.cookies.token;
   if (!token) {
     return res.status(HTTP_STATUS_CODES.UNAUTHORIZED).json({ error: USER_MESSAGES.auth.tokenNotFound });
   }
