@@ -4,44 +4,6 @@ info:
   description: This is the backend API for the News Summarizer
   version: 1.0.0
 paths:
-  /delete-user/{username}:
-    delete:
-      summary: Delete user
-      tags:
-        - Admin Operations
-      description: Delete the user with the given username
-      parameters:
-        - name: username
-          in: path
-          description: The username of the user to delete
-          required: true
-          schema:
-            type: string
-          example: "user"
-      responses:
-        "204":
-          description: Successful deletion
-        "400":
-          description: JSON object with the error message
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    description: The error message
-        "401":
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    description: The error message
-
   /api-stats:
     get:
       summary: Get API usage statistics
