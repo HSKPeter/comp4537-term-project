@@ -4,7 +4,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { navigateToLoginPageIfRoleNotFound } from '../utils/securityUtils';
 import { API_PATHS, HTTP_STATUS_CODES, axiosInstance } from "../utils/httpUtils";
 import "../styles/AdminPage.css";
-import axios from 'axios';
 
 function AdminPage() {
     const navigate = useNavigate();
@@ -14,23 +13,20 @@ function AdminPage() {
 
     useEffect(() => {
         navigateToLoginPageIfRoleNotFound(navigate, location);
-        // axiosInstance.get(API_PATHS.apiStats).then((response) => {
-        //     if (response.status === HTTP_STATUS_CODES.OK) {
-        //         setApiUsageData(response.data);
-        //     } else {
-        //         alert('An error occurred. Was not able to get API usage data.');
-        //     }
-        // })
-        // axiosInstance.get(API_PATHS.usersInfo).then((response) => {
-        //     if (response.status === HTTP_STATUS_CODES.OK) {
-        //         setUsersInfo(response.data);
-        //     } else {
-        //         alert('An error occurred. Was not able to get users info.');
-        //     }
-        // })
-        setApiUsageData(API_USAGE_DATA); // delete when backend endoints are ready
-        setUsersInfo(USER_DATA);    // delete when backend endoints are ready
-
+        axiosInstance.get(API_PATHS.apiStats).then((response) => {
+            if (response.status === HTTP_STATUS_CODES.OK) {
+                setApiUsageData(response.data);
+            } else {
+                alert('An error occurred. Was not able to get API usage data.');
+            }
+        })
+        axiosInstance.get(API_PATHS.usersInfo).then((response) => {
+            if (response.status === HTTP_STATUS_CODES.OK) {
+                setUsersInfo(response.data);
+            } else {
+                alert('An error occurred. Was not able to get users info.');
+            }
+        })
     }, []);
 
     return (
@@ -127,63 +123,6 @@ function UsersTable({ usersInfo }) {
         </div>
     )
 
-}
-
-
-
-// Dummy Data
-const API_USAGE_DATA = {
-    "usageStats": [
-        {
-            "api-name": "API 1",
-            "request-type": "GET",
-            "count": 100
-        },
-        {
-            "api-name": "API 2",
-            "request-type": "POST",
-            "count": 75
-        },
-        {
-            "api-name": "API 3",
-            "request-type": "GET",
-            "count": 120
-        },
-        {
-            "api-name": "API 4",
-            "request-type": "PUT",
-            "count": 50
-        }
-    ]
-}
-
-const USER_DATA = {
-    "users-info": [
-        {
-            "username": "user1",
-            "email": "user1@example.com",
-            "role": "admin",
-            "apiConsumption": 150
-        },
-        {
-            "username": "user2",
-            "email": "user2@example.com",
-            "role": "user",
-            "apiConsumption": 80
-        },
-        {
-            "username": "user3",
-            "email": "user3@example.com",
-            "role": "user",
-            "apiConsumption": 120
-        },
-        {
-            "username": "user4",
-            "email": "user4@example.com",
-            "role": "admin",
-            "apiConsumption": 200
-        }
-    ]
 }
 
 
