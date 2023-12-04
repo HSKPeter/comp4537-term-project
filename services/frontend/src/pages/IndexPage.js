@@ -81,7 +81,7 @@ const IndexPage = () => {
 
     return (
         <>
-            <Navbar />
+            
             <div>
                 <input
                     type="text"
