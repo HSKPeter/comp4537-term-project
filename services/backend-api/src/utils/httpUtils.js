@@ -11,6 +11,10 @@ const HTTP_STATUS_CODES = {
     INTERNAL_SERVER_ERROR: 500,
 };
 
+const STANDARD_HEADERS = {
+    ACCESS_CONTROL_EXPOSE_HEADERS: 'Access-Control-Expose-Headers',
+};
+
 const CUSTOM_HEADERS = {
     API_LIMIT_EXCEEDED: 'X-API-Limit-Exceeded'
 };
@@ -26,6 +30,7 @@ authAxiosInstance.interceptors.request.use((config) => {
 
 module.exports = {
     HTTP_STATUS_CODES,
+    STANDARD_HEADERS,
     CUSTOM_HEADERS,
     authAxiosInstance
 };

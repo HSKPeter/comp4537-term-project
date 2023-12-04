@@ -7,6 +7,7 @@ import { navigateToLoginPageIfRoleNotFound } from '../utils/securityUtils';
 import { BookmarkPanel } from './components/BookmarkPanel';
 import { NewsDisplayPanel } from './NewsDisplayPanel';
 import { LoadingBookmarkWordsContext } from '../context/LoadingBookmarkWords';
+import { displayWarningIfExceedApiLimit } from '../utils/warningUtils';
 
 export const BOOKMARK_WORD_LIMIT = 2;
 
@@ -71,6 +72,8 @@ const IndexPage = () => {
                 return;
             }
             setNews(response.data);
+
+            displayWarningIfExceedApiLimit(response);
         } catch (error) {
             console.error("Error fetching news:", error);
         }
