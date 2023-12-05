@@ -13,7 +13,7 @@ export const USER_MESSAGES_EN = {
     "index_page_get_trending_news_button_loading": "Loading...",
     "index_page_get_trending_news_button_default": "Get Trending News",
     "index_page_error_fetching_bookmark_words": "Error fetching bookmark words:",
-    "index_page_error_fetching_news": "Error fetching news:",
+    "index_page_error_fetching_news": "Error fetching news. Please try again.",
     "news_display_panel_no_news": "No news to display",
     "news_item_card_loading": "Loading...",
     "news_item_card_button_summarize": "Summarize",

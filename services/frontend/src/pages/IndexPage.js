@@ -37,6 +37,7 @@ const IndexPage = () => {
     const [news, setNews] = useState([]);
     const [loading, setLoading] = useState(false);
     const [isLoadingBookmarkWords, setIsLoadingBookmarkWords] = useState(true);
+    const [errorMessage, setErrorMessage] = useState();
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -68,9 +69,10 @@ const IndexPage = () => {
 
     const fetchNews = async () => {
         setLoading(true);
+        setErrorMessage('');
         try {
             const url = keywordNotEmpty ? `${API_PATHS.searchNews}?keyword=${keyword}` : API_PATHS.trendingNews;
-
+            
             const response = await axiosInstance.get(url);
             if (response.status === HTTP_STATUS_CODES.UNAUTHORIZED) {
                 navigate('/login', { state: { from: location } });
@@ -81,6 +83,7 @@ const IndexPage = () => {
             displayWarningIfExceedApiLimit(response);
         } catch (error) {
             console.error("Error fetching news:", error);
+            setErrorMessage(USER_MESSAGES_EN.index_page_error_fetching_news);
         }
         setLoading(false);
     };
@@ -102,6 +105,7 @@ const IndexPage = () => {
                         {loading ? USER_MESSAGES_EN.index_page_get_trending_news_button_loading : USER_MESSAGES_EN.index_page_get_trending_news_button_default}
                     </button>
                 }
+                {errorMessage && <p>{errorMessage}</p>}
                 <LoadingBookmarkWordsContext.Provider value={{ isLoadingBookmarkWords, setIsLoadingBookmarkWords }}>
                     <BookmarkPanel
                         bookmarkWords={bookmarkWords}
