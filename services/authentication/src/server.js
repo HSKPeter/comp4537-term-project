@@ -412,30 +412,47 @@ app.delete('/bookmark-words/:userID', async (req, res) => {
             return;
         } 
     
-        const { words } = req.body;
+        const { word } = req.body;
 
         // Check if the words array is empty
-        if (!words || words.length === 0) {
-            res.status(400).json({ error: 'Words are required' });
+        if (!word) {
+            res.status(400).json({ error: 'Received an empty string!' });
             return;
         }
 
-        for (let i = 0; i < words.length; i++) {
-            const word = words[i];
-            let wordExists = await runSQLQuery('SELECT * FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word]);
-            if (wordExists.length === 0) {
-                res.status(400).json({ error: `Word '${word}' not found` });
-                return;
-            }
-
-            console.log(`Deleting word: ${word}`)
-
-            runSQLQuery('DELETE FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word])
-                .catch((err) => {
-                    console.error('Error deleting bookmarked word: ', err);
-                    res.status(500).json({ error: 'Internal server error' });
-                });
+        // Checks if the word exists in the database
+        let wordExists = await runSQLQuery('SELECT * FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word]);
+        if (wordExists.length === 0) {
+            res.status(400).json({ error: `Word '${word}' not found` });
+            return;
         }
+        
+
+        console.log(`Deleting word: ${word}`);
+
+        // Delete the word from the database
+        runSQLQuery('DELETE FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word])
+            .catch((err) => {
+                console.error('Error deleting bookmarked word: ', err);
+                res.status(500).json({ error: 'Internal server error' });
+            });
+
+        // for (let i = 0; i < words.length; i++) {
+        //     const word = words[i];
+        //     let wordExists = await runSQLQuery('SELECT * FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word]);
+        //     if (wordExists.length === 0) {
+        //         res.status(400).json({ error: `Word '${word}' not found` });
+        //         return;
+        //     }
+
+        //     console.log(`Deleting word: ${word}`)
+
+        //     runSQLQuery('DELETE FROM BookmarkWord WHERE UserID = ? AND Word = ?', [userID, word])
+        //         .catch((err) => {
+        //             console.error('Error deleting bookmarked word: ', err);
+        //             res.status(500).json({ error: 'Internal server error' });
+        //         });
+        // }
 
         res.status(200).json({ message: 'Words deleted successfully' });
     } catch (error) {
