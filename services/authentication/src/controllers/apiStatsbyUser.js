@@ -12,6 +12,38 @@ async function apiStatsByUserController(req, res) {
     }
 }
 
+async function getApiStatsByUserFromDatabase() {
+    try {
+        const apiStatsByUserQuery = `
+            SELECT
+                User.Name AS 'username',
+                User.Email AS 'email',
+                UserType.UserAuthorization AS 'role',
+                COUNT(*) AS 'apiConsumption'
+            FROM APICall
+            JOIN User ON APICall.UserID = User.UserID
+            JOIN UserType ON User.UserType = UserType.UserTypeID
+            GROUP BY User.Name, User.Email, UserType.UserAuthorization;
+        `;
+
+        const apiStatsByUser = await runSQLQuery(apiStatsByUserQuery);
+
+        // Transform the result to the desired format
+        const formattedApiStats = apiStatsByUser.map(apiStat => ({
+            username: apiStat.username,
+            email: apiStat.email,
+            role: apiStat.role,
+            apiConsumption: apiStat.apiConsumption
+        }));
+
+        return formattedApiStats;
+    } catch (error) {
+        console.error('Error getting API stats by user from the database: ', error);
+        throw error;
+    }
+}
+
+
 module.exports = {
     apiStatsByUserController
 }

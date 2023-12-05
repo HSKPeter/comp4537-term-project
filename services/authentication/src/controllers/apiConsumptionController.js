@@ -14,6 +14,34 @@ async function apiConsumptionController(req, res) {
     }
 }
 
+async function getApiConsumptionForCurrentUser(userID) {
+    try {
+        const apiConsumptionQuery = `
+            SELECT
+                Endpoint AS 'api-name',
+                Method AS 'request-type',
+                COUNT(*) AS 'count'
+            FROM APICall
+            WHERE UserID = ?
+            GROUP BY Method, Endpoint;
+        `;
+
+        const apiConsumption = await runSQLQuery(apiConsumptionQuery, [userID]);
+
+        // Transform the result to the desired format
+        const formattedApiConsumption = apiConsumption.map(apiStat => ({
+            'api-name': apiStat['api-name'],
+            'request-type': apiStat['request-type'],
+            'count': apiStat['count']
+        }));
+
+        return formattedApiConsumption;
+    } catch (error) {
+        console.error('Error getting API consumption for the specified user from the database: ', error);
+        throw error;
+    }
+}
+
 module.exports = {
     apiConsumptionController
 }
