@@ -53,7 +53,7 @@ async function postBookmarkWordController(req, res) {
     }
 }
 
-async function postBookmarkWordController(req, res) {
+async function putBookmarkWordController(req, res) {
     try {
         const {userID} = req.params;
 
@@ -129,5 +129,10 @@ async function deleteBookmarkWordController(req, res) {
     }
 };
 
-
+module.exports = {
+    getBookmarkWordController,
+    postBookmarkWordController,
+    putBookmarkWordController,
+    deleteBookmarkWordController
+}
 
