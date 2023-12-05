@@ -36,6 +36,7 @@ export const USER_MESSAGES_EN = {
     "navbar_link_home": "Home",
     "navbar_link_search": "Search",
     "navbar_link_admin": "Admin",
-    "navbar_button_logout": "Logout"
+    "navbar_button_logout": "Logout",
+    "warning_utils_api_limit_exceeded": 'You have exceeded the API limit, but we will still provide you with the service.',
 
-}
+}   

@@ -1,8 +1,9 @@
+import { USER_MESSAGES_EN } from './userMessages.js';
+
 function displayWarningIfExceedApiLimit(response) {
     const isApiLimitExceeded = response.headers['x-api-limit-exceeded'] === 'true';
     if (isApiLimitExceeded) {
-        // TODO: Refactor user message into constants
-        alert('You have exceeded the API limit, but we will still provide you with the service.');
+        alert(USER_MESSAGES_EN.warning_utils_api_limit_exceeded);
     }
 }
 
