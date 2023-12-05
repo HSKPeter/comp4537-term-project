@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { login, register } from '../auth';
 import { updateUserRoleInCache } from '../utils/userRoleUtils';
 import { USER_MESSAGES_EN } from '../utils/userMessages';
+import { ROUTER_PATHS } from '../utils/httpUtils';
+import { getUserRoleFromCache } from '../utils/userRoleUtils';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -11,6 +13,15 @@ export default function LoginPage() {
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        let role = getUserRoleFromCache();
+        if (role) {
+            navigate(ROUTER_PATHS.index, { state: { from: location } });
+        }
+    })
+
 
     const isValidInput = () => {
         if (!email || !username || !password) {
@@ -26,7 +37,7 @@ export default function LoginPage() {
         try {
             const role = await login(email, username, password);
             updateUserRoleInCache(role);
-            navigate('/');
+            navigate(ROUTER_PATHS.index);
         } catch (error) {
             setErrorMessage(`${error.message} ${USER_MESSAGES_EN.login_page_validationErrorMessage}`);
         } finally {
@@ -40,7 +51,7 @@ export default function LoginPage() {
         try {
             const role = await register(email, username, password);
             updateUserRoleInCache(role);
-            navigate('/');
+            navigate(ROUTER_PATHS.index);
         } catch (error) {
             setErrorMessage(`${error.message} ${USER_MESSAGES_EN.login_page_validationErrorMessage}`);
         } finally {

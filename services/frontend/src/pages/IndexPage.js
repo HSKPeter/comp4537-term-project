@@ -1,7 +1,7 @@
 // src/IndexPage.js
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { API_PATHS, HTTP_STATUS_CODES, axiosInstance } from '../utils/httpUtils';
+import { API_PATHS, HTTP_STATUS_CODES, ROUTER_PATHS, axiosInstance } from '../utils/httpUtils';
 import { navigateToLoginPageIfRoleNotFound } from '../utils/securityUtils';
 import { BookmarkPanel } from './components/BookmarkPanel';
 import { NewsDisplayPanel } from './NewsDisplayPanel';
@@ -75,7 +75,7 @@ const IndexPage = () => {
             
             const response = await axiosInstance.get(url);
             if (response.status === HTTP_STATUS_CODES.UNAUTHORIZED) {
-                navigate('/login', { state: { from: location } });
+                navigate(ROUTER_PATHS.login, { state: { from: location } });
                 return;
             }
             setNews(response.data);

@@ -12,6 +12,7 @@ export const axiosInstance = axios.create({
 
 export const API_PATHS = {
     login: '/login',
+    logout: '/logout',
     register: '/register',
     role: '/role',
     apiStats: '/api-stats',
@@ -28,4 +29,10 @@ export const HTTP_STATUS_CODES = {
     OK: 200,
     CREATED: 201,
     UNAUTHORIZED: 401,
+}
+
+export const ROUTER_PATHS = {
+    index: '/',
+    login: '/login',
+    admin: '/admin',
 }
