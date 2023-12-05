@@ -180,10 +180,13 @@ function decodeToken(token) {
 async function checkIfUserHasRemainingQuota(token) {
     const decodedToken = decodeToken(token);
     const userID = decodedToken.userID;
-    const apiCalls = await runSQLQuery('SELECT COUNT(*) AS callCount FROM APICall WHERE UserID = ?', [userID]);
+    const sqlQueryResult = await runSQLQuery('SELECT COUNT(*) AS callCount FROM APICall WHERE UserID = ?', [userID]);
+    
+    // Extract the call count from the query result
+    const apiCallCount = sqlQueryResult[0].callCount;
 
     // TODO: Read database to determine if the user has remaining quota
-    if (apiCalls > 20) {
+    if (apiCallCount > 20) {
         return false;
     }
 
