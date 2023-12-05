@@ -46,29 +46,36 @@ function ApiUsageTable() {
             <div className='api-usage-table'> {message} </div>
         )
     }
-    return (
-        <div className='api-usage-table'>
-            <table>
-                <thead>
-                    <tr>
-                        <th>API Name</th>
-                        <th>Request Type</th>
-                        <th>Count</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {apiUsageData.map((apiUsage) => (
-                        <tr key={apiUsage['api-name']}>
-                            <td>{apiUsage['api-name']}</td>
-                            <td>{apiUsage['request-type']}</td>
-                            <td>{apiUsage['count']}</td>
+    try {
+        return (
+            <div className='api-usage-table'>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>API Name</th>
+                            <th>Request Type</th>
+                            <th>Count</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    )
+                    </thead>
+                    <tbody>
+                        {apiUsageData.map((apiUsage) => (
+                            <tr key={apiUsage['api-name']}>
+                                <td>{apiUsage['api-name']}</td>
+                                <td>{apiUsage['request-type']}</td>
+                                <td>{apiUsage['count']}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        )
+    } catch (error) {
+        console.error("Error rendering API usage table:", error);
+        return (
+            <div className='api-usage-table'> {USER_MESSAGES_EN.admin_page_error_api_usage} </div>
+        )
 
+    }
 }
 
 
@@ -93,33 +100,38 @@ function UsersTable() {
 
         )
     }
-    return (
-        <div className='users-table'>
-            <table className="admin-page-table">
-                <thead>
-                    <tr>
-                        <th>Username</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>API Consumption</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {usersInfo.map((user) => (
-                        <tr key={user.username}>
-                            <td>{user.username}</td>
-                            <td>{user.email}</td>
-                            <td>{user.role}</td>
-                            <td>{user.apiConsumption}</td>
+    try {
+        return (
+            <div className='users-table'>
+                <table className="admin-page-table">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>API Consumption</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-        </div>
-    )
+                    </thead>
+                    <tbody>
+                        {usersInfo.map((user) => (
+                            <tr key={user.username}>
+                                <td>{user.username}</td>
+                                <td>{user.email}</td>
+                                <td>{user.role}</td>
+                                <td>{user.apiConsumption}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        )
+    } catch (error) {
+        console.error("Error rendering users table:", error);
+        return (
+            <div className='users-table'> {USER_MESSAGES_EN.admin_page_error_users_info} </div>
+        )
 
+    }
 }
-
-
 
 export default AdminPage;
