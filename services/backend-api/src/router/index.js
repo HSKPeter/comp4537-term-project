@@ -8,7 +8,6 @@ const {
     userRegistrationController,
     userLogoutController,
     apiConsumptionController,
-    // TODO: Uncomment these when the real implementation is ready
     apiStatsByUserController,
     apiStatsController,
     getBookmarkWordsController,
@@ -41,38 +40,6 @@ router.get(API_ROUTE_PATHS.ROLE, roleValidationController);
 router.get(API_ROUTE_PATHS.API_STATS, apiStatsController);
 
 router.get(API_ROUTE_PATHS.API_STATS_BY_USER, apiStatsByUserController);
-// TODO: Replace with the real implementation
-// router.get(API_ROUTE_PATHS.API_STATS_BY_USER, (req, res) => {
-//     const USER_DATA = {
-//         "users-info": [
-//             {
-//                 "username": "user1",
-//                 "email": "user1@example.com",
-//                 "role": "admin",
-//                 "apiConsumption": 150
-//             },
-//             {
-//                 "username": "user2",
-//                 "email": "user2@example.com",
-//                 "role": "user",
-//                 "apiConsumption": 80
-//             },
-//             {
-//                 "username": "user3",
-//                 "email": "user3@example.com",
-//                 "role": "user",
-//                 "apiConsumption": 120
-//             },
-//             {
-//                 "username": "user4",
-//                 "email": "user4@example.com",
-//                 "role": "admin",
-//                 "apiConsumption": 200
-//             }
-//         ]
-//     }
-//     res.json(USER_DATA);
-// });
 
 router.get(API_ROUTE_PATHS.API_CONSUMPTION, apiConsumptionController);
 
