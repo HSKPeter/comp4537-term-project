@@ -1,3 +1,5 @@
+const { runSQLQuery } = require('../utils/sqlUtil');
+
 async function recordController(req, res) {
     try {
         const { token, endpoint, method, timestamp } = req.body;
@@ -25,6 +27,15 @@ async function recordController(req, res) {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+function decodeToken(token) {
+    try {
+        const decodedToken = jwt.verify(token, SECRET_KEY);
+        return decodedToken;
+    } catch (error) {
+        return null;
+    }
+}
 
 module.exports = {
     recordController

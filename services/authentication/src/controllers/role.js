@@ -13,7 +13,22 @@ async function roleController(req, res) {
         console.error('Error retrieving role: ', error);
         res.status(500).json({ error: 'Internal server error' });
     }
-};
+}
+
+function decodeToken(token) {
+    try {
+        const decodedToken = jwt.verify(token, SECRET_KEY);
+        return decodedToken;
+    } catch (error) {
+        return null;
+    }
+}
+
+function renewToken(payload) {
+    const { iat, exp, expiresIn, ...corePayload } = payload;
+    const newToken = jwt.sign(corePayload, SECRET_KEY, { expiresIn: DEFAULT_TOKEN_EXPIRES_IN });
+    return newToken;
+}
 
 module.exports = {
     roleController

@@ -1,3 +1,5 @@
+const { runSQLQuery } = require('../utils/sqlUtil');
+
 async function getBookmarkWordController(req, res) {
     try {
         const {userID} = req.params;

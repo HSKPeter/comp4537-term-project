@@ -7,7 +7,7 @@ const swaggerUi = require('swagger-ui-express');
 require('dotenv').config({ path: './.env' });
 
 require('./router/routes');
-const { runSQLQuery, setupDatabase } = require('./utils/sqlUtil')
+const { setupDatabase } = require('./utils/sqlUtil')
 const { registerController } = require('./controllers/register');
 const { loginController } = require('./controllers/login');
 const { userController } = require('./controllers/user');
@@ -24,8 +24,6 @@ const { apiStatsByUserController } = require('./controllers/apiStatsByUser');
 const { apiConsumptionController } = require('./controllers/apiConsumptionController');
 const { swaggerSpecs } = require('./swagger/swaggerDocs');
 const { ROUTE_PATHS } = require('./router/routes');
-
-const DEFAULT_TOKEN_EXPIRES_IN = 60 * 15; // 15 minutes
 
 const app = express();
 

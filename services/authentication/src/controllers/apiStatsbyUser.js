@@ -1,3 +1,5 @@
+const { runSQLQuery } = require('../utils/sqlUtil');
+
 async function apiStatsByUserController(req, res) {
     try {
         // Fetch API stats

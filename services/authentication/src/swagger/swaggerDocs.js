@@ -4,7 +4,7 @@ const path = require('path');
 
 const swaggerYamlFilePath = path.join(__dirname, 'swagger.yaml');
 const swaggerDefinition = YAML.load(swaggerYamlFilePath);
-swaggerDefinition.servers = [{ url: "http://localhost:8000" }]; // TODO: Update url
+swaggerDefinition.servers = [{ url: "https://patrickcammayo.com/COMP4537/project/api/v2/authentication" }]; 
 
 const options = {
     swaggerDefinition,

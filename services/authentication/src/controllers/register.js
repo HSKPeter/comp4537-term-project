@@ -1,4 +1,9 @@
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
 const { runSQLQuery, UserTypes } = require('../utils/sqlUtil');
+
+const DEFAULT_TOKEN_EXPIRES_IN = 60 * 15; // 15 minutes
 
 async function registerController(req, res)  {
     try {
