@@ -35,38 +35,37 @@ app.use(express.json());
 
 const PORT = 8000;
 
-// TODO: Remove 'abcd' from the below line
-// const API_SECRET_KEY = process.env.API_SECRET_KEY ?? 'abcd';
+const API_SECRET_KEY = process.env.API_SECRET_KEY
 
-// const BEARER_TOKEN_PREFIX = 'Bearer ';
-// app.use((req, res, next) => {
-//     try {
-//         const authHeader = req.headers.authorization;
+const BEARER_TOKEN_PREFIX = 'Bearer ';
+app.use((req, res, next) => {
+    try {
+        const authHeader = req.headers.authorization;
 
-//         if (!authHeader) {
-//             res.status(401).json({ error: 'No token provided' });
-//             return;
-//         }
+        if (!authHeader) {
+            res.status(401).json({ error: 'No token provided' });
+            return;
+        }
 
-//         if (!authHeader.startsWith(BEARER_TOKEN_PREFIX)) {
-//             res.status(401).json({ error: 'Invalid token' });
-//             return;
-//         }
+        if (!authHeader.startsWith(BEARER_TOKEN_PREFIX)) {
+            res.status(401).json({ error: 'Invalid token' });
+            return;
+        }
 
-//         const apiKey = authHeader.substring(BEARER_TOKEN_PREFIX.length);
+        const apiKey = authHeader.substring(BEARER_TOKEN_PREFIX.length);
 
-//         // TODO: Find the API key in the database
-//         if (apiKey !== API_SECRET_KEY) {
-//             res.status(401).json({ error: 'Invalid token' });
-//             return;
-//         }
+        
+        if (apiKey !== API_SECRET_KEY) {
+            res.status(401).json({ error: 'Invalid token' });
+            return;
+        }
 
-//         next();
-//     } catch (error) {
-//         console.error('Error authenticating token: ', error);
-//         res.status(401).json({ error: 'Invalid token' });
-//     }
-// });
+        next();
+    } catch (error) {
+        console.error('Error authenticating token: ', error);
+        res.status(401).json({ error: 'Invalid token' });
+    }
+});
 
 app.use((req, res, next) => {
     const method = req.method;
