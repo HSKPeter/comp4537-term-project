@@ -21,11 +21,13 @@ const USER_MESSAGES = {
         missingFields: 'Missing email, username or password.',
         invalid: 'Invalid login.',
         failure: 'Failed to login. Please try again later.',
+        invalidEmail: 'Invalid email format.',
     },
     registration: {
         missingFields: 'Missing email, username or password.',
         failure: 'Failed to register. Please try again later.',
         success: 'User registered successfully.',
+        invalidEmail: 'Invalid email format.',
     },
     wordBookmark: {
         missingFields: 'Missing word.',

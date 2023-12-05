@@ -5,6 +5,7 @@ const { HTTP_STATUS_CODES } = require('../utils/httpUtils');
 const { COOKIE_CONFIG, COOKIE_KEYS } = require('../utils/cookieUtils');
 const { loginUser } = require('../utils/userAuthenticationUtils');
 const { recordUsageOfApi } = require('../utils/recordApiUsageUtils');
+const { isValidEmail } = require('../utils/validationUtils');
 
 function userLoginController(req, res) {
   try {
@@ -12,6 +13,11 @@ function userLoginController(req, res) {
     const { email, username, password } = req.body;
     if (email === undefined || password === undefined || username === undefined) {
       res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.login.missingFields });
+      return;
+    }
+
+    if (!isValidEmail(email)) {
+      res.status(HTTP_STATUS_CODES.BAD_REQUEST).json({ error: USER_MESSAGES.login.invalidEmail });
       return;
     }
     
