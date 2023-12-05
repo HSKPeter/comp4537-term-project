@@ -1,6 +1,5 @@
 # COMP 4537 Term Project
 
-
 ## Development Guide
 
 ### React Frontend
@@ -22,4 +21,8 @@
 3. Run `npm install` to install all dependencies
 4. Run `node server.js` to start the authentication
 5. Open browser and visit `http://localhost:8000/api-docs`
+
+### Attribution to Outside Resources
+- ChatGPT for code suggestions
+- GitHub Copilot for auto code completions
 
