@@ -1,14 +1,13 @@
 const { USER_MESSAGES } = require('../messages/userMessage');
-// const { API_ROUTE_PATHS } = require('../router/routes');
+const { API_ROUTE_PATHS } = require('../router/routes');
 const { COOKIE_KEYS, COOKIE_CONFIG } = require('../utils/cookieUtils');
 const { HTTP_STATUS_CODES } = require('../utils/httpUtils');
 const { getRoleFromToken, USER_ROLES } = require('../utils/userAuthenticationUtils');
 
 const pathsExclusiveToAdmin = [
-  // TODO: Uncomment the following lines
-  // API_ROUTE_PATHS.API_STATS,
-  // API_ROUTE_PATHS.API_STATS_BY_USER,
-  // API_ROUTE_PATHS.API_CONSUMPTION
+  API_ROUTE_PATHS.API_STATS,
+  API_ROUTE_PATHS.API_STATS_BY_USER,
+  API_ROUTE_PATHS.API_CONSUMPTION
 ];
 
 function checkAdminRole(req, res, next) {
