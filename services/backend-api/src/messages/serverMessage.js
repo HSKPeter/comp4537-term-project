@@ -9,6 +9,7 @@ const SERVER_MESSAGES = {
     failedToRegisterUser: 'Failed to register user. %s',
     failedToLoginUser: 'Failed to login user. %s',
     failedToGetQuotaFromToken: 'Failed to get quota from token. %s',
+    accessDenied: 'Access denied',
     recordedApiUsage: {
         success: 'Recorded API usage for %s request to %s',
         error: 'Error recording API usage for %s request to %s',
@@ -29,6 +30,9 @@ const SERVER_MESSAGES = {
         unknownError: 'Unknown error occurred when calling auth server',
     },
     failedToRetrieveRoleFromToken: 'Failed to retrieve role from token. %s',
+    failedToGetApiStats: 'Failed to get API statistics. %s',
+    failedToGetApiStatsByUser: 'Failed to get API statistics by user. %s',
+    failedToGetApiConsumptionStats: 'Failed to get API consumption statistics. %s',
 };
 
 module.exports = {

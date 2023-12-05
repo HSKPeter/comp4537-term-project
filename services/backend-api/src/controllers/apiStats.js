@@ -10,7 +10,7 @@ async function apiStatsController(req, res) {
         const token = req.cookies.token;
         const role = await readRole(token);
 
-        if (role !== 'admin') { // Assuming 'admin' is the required role
+        if (role !== 'Admin') { // Assuming 'admin' is the required role
             res.status(HTTP_STATUS_CODES.FORBIDDEN).json({ error: SERVER_MESSAGES.accessDenied });
             return;
         }
@@ -33,7 +33,7 @@ async function apiStatsByUserController(req, res) {
         const token = req.cookies.token;
         const role = await readRole(token);
 
-        if (role !== 'admin') { // Assuming 'admin' is the required role
+        if (role !== 'Admin') { // Assuming 'admin' is the required role
             res.status(HTTP_STATUS_CODES.FORBIDDEN).json({ error: SERVER_MESSAGES.accessDenied });
             return;
         }
