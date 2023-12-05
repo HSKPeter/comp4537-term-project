@@ -1,8 +1,7 @@
 const { vsprintf } = require("sprintf-js");
 const { SERVER_MESSAGES } = require("../messages/serverMessage"); // Assuming you have a server messages module
 const { HTTP_STATUS_CODES } = require("../utils/httpUtils");
-const { getRoleFromToken } = require("../utils/tokenUtils"); // Assuming you have a function to get role from token
-const { readRole } = require("../utils/tokenUtils"); // Assuming you have a function to get user token
+const { readRole, readUserId } = require("../utils/tokenUtils"); // Assuming you have a function to get user token
 const { getApiStats, getApiStatsByUser, getApiConsumptionStats } = require("../utils/adminUtils");
 
 async function apiStatsController(req, res) {
@@ -10,7 +9,6 @@ async function apiStatsController(req, res) {
 
         const token = req.cookies.token;
         const role = await readRole(token);
-        console.log(role);
 
         if (role !== 'admin') { // Assuming 'admin' is the required role
             res.status(HTTP_STATUS_CODES.FORBIDDEN).json({ error: SERVER_MESSAGES.accessDenied });
@@ -34,7 +32,6 @@ async function apiStatsByUserController(req, res) {
         
         const token = req.cookies.token;
         const role = await readRole(token);
-        console.log(role);
 
         if (role !== 'admin') { // Assuming 'admin' is the required role
             res.status(HTTP_STATUS_CODES.FORBIDDEN).json({ error: SERVER_MESSAGES.accessDenied });
