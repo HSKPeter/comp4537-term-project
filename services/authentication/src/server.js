@@ -6,7 +6,9 @@ const bcrypt = require('bcrypt');
 const swaggerUi = require('swagger-ui-express');
 require('dotenv').config({ path: './.env' });
 
+const router = require('./router');
 const { swaggerSpecs } = require('./swagger/swaggerDocs');
+const { ROUTE_PATHS } = require('./router/routes');
 
 const dbPool = mysql.createPool({
     host: "localhost",
@@ -69,10 +71,13 @@ const DEFAULT_TOKEN_EXPIRES_IN = 60 * 15; // 15 minutes
 
 const app = express();
 
-const swaggerPath = '/api-docs';
-app.use(swaggerPath, swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+// Setup Swagger UI
+app.use(ROUTE_PATHS.SWAGGER, swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
+// Enable CORS
 app.use(cors());
+
+// Enable body parsing for JSON and URL encoded data
 app.use(express.json());
 
 const PORT = 8000;
@@ -124,7 +129,7 @@ app.use((req, res, next) => {
     next();
 })
 
-app.post('/register', async (req, res) => {
+app.post(ROUTE_PATHS.REGISTER, async (req, res) => {
     try {
         const { email, username, password } = req.body;
 
@@ -166,7 +171,7 @@ app.post('/register', async (req, res) => {
     }
 });
 
-app.post('/login', async (req, res) => {
+app.post(ROUTE_PATHS.LOGIN, async (req, res) => {
     try {
         const { email, username, password } = req.body;
 
@@ -241,7 +246,7 @@ async function checkIfUserHasRemainingQuota(token) {
     return true;
 }
 
-app.post('/user', async (req, res) => {
+app.post(ROUTE_PATHS.USER, async (req, res) => {
     try {
         const { token } = req.body;
 
@@ -262,7 +267,7 @@ app.post('/user', async (req, res) => {
     }
 });
 
-app.post('/role', async (req, res) => {
+app.post(ROUTE_PATHS.ROLE, async (req, res) => {
     try {
         const { token } = req.body;
         const payload = decodeToken(token);
@@ -280,7 +285,7 @@ app.post('/role', async (req, res) => {
 });
 
 
-app.post('/record', async (req, res) => {
+app.post(ROUTE_PATHS.RECORD, async (req, res) => {
     try {
         const { token, endpoint, method, timestamp } = req.body;
 
@@ -308,7 +313,7 @@ app.post('/record', async (req, res) => {
     }
 });
 
-app.get('/bookmark-words/:userID', async (req, res) => {
+app.get(ROUTE_PATHS.GET_BOOKMARK_WORDS, async (req, res) => {
     try {
         const {userID} = req.params;
         runSQLQuery('SELECT word FROM BookmarkWord WHERE UserID = ?', [userID])
@@ -328,7 +333,7 @@ app.get('/bookmark-words/:userID', async (req, res) => {
     }
 });
 
-app.post('/bookmark-words/:userID', async (req, res) => {
+app.post(ROUTE_PATHS.POST_BOOKMARK_WORDS, async (req, res) => {
     try {
         const {userID} = req.params;
     
@@ -363,7 +368,7 @@ app.post('/bookmark-words/:userID', async (req, res) => {
     }
 });
 
-app.put('/bookmark-words/:userID', async (req, res) => {
+app.put(ROUTE_PATHS.PUT_BOOKMARK_WORDS, async (req, res) => {
     try {
         const {userID} = req.params;
 
@@ -390,7 +395,7 @@ app.put('/bookmark-words/:userID', async (req, res) => {
     }
 });
 
-app.delete('/bookmark-words/:userID', async (req, res) => {
+app.delete(ROUTE_PATHS.DELETE_BOOKMARK_WORDS, async (req, res) => {
     try {
         const {userID} = req.params;
 
@@ -461,7 +466,7 @@ app.delete('/bookmark-words/:userID', async (req, res) => {
 // Admin API Endpoints
 
 //Implement get API stats for admin
-app.get('/api-stats', async (req, res) => {
+app.get(ROUTE_PATHS.API_STATS, async (req, res) => {
     try {
         // Fetch API stats
         const apiStats = await getApiStatsFromDatabase();
@@ -497,7 +502,7 @@ async function getApiStatsFromDatabase() {
 }
 
 //Implement get API stats by user for admin
-app.get('/users-info', async (req, res) => {
+app.get(ROUTE_PATHS.USERS_INFO, async (req, res) => {
     try {
         // Fetch API stats
         const apiStats = await getApiStatsByUserFromDatabase();
@@ -544,7 +549,7 @@ async function getApiStatsByUserFromDatabase() {
 
 
 // Implement get API consumption for user by admin
-app.get('/api-consumption/:userID', async (req, res) => {
+app.get(ROUTE_PATHS.API_CONSUMPTION, async (req, res) => {
     try {
         const { userID } = req.params;
 
@@ -591,7 +596,7 @@ async function getApiConsumptionForCurrentUser(userID) {
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-    console.log(`Swagger docs available at http://localhost:${PORT}${swaggerPath}`);
+    console.log(`Swagger docs available at http://localhost:${PORT}${ROUTE_PATHS.SWAGGER}`);
     try {
         setupDatabase();
     } catch (error) {

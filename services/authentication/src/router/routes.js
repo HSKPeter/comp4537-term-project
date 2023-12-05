@@ -16,7 +16,8 @@ const API_ROUTE_PATHS = {
 
 const ROUTE_PATHS = {
     ...API_ROUTE_PATHS,
-    SWAGGER: '/api-docs'
+    SWAGGER: '/api-docs',
+    PORT: 8000
 }
 
 module.exports = {
