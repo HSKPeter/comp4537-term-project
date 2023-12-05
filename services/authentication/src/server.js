@@ -24,7 +24,6 @@ const CREATE_TABLE_QUERIES = {
             Password VARCHAR(100) NOT NULL,
             UserType INT NOT NULL,
             Email VARCHAR(100) NOT NULL,
-            TotalRequests INT NOT NULL DEFAULT 0,
             PRIMARY KEY (UserID),
             FOREIGN KEY (UserType) REFERENCES UserType(UserTypeID)
         );
@@ -301,9 +300,6 @@ app.post('/record', async (req, res) => {
 
         // Insert the API call into the database
         await runSQLQuery('INSERT INTO APICall (UserID, Time, Method, Endpoint) VALUES (?, ?, ?, ?)', [userID, time, method, endpoint]);
-
-        // Update the total requests for the user
-        await runSQLQuery('UPDATE User SET TotalRequests = TotalRequests + 1 WHERE UserID = ?', [userID]);
 
         res.status(201).json({ message: 'API call recorded successfully' });
     } catch (error) {
