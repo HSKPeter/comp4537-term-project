@@ -9,8 +9,8 @@ const {
     userLogoutController,
     apiConsumptionController,
     // TODO: Uncomment these when the real implementation is ready
-    // apiStatsByUserController,
-    // apiStatsController,
+    apiStatsByUserController,
+    apiStatsController,
     getBookmarkWordsController,
     addBookmarkWordController,
     editBookmarkWordController,
@@ -38,70 +38,41 @@ router.post(API_ROUTE_PATHS.REGISTER, userRegistrationController);
 router.post(API_ROUTE_PATHS.LOGOUT, userLogoutController);
 router.get(API_ROUTE_PATHS.ROLE, roleValidationController);
 
-// router.get(API_ROUTE_PATHS.API_STATS, apiStatsController);
-// TODO: Replace with the real implementation
-router.get(API_ROUTE_PATHS.API_STATS, (req, res) => {
-    const API_USAGE_DATA = {
-        "usageStats": [
-            {
-                "api-name": "API 1",
-                "request-type": "GET",
-                "count": 100
-            },
-            {
-                "api-name": "API 2",
-                "request-type": "POST",
-                "count": 75
-            },
-            {
-                "api-name": "API 3",
-                "request-type": "GET",
-                "count": 120
-            },
-            {
-                "api-name": "API 4",
-                "request-type": "PUT",
-                "count": 50
-            }
-        ]
-    }
+router.get(API_ROUTE_PATHS.API_STATS, apiStatsController);
 
-    res.json(API_USAGE_DATA);
-});
-
-// router.get(API_ROUTE_PATHS.API_STATS_BY_USER, apiStatsByUserController);
+router.get(API_ROUTE_PATHS.API_STATS_BY_USER, apiStatsByUserController);
 // TODO: Replace with the real implementation
-router.get(API_ROUTE_PATHS.API_STATS_BY_USER, (req, res) => {
-    const USER_DATA = {
-        "users-info": [
-            {
-                "username": "user1",
-                "email": "user1@example.com",
-                "role": "admin",
-                "apiConsumption": 150
-            },
-            {
-                "username": "user2",
-                "email": "user2@example.com",
-                "role": "user",
-                "apiConsumption": 80
-            },
-            {
-                "username": "user3",
-                "email": "user3@example.com",
-                "role": "user",
-                "apiConsumption": 120
-            },
-            {
-                "username": "user4",
-                "email": "user4@example.com",
-                "role": "admin",
-                "apiConsumption": 200
-            }
-        ]
-    }
-    res.json(USER_DATA);
-});
+// router.get(API_ROUTE_PATHS.API_STATS_BY_USER, (req, res) => {
+//     const USER_DATA = {
+//         "users-info": [
+//             {
+//                 "username": "user1",
+//                 "email": "user1@example.com",
+//                 "role": "admin",
+//                 "apiConsumption": 150
+//             },
+//             {
+//                 "username": "user2",
+//                 "email": "user2@example.com",
+//                 "role": "user",
+//                 "apiConsumption": 80
+//             },
+//             {
+//                 "username": "user3",
+//                 "email": "user3@example.com",
+//                 "role": "user",
+//                 "apiConsumption": 120
+//             },
+//             {
+//                 "username": "user4",
+//                 "email": "user4@example.com",
+//                 "role": "admin",
+//                 "apiConsumption": 200
+//             }
+//         ]
+//     }
+//     res.json(USER_DATA);
+// });
 
 router.get(API_ROUTE_PATHS.API_CONSUMPTION, apiConsumptionController);
 
