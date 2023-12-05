@@ -41,3 +41,7 @@ async function registerController(req, res)  {
         res.status(500).json({ error: 'Internal server error' });
     }
 }
+
+module.exports = {
+    registerController
+}

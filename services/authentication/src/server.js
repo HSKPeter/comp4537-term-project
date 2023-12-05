@@ -85,53 +85,7 @@ app.use((req, res, next) => {
 
 app.post(ROUTE_PATHS.REGISTER, registerController);
 app.post(ROUTE_PATHS.LOGIN, loginController);
-function decodeToken(token) {
-    try {
-        const decodedToken = jwt.verify(token, SECRET_KEY);
-        return decodedToken;
-    } catch (error) {
-        return null;
-    }
-}
-
-
-async function checkIfUserHasRemainingQuota(token) {
-    const decodedToken = decodeToken(token);
-    const userID = decodedToken.userID;
-    const sqlQueryResult = await runSQLQuery('SELECT COUNT(*) AS callCount FROM APICall WHERE UserID = ?', [userID]);
-    
-    // Extract the call count from the query result
-    const apiCallCount = sqlQueryResult[0].callCount;
-
-    // TODO: Read database to determine if the user has remaining quota
-    if (apiCallCount > 20) {
-        return false;
-    }
-
-    return true;
-}
-
-app.post(ROUTE_PATHS.USER, async (req, res) => {
-    try {
-        const { token } = req.body;
-
-        const payload = decodeToken(token);
-
-        if (!payload) {
-            res.status(401).json({ error: 'Invalid token' });
-            return;
-        }
-
-        const hasRemainingQuota = await checkIfUserHasRemainingQuota(token);
-        const newToken = renewToken(payload);
-
-        res.status(200).json({ hasRemainingQuota, newToken });
-    } catch (error) {
-        console.error('Error authenticating token: ', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
+app.post(ROUTE_PATHS.USER, userController);
 app.post(ROUTE_PATHS.ROLE, async (req, res) => {
     try {
         const { token } = req.body;
@@ -345,26 +299,7 @@ app.get(ROUTE_PATHS.API_STATS, async (req, res) => {
     }
 });
 
-async function getApiStatsFromDatabase() {
-    try {
-        // Query the database to get API stats
-        const apiStatsQuery = `
-            SELECT
-                Endpoint AS 'api-name',
-                Method AS 'request-type',
-                COUNT(*) AS 'count'
-            FROM APICall
-            GROUP BY Method, Endpoint;
-        `;
 
-        const apiStats = await runSQLQuery(apiStatsQuery);
-
-        return apiStats;
-    } catch (error) {
-        console.error('Error getting API stats from the database: ', error);
-        throw error;
-    }
-}
 
 //Implement get API stats by user for admin
 app.get(ROUTE_PATHS.USERS_INFO, async (req, res) => {
@@ -381,36 +316,7 @@ app.get(ROUTE_PATHS.USERS_INFO, async (req, res) => {
     }
 });
 
-async function getApiStatsByUserFromDatabase() {
-    try {
-        const apiStatsByUserQuery = `
-            SELECT
-                User.Name AS 'username',
-                User.Email AS 'email',
-                UserType.UserAuthorization AS 'role',
-                COUNT(*) AS 'apiConsumption'
-            FROM APICall
-            JOIN User ON APICall.UserID = User.UserID
-            JOIN UserType ON User.UserType = UserType.UserTypeID
-            GROUP BY User.Name, User.Email, UserType.UserAuthorization;
-        `;
-
-        const apiStatsByUser = await runSQLQuery(apiStatsByUserQuery);
-
-        // Transform the result to the desired format
-        const formattedApiStats = apiStatsByUser.map(apiStat => ({
-            username: apiStat.username,
-            email: apiStat.email,
-            role: apiStat.role,
-            apiConsumption: apiStat.apiConsumption
-        }));
-
-        return formattedApiStats;
-    } catch (error) {
-        console.error('Error getting API stats by user from the database: ', error);
-        throw error;
-    }
-} 
+ 
 
 
 // Implement get API consumption for user by admin
@@ -429,6 +335,15 @@ app.get(ROUTE_PATHS.API_CONSUMPTION, async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch API consumption stats from the database' });
     }
 });
+
+function decodeToken(token) {
+    try {
+        const decodedToken = jwt.verify(token, SECRET_KEY);
+        return decodedToken;
+    } catch (error) {
+        return null;
+    }
+}
 
 async function getApiConsumptionForCurrentUser(userID) {
     try {
@@ -470,3 +385,68 @@ app.listen(PORT, () => {
 });
 
 
+async function checkIfUserHasRemainingQuota(token) {
+    const decodedToken = decodeToken(token);
+    const userID = decodedToken.userID;
+    const sqlQueryResult = await runSQLQuery('SELECT COUNT(*) AS callCount FROM APICall WHERE UserID = ?', [userID]);
+    
+    // Extract the call count from the query result
+    const apiCallCount = sqlQueryResult[0].callCount;
+
+    // TODO: Read database to determine if the user has remaining quota
+    if (apiCallCount > 20) {
+        return false;
+    }
+
+    return true;
+}
+async function getApiStatsByUserFromDatabase() {
+    try {
+        const apiStatsByUserQuery = `
+            SELECT
+                User.Name AS 'username',
+                User.Email AS 'email',
+                UserType.UserAuthorization AS 'role',
+                COUNT(*) AS 'apiConsumption'
+            FROM APICall
+            JOIN User ON APICall.UserID = User.UserID
+            JOIN UserType ON User.UserType = UserType.UserTypeID
+            GROUP BY User.Name, User.Email, UserType.UserAuthorization;
+        `;
+
+        const apiStatsByUser = await runSQLQuery(apiStatsByUserQuery);
+
+        // Transform the result to the desired format
+        const formattedApiStats = apiStatsByUser.map(apiStat => ({
+            username: apiStat.username,
+            email: apiStat.email,
+            role: apiStat.role,
+            apiConsumption: apiStat.apiConsumption
+        }));
+
+        return formattedApiStats;
+    } catch (error) {
+        console.error('Error getting API stats by user from the database: ', error);
+        throw error;
+    }
+}
+async function getApiStatsFromDatabase() {
+    try {
+        // Query the database to get API stats
+        const apiStatsQuery = `
+            SELECT
+                Endpoint AS 'api-name',
+                Method AS 'request-type',
+                COUNT(*) AS 'count'
+            FROM APICall
+            GROUP BY Method, Endpoint;
+        `;
+
+        const apiStats = await runSQLQuery(apiStatsQuery);
+
+        return apiStats;
+    } catch (error) {
+        console.error('Error getting API stats from the database: ', error);
+        throw error;
+    }
+}
