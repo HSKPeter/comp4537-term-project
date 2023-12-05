@@ -10,6 +10,14 @@ require('./router/routes');
 const { runSQLQuery, setupDatabase } = require('./utils/sqlUtil')
 const { registerController } = require('./controllers/register');
 const { loginController } = require('./controllers/login');
+const { userController } = require('./controllers/user');
+const { roleController } = require('./controllers/role');
+const { recordController } = require('./controllers/record');
+const { bookmarkWordsController } = require('./controllers/bookmarkWords');
+const { apiStatsController } = require('./controllers/apiStats');
+const { apiStatsByUserController } = require('./controllers/apiStatsByUser');
+const { apiConsumptionController } = require('./controllers/apiConsumption');
+const { usersInfoController } = require('./controllers/usersInfo');
 const { swaggerSpecs } = require('./swagger/swaggerDocs');
 const { ROUTE_PATHS } = require('./router/routes');
 
@@ -75,7 +83,7 @@ app.use((req, res, next) => {
     next();
 })
 
-app.post(ROUTE_PATHS.REGISTER, );
+app.post(ROUTE_PATHS.REGISTER, registerController);
 app.post(ROUTE_PATHS.LOGIN, async (req, res) => {
     try {
         const { email, username, password } = req.body;
