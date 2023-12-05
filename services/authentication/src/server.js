@@ -1,8 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const mysql = require('mysql2');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 const swaggerUi = require('swagger-ui-express');
 require('dotenv').config({ path: './.env' });
 
@@ -37,7 +34,6 @@ app.use(cors());
 app.use(express.json());
 
 const PORT = 8000;
-const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 // TODO: Remove 'abcd' from the below line
 // const API_SECRET_KEY = process.env.API_SECRET_KEY ?? 'abcd';
