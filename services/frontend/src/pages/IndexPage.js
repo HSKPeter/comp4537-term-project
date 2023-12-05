@@ -59,7 +59,7 @@ const IndexPage = () => {
                     syncBookmarkWordsWithBackend();
                 }
             });
-    }, []);
+    }, [location, navigate]);
 
     const handleInputChange = (e) => {
         const filteredValue = e.target.value.replace(/[^a-zA-Z0-9]/g, '');

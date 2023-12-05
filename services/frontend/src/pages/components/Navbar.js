@@ -3,13 +3,16 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getUserRoleFromCache, removeUserRoleFromCache } from '../../utils/userRoleUtils';
 import { axiosInstance, API_PATHS } from '../../utils/httpUtils';
 import { USER_MESSAGES_EN } from '../../utils/userMessages';
+import { useLocation } from 'react-router-dom';
 
 
 const Navbar = () => {
     const [apiUsage, setApiUsage] = useState();
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
+        if (!getUserRoleFromCache()) return;
         axiosInstance.get(API_PATHS.apiConsumption).then((response) => {
             setApiUsage(response.data);
         }).catch((error) => {
@@ -23,16 +26,17 @@ const Navbar = () => {
         navigate('/login');
     }
 
-
+    console.log(location);
     const userRole = getUserRoleFromCache();
     console.log(userRole);
+    const isInLoginPage = location.pathname === API_PATHS.login;
     return (
         <nav className="navbar">
             {userRole && <p>{USER_MESSAGES_EN.navbar_logged_in_api_usage}{apiUsage}</p>}
             {!userRole && <Link to="/">{USER_MESSAGES_EN.navbar_link_home}</Link>}
             {userRole && <Link to="/">{USER_MESSAGES_EN.navbar_link_search}</Link>}
-            {userRole === 'Admin' && <Link to="/admin">{USER_MESSAGES_EN.navbar_link_admin}</Link>}
-            {userRole && <button onClick={onLogout}>{USER_MESSAGES_EN.navbar_button_logout}</button>}
+            {userRole === 'Admin' && !isInLoginPage && <Link to="/admin">{USER_MESSAGES_EN.navbar_link_admin}</Link>}
+            {userRole && !isInLoginPage && <button onClick={onLogout}>{USER_MESSAGES_EN.navbar_button_logout}</button>}
         </nav>
     );
 };

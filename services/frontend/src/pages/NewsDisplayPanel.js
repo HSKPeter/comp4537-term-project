@@ -100,6 +100,7 @@ function NewsItemCard({ article }) {
             localStorage.setItem(article.title, JSON.stringify(response.data.summary));
         } catch (error) {
             console.error('Error summarizing article:', error);
+            setSummary(USER_MESSAGES_EN.news_item_card_error_summarizing);
         }
     };
 

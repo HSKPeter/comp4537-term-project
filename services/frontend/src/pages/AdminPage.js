@@ -28,7 +28,7 @@ function AdminPage() {
                 alert(USER_MESSAGES_EN.admin_page_error_users_info);
             }
         })
-    }, []);
+    }, [navigate, location]);
 
     return (
         <div className='admin-page'>
