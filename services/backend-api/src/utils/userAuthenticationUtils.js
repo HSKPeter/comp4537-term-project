@@ -2,8 +2,8 @@ const { SERVER_MESSAGES } = require('../messages/serverMessage');
 const { HTTP_STATUS_CODES, AUTH_SERVER_API_ENDPOINTS, authAxiosInstance } = require('./httpUtils');
 
 const USER_ROLES = {
-    ADMIN: "admin",
-    USER: "user"
+    ADMIN: "Admin",
+    USER: "Regular"
 }
 
 async function registerUser({ email, username, password }) {
