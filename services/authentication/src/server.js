@@ -21,7 +21,6 @@ const {
 } = require('./controllers/bookmarkWords');
 const { apiStatsController } = require('./controllers/apiStats');
 const { apiStatsByUserController } = require('./controllers/apiStatsByUser');
-const { apiConsumptionController } = require('./controllers/apiConsumption');
 const { usersInfoController } = require('./controllers/usersInfo');
 const { swaggerSpecs } = require('./swagger/swaggerDocs');
 const { ROUTE_PATHS } = require('./router/routes');
@@ -98,34 +97,15 @@ app.get(ROUTE_PATHS.GET_BOOKMARK_WORDS, getBookmarkWordController);
 app.post(ROUTE_PATHS.POST_BOOKMARK_WORDS, postBookmarkWordController); 
 app.put(ROUTE_PATHS.PUT_BOOKMARK_WORDS, putBookmarkWordController);
 app.delete(ROUTE_PATHS.DELETE_BOOKMARK_WORDS, deleteBookmarkWordController); 
-        
 
 //Implement get API stats for admin
-app.get(ROUTE_PATHS.API_STATS, apiStatsController);
-
+app.get(ROUTE_PATHS.API_STATS, apiConsumptionController);
 
 //Implement get API stats by user for admin
 app.get(ROUTE_PATHS.USERS_INFO, usersInfoController);
  
-
-
 // Implement get API consumption for user by admin
-app.get(ROUTE_PATHS.API_CONSUMPTION, async (req, res) => {
-    try {
-        const { userID } = req.params;
-
-        // Fetch API consumption stats for the specified user ID
-        const apiStats = await getApiConsumptionForCurrentUser(userID);
-
-        // Return API consumption stats
-        res.status(200).json({ usageStats: apiStats });
-
-    } catch (err) {
-        console.error(`Failed to get API consumption stats from the database: ${err?.stack ?? err}`);
-        res.status(500).json({ error: 'Failed to fetch API consumption stats from the database' });
-    }
-});
-
+app.get(ROUTE_PATHS.API_CONSUMPTION, apiStatsByUserController);
 function decodeToken(token) {
     try {
         const decodedToken = jwt.verify(token, SECRET_KEY);
