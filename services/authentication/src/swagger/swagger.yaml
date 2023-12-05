@@ -459,3 +459,118 @@ paths:
                   error:
                     type: string
                     description: The error message
+  /api-stats:
+    get:
+      summary: Get API usage statistics
+      tags:
+        - API Statistics
+      description: Get the API usage statistics based on the JWT token in HttpOnly secure cookie
+      responses:
+        "200":
+          description: JSON object with the API usage statistics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  usageStats:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        api-name:
+                          type: string
+                          description: The name of the API
+                        request-type:
+                          type: string
+                          description: The type of the API request
+                        count:
+                          type: integer
+                          description: The number of API calls
+        "400":
+          description: JSON object with the error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+  /users-info:
+    get:
+      summary: Get users info
+      tags:
+        - API Statistics
+      description: Get username, email, role, and API usage statistics of all users
+      responses:
+        "200":
+          description: JSON object with the users info
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    username:
+                      type: string
+                      description: The username of the user
+                    email:
+                      type: string
+                      description: The email of the user
+                    role:
+                      type: string
+                      description: The role of the user
+                    apiConsumption:
+                      type: integer
+                      description: The API consumption of the user
+        "400":
+          description: JSON object with the error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+  /api-consumption:
+    get:
+      summary: Get API consumption
+      tags:
+        - API Statistics
+      description: Get the API consumption of the current user
+      responses:
+        "200":
+          description: JSON object with the API consumption
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  apiConsumption:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        api-name:
+                          type: string
+                          description: The name of the API
+                        request-type:
+                          type: string
+                          description: The type of the API request
+                        count:
+                          type: integer
+                          description: The number of API calls
+        "400":
+          description: JSON object with the error message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    description: The error message
+  
