@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { API_PATHS, HTTP_STATUS_CODES, axiosInstance } from '../utils/httpUtils';
-import Navbar from './components/Navbar';
 import { navigateToLoginPageIfRoleNotFound } from '../utils/securityUtils';
 import { BookmarkPanel } from './components/BookmarkPanel';
 import { NewsDisplayPanel } from './NewsDisplayPanel';
@@ -62,6 +61,11 @@ const IndexPage = () => {
             });
     }, []);
 
+    const handleInputChange = (e) => {
+        const filteredValue = e.target.value.replace(/[^a-zA-Z0-9]/g, '');
+        setKeyword(filteredValue);
+    };
+
     const fetchNews = async () => {
         setLoading(true);
         try {
@@ -87,7 +91,7 @@ const IndexPage = () => {
                 <input
                     type="text"
                     value={keyword}
-                    onChange={(e) => setKeyword(e.target.value)}
+                    onChange={handleInputChange}
                     placeholder={USER_MESSAGES_EN.index_page_keyword_input_placeholder}
                 />
                 {keywordNotEmpty

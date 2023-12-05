@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getUserRoleFromCache, removeUserRoleFromCache } from '../../utils/userRoleUtils';
-import { axiosInstance } from '../../utils/httpUtils';
+import { axiosInstance, API_PATHS } from '../../utils/httpUtils';
 import { USER_MESSAGES_EN } from '../../utils/userMessages';
 
 
@@ -10,12 +10,11 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // axiosInstance.get('/api/stats').then((response) => {
-        //     setApiUsage(response.data);
-        // }).catch((error) => {
-        //     console.error("Error fetching API usage:", error);
-        // });
-        setApiUsage(100);
+        axiosInstance.get(API_PATHS.apiConsumption).then((response) => {
+            setApiUsage(response.data);
+        }).catch((error) => {
+            console.error("Error fetching API usage:", error);
+        });
     }, []);
 
     const onLogout = () => {
