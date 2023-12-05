@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const swaggerUi = require('swagger-ui-express');
 require('dotenv').config({ path: './.env' });
 
-const router = require('./router');
+require('./router/routes');
 const { swaggerSpecs } = require('./swagger/swaggerDocs');
 const { ROUTE_PATHS } = require('./router/routes');
 
