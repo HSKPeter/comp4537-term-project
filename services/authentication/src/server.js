@@ -318,6 +318,8 @@ app.get('/bookmark-words/:userID', async (req, res) => {
         runSQLQuery('SELECT word FROM BookmarkWord WHERE UserID = ?', [userID])
         .then((wordsQueryResults) => {
             const words = wordsQueryResults.map((wordQueryResult) => wordQueryResult.word);
+            // Set Cache-Control header to prevent caching
+            res.setHeader('Cache-Control', 'no-store');
             res.status(200).json({ words });
         })
         .catch((err) => {
