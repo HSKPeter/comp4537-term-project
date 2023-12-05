@@ -4,6 +4,8 @@ import { API_PATHS, axiosInstance } from '../../utils/httpUtils';
 import WordChip from '../../WordChip';
 import { BOOKMARK_WORD_LIMIT, styles } from '../IndexPage';
 import { displayWarningIfExceedApiLimit } from '../../utils/warningUtils';
+import { USER_MESSAGES_EN } from '../../utils/userMessages';
+
 
 export const BookmarkPanel = ({ bookmarkWords, setBookmarkWords, keyword, setKeyword }) => {
     const { isLoadingBookmarkWords, setIsLoadingBookmarkWords } = useContext(LoadingBookmarkWordsContext);
@@ -12,7 +14,7 @@ export const BookmarkPanel = ({ bookmarkWords, setBookmarkWords, keyword, setKey
 
     const clearAllBookmarkWords = async () => {
         try {
-            const hasConfirmed = window.confirm("Confirm to clear all bookmarked words?");
+            const hasConfirmed = window.confirm(USER_MESSAGES_EN.bookmark_panel_confirm_clear_all);
             if (hasConfirmed) {
                 setIsLoadingBookmarkWords(true);
                 const response = await axiosInstance.delete(API_PATHS.bookmarkWords + `?all=true`);
@@ -22,7 +24,7 @@ export const BookmarkPanel = ({ bookmarkWords, setBookmarkWords, keyword, setKey
             }
         } catch (error) {
             console.error("Error clearing bookmark words:", error);
-            alert("Error clearing bookmark words. Please try again later.");
+            alert(USER_MESSAGES_EN.bookmark_panel_error_clearing);
             setIsLoadingBookmarkWords(false);
         }
     };
@@ -47,10 +49,10 @@ export const BookmarkPanel = ({ bookmarkWords, setBookmarkWords, keyword, setKey
     return (
         <>
             <button disabled={isLoadingBookmarkWords || isBookmarkWordLimitReached || bookmarkWords.includes(keyword)} onClick={addBookmarkWord}>
-                Bookmark
+                {USER_MESSAGES_EN.bookmark_panel_bookmark_button}
             </button>
-            {isBookmarkWordLimitReached && !isLoadingBookmarkWords && <div>You can only bookmark {BOOKMARK_WORD_LIMIT} words. Please delete a word to add a new one.</div>}
-            {isLoadingBookmarkWords && <p>Loading bookmarked words...</p>}
+            {isBookmarkWordLimitReached && !isLoadingBookmarkWords && <div>{USER_MESSAGES_EN.bookmark_panel_limit_reached.replace("{0}", BOOKMARK_WORD_LIMIT)}</div>}
+            {isLoadingBookmarkWords && <p>{USER_MESSAGES_EN.bookmark_panel_loading}</p>}
 
             {!isLoadingBookmarkWords && (
                 <div style={styles.wordChipContainer}>
@@ -66,8 +68,8 @@ export const BookmarkPanel = ({ bookmarkWords, setBookmarkWords, keyword, setKey
                             onDelete={() => setBookmarkWords(bookmarkWords.filter((w) => w !== word))} />
                     ))}
                     {bookmarkWords.length === 0
-                        ? <p>No bookmarked words to display</p>
-                        : <button style={styles.clearAllBookmarkWordsButton} onClick={clearAllBookmarkWords}>Clear all bookmarked words</button>}
+                        ? <p>{USER_MESSAGES_EN.bookmark_panel_no_bookmarks}</p>
+                        : <button style={styles.clearAllBookmarkWordsButton} onClick={clearAllBookmarkWords}>{USER_MESSAGES_EN.bookmark_panel_clear_all_button}</button>}
                 </div>
             )}
         </>

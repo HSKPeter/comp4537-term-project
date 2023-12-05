@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login, register } from '../auth';
 import { updateUserRoleInCache } from '../utils/userRoleUtils';
+import { USER_MESSAGES_EN } from '../utils/userMessages';
 
 export default function LoginPage() {
     const [email, setEmail] = useState('');
@@ -12,12 +13,10 @@ export default function LoginPage() {
     const navigate = useNavigate();
 
     const isValidInput = () => {
-        // Add input validation logic here (e.g., check for empty fields, valid email format)
         if (!email || !username || !password) {
-            setErrorMessage('Please fill in all fields.');
+            setErrorMessage(USER_MESSAGES_EN.login_page_errorMessage);
             return false;
         }
-        // Add more validation rules as required
         return true;
     };
 
@@ -29,7 +28,7 @@ export default function LoginPage() {
             updateUserRoleInCache(role);
             navigate('/');
         } catch (error) {
-            setErrorMessage("" + error.message + " Please try again.");
+            setErrorMessage(`${error.message} ${USER_MESSAGES_EN.login_page_validationErrorMessage}`);
         } finally {
             setIsLoading(false);
         }
@@ -43,7 +42,7 @@ export default function LoginPage() {
             updateUserRoleInCache(role);
             navigate('/');
         } catch (error) {
-            setErrorMessage("" + error.message + " Please try again.");
+            setErrorMessage(`${error.message} ${USER_MESSAGES_EN.login_page_validationErrorMessage}`);
         } finally {
             setIsLoading(false);
         }
@@ -54,7 +53,7 @@ export default function LoginPage() {
             <div className='login-form' style={styles.loginForm}>
                 <input
                     type="text"
-                    placeholder="Email"
+                    placeholder={USER_MESSAGES_EN.login_page_email}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     style={styles.input}
@@ -62,24 +61,28 @@ export default function LoginPage() {
                 />
                 <input
                     type="text"
-                    placeholder="Username"
+                    placeholder={USER_MESSAGES_EN.login_page_username}
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     style={styles.input}
                     disabled={isLoading}
-                />                
+                />
                 <input
                     type="password"
-                    placeholder="Password"
+                    placeholder={USER_MESSAGES_EN.login_page_password}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     style={styles.input}
                     disabled={isLoading}
                 />
-                <button style={styles.loginButton} onClick={handleLogin} disabled={isLoading}>Login</button>
-                <button style={styles.registrationButton} onClick={handleRegistration} disabled={isLoading}>Registration</button>
+                <button style={styles.loginButton} onClick={handleLogin} disabled={isLoading}>
+                    {USER_MESSAGES_EN.login_page_loginButton}
+                </button>
+                <button style={styles.registrationButton} onClick={handleRegistration} disabled={isLoading}>
+                    {USER_MESSAGES_EN.login_page_registrationButton}
+                </button>
                 {errorMessage && <div style={styles.errorMessage}>{errorMessage}</div>}
-                {isLoading && <div>Loading...</div>}
+                {isLoading && <div>{USER_MESSAGES_EN.login_page_loading}</div>}
             </div>
         </div>
     );

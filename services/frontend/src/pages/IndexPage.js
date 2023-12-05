@@ -8,6 +8,7 @@ import { BookmarkPanel } from './components/BookmarkPanel';
 import { NewsDisplayPanel } from './NewsDisplayPanel';
 import { LoadingBookmarkWordsContext } from '../context/LoadingBookmarkWords';
 import { displayWarningIfExceedApiLimit } from '../utils/warningUtils';
+import { USER_MESSAGES_EN } from '../utils/userMessages';
 
 export const BOOKMARK_WORD_LIMIT = 2;
 
@@ -80,24 +81,21 @@ const IndexPage = () => {
         setLoading(false);
     };
 
-
-
     return (
         <>
-            
             <div>
                 <input
                     type="text"
                     value={keyword}
                     onChange={(e) => setKeyword(e.target.value)}
-                    placeholder="Enter keyword"
+                    placeholder={USER_MESSAGES_EN.index_page_keyword_input_placeholder}
                 />
                 {keywordNotEmpty
                     ? <button onClick={fetchNews} disabled={loading}>
-                        {loading ? 'Loading...' : 'Search News'}
+                        {loading ? USER_MESSAGES_EN.index_page_search_news_button_loading : USER_MESSAGES_EN.index_page_search_news_button_default}
                     </button>
                     : <button onClick={fetchNews} disabled={loading}>
-                        {loading ? 'Loading...' : 'Get Trending News'}
+                        {loading ? USER_MESSAGES_EN.index_page_get_trending_news_button_loading : USER_MESSAGES_EN.index_page_get_trending_news_button_default}
                     </button>
                 }
                 <LoadingBookmarkWordsContext.Provider value={{ isLoadingBookmarkWords, setIsLoadingBookmarkWords }}>
