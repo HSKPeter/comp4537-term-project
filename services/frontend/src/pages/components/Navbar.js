@@ -15,7 +15,6 @@ const Navbar = () => {
         if (!getUserRoleFromCache()) return;
         axiosInstance.get(API_PATHS.apiConsumption).then((response) => {
             let totalConsumption = 0
-            console.log(response.data.usageStats)
             response.data.usageStats.forEach((api) => {
                 totalConsumption += api.count;
             })

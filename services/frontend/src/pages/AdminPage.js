@@ -2,52 +2,48 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { navigateToLoginPageIfRoleNotFound } from '../utils/securityUtils';
-import { API_PATHS, HTTP_STATUS_CODES, axiosInstance } from "../utils/httpUtils";
+import { API_PATHS, axiosInstance } from "../utils/httpUtils";
 import "../styles/AdminPage.css";
 import { USER_MESSAGES_EN } from '../utils/userMessages';
 
 function AdminPage() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [apiUsageData, setApiUsageData] = useState([]);
-    const [usersInfo, setUsersInfo] = useState([]);
+
 
     useEffect(() => {
         navigateToLoginPageIfRoleNotFound(navigate, location);
-        axiosInstance.get(API_PATHS.apiStats).then((response) => {
-            if (response.status === HTTP_STATUS_CODES.OK) {
-                setApiUsageData(response.data);
-            } else {
-                alert(USER_MESSAGES_EN.admin_page_error_api_usage);
-            }
-        })
-        axiosInstance.get(API_PATHS.usersInfo).then((response) => {
-            if (response.status === HTTP_STATUS_CODES.OK) {
-                setUsersInfo(response.data);
-            } else {
-                alert(USER_MESSAGES_EN.admin_page_error_users_info);
-            }
-        })
     }, [navigate, location]);
 
     return (
         <div className='admin-page'>
             <h1>{USER_MESSAGES_EN.admin_page_title}</h1>
-            <ApiUsageTable apiUsageData={apiUsageData.usageStats} />
-            <UsersTable usersInfo={usersInfo['users-info']} />
+            <ApiUsageTable />
+            <UsersTable />
         </div>
     )
 }
 
 
 
-function ApiUsageTable({ apiUsageData }) {
-    console.log(apiUsageData)
-    if (!apiUsageData) {
-        // return table with loading wheel
-        return (
-            <div className='api-usage-table'> LOADING </div>
+function ApiUsageTable() {
+    const [apiUsageData, setApiUsageData] = useState([]);
+    const [message, setMessage] = useState('');
 
+    useEffect(() => {
+        setMessage(USER_MESSAGES_EN.adming_page_loading);
+        axiosInstance.get(API_PATHS.apiStats).then((response) => {
+            setApiUsageData(response.data.usageStats);
+        }).catch((error) => {
+            console.error("Error fetching API usage:", error);
+            setMessage(USER_MESSAGES_EN.admin_page_error_api_usage);
+        }
+        )
+    }, [])
+
+    if (!apiUsageData) {
+        return (
+            <div className='api-usage-table'> {message} </div>
         )
     }
     return (
@@ -76,11 +72,24 @@ function ApiUsageTable({ apiUsageData }) {
 }
 
 
-function UsersTable({ usersInfo }) {
+function UsersTable() {
+    const [usersInfo, setUsersInfo] = useState([]);
+    const [message, setMessage] = useState('');
+
+    useEffect(() => {
+        axiosInstance.get(API_PATHS.usersInfo).then((response) => {
+            setUsersInfo(response.data['users-info']);
+        }).catch((error) => {
+            console.error("Error fetching users info:", error);
+            setMessage(USER_MESSAGES_EN.admin_page_error_users_info);
+        }
+        )
+    }, [])
+
     if (!usersInfo) {
         // return table with loading wheel
         return (
-            <div className='users-table'> LOADING </div>
+            <div className='users-table'> {message} </div>
 
         )
     }
