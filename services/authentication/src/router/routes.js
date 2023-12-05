@@ -13,3 +13,12 @@ const API_ROUTE_PATHS = {
     USERS_INFO: '/users-info',
     API_CONSUMPTION: '/api-consumption/:userID',
 }
+
+const ROUTE_PATHS = {
+    ...API_ROUTE_PATHS,
+    SWAGGER: '/api-docs'
+}
+
+module.exports = {
+    ROUTE_PATHS
+}
