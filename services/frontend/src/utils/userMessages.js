@@ -22,8 +22,9 @@ export const USER_MESSAGES_EN = {
     "news_item_card_published_date_prefix": "Published:",
     "news_item_card_error_summarizing": "Error summarizing article.",
     "admin_page_title": "Admin Page",
-    "admin_page_error_api_usage": "An error occurred. Was not able to get API usage data.",
-    "admin_page_error_users_info": "An error occurred. Was not able to get users info.",
+    "admin_page_loading": "Loading...",
+    "admin_page_error_api_usage": "An error occurred. Was not able to get API usage data. Please try again later.",
+    "admin_page_error_users_info": "An error occurred. Was not able to get users info. Please try again later.",
     "bookmark_panel_confirm_clear_all": "Confirm to clear all bookmarked words?",
     "bookmark_panel_error_clearing": "Error clearing bookmark words. Please try again later.",
     "bookmark_panel_bookmark_button": "Bookmark",
@@ -36,5 +37,5 @@ export const USER_MESSAGES_EN = {
     "navbar_link_search": "Search",
     "navbar_link_admin": "Admin",
     "navbar_button_logout": "Logout"
-    
+
 }
