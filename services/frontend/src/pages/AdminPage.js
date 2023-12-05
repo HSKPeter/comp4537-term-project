@@ -85,7 +85,6 @@ function UsersTable() {
 
     useEffect(() => {
         axiosInstance.get(API_PATHS.usersInfo).then((response) => {
-            console.log(response.data)
             setUsersInfo(response.data.usageStats);
         }).catch((error) => {
             console.error("Error fetching users info:", error);
