@@ -58,8 +58,8 @@ function ApiUsageTable() {
                         </tr>
                     </thead>
                     <tbody>
-                        {apiUsageData.map((apiUsage) => (
-                            <tr key={apiUsage['api-name']}>
+                        {apiUsageData.map((apiUsage, i) => (
+                            <tr key={apiUsage['api-name'] + i}>
                                 <td>{apiUsage['api-name']}</td>
                                 <td>{apiUsage['request-type']}</td>
                                 <td>{apiUsage['count']}</td>
@@ -85,7 +85,7 @@ function UsersTable() {
 
     useEffect(() => {
         axiosInstance.get(API_PATHS.usersInfo).then((response) => {
-            setUsersInfo(response.data['users-info']);
+            setUsersInfo(response.data.usageStats);
         }).catch((error) => {
             console.error("Error fetching users info:", error);
             setMessage(USER_MESSAGES_EN.admin_page_error_users_info);
