@@ -2,7 +2,8 @@ const { USER_MESSAGES } = require('../messages/userMessage');
 const { API_ROUTE_PATHS } = require('../router/routes');
 const { HTTP_STATUS_CODES, CUSTOM_HEADERS, STANDARD_HEADERS } = require('../utils/httpUtils');
 const { COOKIE_KEYS, COOKIE_CONFIG } = require('../utils/cookieUtils');
-const { getUserQuotaFromToken } = require('../utils/userAuthenticationUtils');
+const { getUserQuotaFromToken, USER_ROLES } = require('../utils/userAuthenticationUtils');
+const { readRole } = require('../utils/tokenUtils');
 
 const pathsRequiringUserQuota = [
   API_ROUTE_PATHS.SEARCH_NEWS,
@@ -26,8 +27,11 @@ function checkUserQuota(req, res, next) {
 
   getUserQuotaFromToken(token)
     .then(({ hasRemainingQuota, token }) => {
-      res.setHeader(STANDARD_HEADERS.ACCESS_CONTROL_EXPOSE_HEADERS, CUSTOM_HEADERS.API_LIMIT_EXCEEDED);
-      res.setHeader(CUSTOM_HEADERS.API_LIMIT_EXCEEDED, !hasRemainingQuota);
+      const role = readRole(token);
+      if (role !== USER_ROLES.ADMIN) {
+        res.setHeader(STANDARD_HEADERS.ACCESS_CONTROL_EXPOSE_HEADERS, CUSTOM_HEADERS.API_LIMIT_EXCEEDED);
+        res.setHeader(CUSTOM_HEADERS.API_LIMIT_EXCEEDED, !hasRemainingQuota);
+      }
 
       res.cookie(COOKIE_KEYS.TOKEN, token, COOKIE_CONFIG);
 
