@@ -25,9 +25,9 @@ function checkUserQuota(req, res, next) {
   }
 
   getUserQuotaFromToken(token)
-    .then(({ userQuota, token }) => {
+    .then(({ hasRemainingQuota, token }) => {
       res.setHeader(STANDARD_HEADERS.ACCESS_CONTROL_EXPOSE_HEADERS, CUSTOM_HEADERS.API_LIMIT_EXCEEDED);
-      res.setHeader(CUSTOM_HEADERS.API_LIMIT_EXCEEDED, userQuota <= 0);
+      res.setHeader(CUSTOM_HEADERS.API_LIMIT_EXCEEDED, !hasRemainingQuota);
 
       res.cookie(COOKIE_KEYS.TOKEN, token, COOKIE_CONFIG);
 
