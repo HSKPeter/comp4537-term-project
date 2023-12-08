@@ -39,7 +39,7 @@ export default function LoginPage() {
             updateUserRoleInCache(role);
             navigate(ROUTER_PATHS.index);
         } catch (error) {
-            setErrorMessage(`${error.message} ${USER_MESSAGES_EN.login_page_validationErrorMessage}`);
+            setErrorMessage(`${USER_MESSAGES_EN.login_page_loginErrorMessage}`);
         } finally {
             setIsLoading(false);
         }
@@ -53,7 +53,7 @@ export default function LoginPage() {
             updateUserRoleInCache(role);
             navigate(ROUTER_PATHS.index);
         } catch (error) {
-            setErrorMessage(`${error.message} ${USER_MESSAGES_EN.login_page_validationErrorMessage}`);
+            setErrorMessage(`${USER_MESSAGES_EN.login_page_registrationErrorMessage}`);
         } finally {
             setIsLoading(false);
         }

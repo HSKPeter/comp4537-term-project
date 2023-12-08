@@ -12,7 +12,7 @@ const Navbar = () => {
     const location = useLocation();
 
     useEffect(() => {
-        if (!getUserRoleFromCache()) return;
+        if (location.pathname === ROUTER_PATHS.login || !getUserRoleFromCache()) return;
         axiosInstance.get(API_PATHS.apiConsumption).then((response) => {
             let totalConsumption = 0
             response.data.usageStats.forEach((api) => {

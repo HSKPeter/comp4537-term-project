@@ -6,6 +6,8 @@ export const USER_MESSAGES_EN = {
     "login_page_loading": "Loading...",
     "login_page_loginButton": "Login",
     "login_page_registrationButton": "Registration",
+    "login_page_loginErrorMessage": "Error logging in. Please try again.",
+    "login_page_registrationErrorMessage": "Registration error. Please try again.",
     "login_page_validationErrorMessage": "Please try again.",
     "index_page_keyword_input_placeholder": "Enter keyword",
     "index_page_search_news_button_loading": "Loading...",
