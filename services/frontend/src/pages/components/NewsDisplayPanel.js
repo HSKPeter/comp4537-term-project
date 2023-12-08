@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { API_PATHS, axiosInstance } from '../utils/httpUtils';
+import { API_PATHS, axiosInstance } from '../../utils/httpUtils';
 import styled from 'styled-components';
-import { USER_MESSAGES_EN } from '../utils/userMessages';
+import { USER_MESSAGES_EN } from '../../utils/userMessages';
 
 
 // Styled components
@@ -85,9 +85,10 @@ function NewsItemCard({ article }) {
         setIsExpanded(!isExpanded);
     };
 
-    const handleSummarize = async () => {
+    const handleSummarize = async (event) => {
+        event.stopPropagation();
         setShowSummary(!showSummary);
-        if (summary) {
+        if (summary && summary !== USER_MESSAGES_EN.news_item_card_error_summarizing) {
             return;
         }
 
@@ -119,6 +120,7 @@ function NewsItemCard({ article }) {
             </ButtonContainer>
             <ReadMoreLink href={article.link} target="_blank" rel="noopener noreferrer">{USER_MESSAGES_EN.news_item_card_read_more_link}</ReadMoreLink>
             <PublishedDate>{USER_MESSAGES_EN.news_item_card_published_date_prefix} {article.published}</PublishedDate>
+            {!showSummary && <p style={{ textAlign: 'center', cursor: "pointer"}}>{isExpanded ? 'Show less' : 'Show more'}</p>}
         </Card >
     );
 }

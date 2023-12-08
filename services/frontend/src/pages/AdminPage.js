@@ -5,6 +5,8 @@ import { navigateToLoginPageIfRoleNotFound } from '../utils/securityUtils';
 import { API_PATHS, axiosInstance } from "../utils/httpUtils";
 import "../styles/AdminPage.css";
 import { USER_MESSAGES_EN } from '../utils/userMessages';
+import { getUserRoleFromCache } from '../utils/userRoleUtils';
+import { ROUTER_PATHS } from '../utils/httpUtils';
 
 function AdminPage() {
     const navigate = useNavigate();
@@ -13,6 +15,10 @@ function AdminPage() {
 
     useEffect(() => {
         navigateToLoginPageIfRoleNotFound(navigate, location);
+        let role = getUserRoleFromCache();
+        if (role !== 'Admin') {
+            navigate(ROUTER_PATHS.index, { state: { from: location } });
+        }
     }, [navigate, location]);
 
     return (

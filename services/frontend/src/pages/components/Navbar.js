@@ -22,7 +22,7 @@ const Navbar = () => {
         }).catch((error) => {
             console.error("Error fetching API usage:", error);
         });
-    }, []);
+    }, [location]);
 
     const onLogout = () => {
         removeUserRoleFromCache();

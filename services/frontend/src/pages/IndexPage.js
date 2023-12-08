@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { API_PATHS, HTTP_STATUS_CODES, ROUTER_PATHS, axiosInstance } from '../utils/httpUtils';
 import { navigateToLoginPageIfRoleNotFound } from '../utils/securityUtils';
 import { BookmarkPanel } from './components/BookmarkPanel';
-import { NewsDisplayPanel } from './NewsDisplayPanel';
+import { NewsDisplayPanel } from './components/NewsDisplayPanel';
 import { LoadingBookmarkWordsContext } from '../context/LoadingBookmarkWords';
 import { displayWarningIfExceedApiLimit } from '../utils/warningUtils';
 import { USER_MESSAGES_EN } from '../utils/userMessages';
