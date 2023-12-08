@@ -1,5 +1,5 @@
 const API_ROUTE_PATHS = {
-    ROOT: '',
+    ROOT: '', // Change this to the correct endpoint path
     REGISTER: '/register',
     LOGIN: '/login',
     USER: '/user',

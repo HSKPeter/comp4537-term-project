@@ -125,7 +125,7 @@ async function deleteBookmarkWordController(req, res) {
                 res.status(500).json({ error: USER_STRINGS.SERVER_ERROR });
             });
 
-                res.status(200).json({ message: USER_STRINGS.WORDS_DELETED_SUCCESSFULLY });
+                res.status(200).json({ message: formatUserString(USER_STRINGS.DELETED_WORD_SUCCESSFULLY, [word]) });
     } catch (error) {
         console.error('Error deleting bookmarked word: ', error);
         res.status(500).json({ error: USER_STRINGS.SERVER_ERROR });

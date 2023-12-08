@@ -15,7 +15,7 @@ const USER_STRINGS = {
     API_CALL_RECORDED_SUCESSFULLY: "API call recorded successfully",
     USERNAME_EXISTS: "Username already exists",
     USER_REGISTERED_SUCCESSFULLY: "User registered successfully",
-    
+    DELETED_WORD_SUCCESSFULLY: "Deleted '%s' successfully"
 };
 
 function formatUserString(userString, replacements) {

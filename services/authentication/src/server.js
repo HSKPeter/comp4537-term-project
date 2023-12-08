@@ -68,12 +68,12 @@ const BEARER_TOKEN_PREFIX = 'Bearer ';
 //     }
 // });
 
-// app.use((req, res, next) => {
-//     const method = req.method;
-//     const url = req.url;
-//     console.log(`[${method}] ${url}`);
-//     next();
-// })
+app.use((req, res, next) => {
+    const method = req.method;
+    const url = req.url;
+    console.log(`[${method}] ${url}`);
+    next();
+})
 
 app.post(ROUTE_PATHS.REGISTER, registerController);
 app.post(ROUTE_PATHS.LOGIN, loginController);

@@ -1,6 +1,7 @@
 const { USER_STRINGS, formatUserString } = require('../utils/userStrings');
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
+const DEFAULT_TOKEN_EXPIRES_IN = 60 * 15; // 15 minutes
 
 async function roleController(req, res) {
     try {

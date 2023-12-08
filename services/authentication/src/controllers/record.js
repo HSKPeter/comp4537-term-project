@@ -1,5 +1,7 @@
 const { runSQLQuery } = require('../utils/sqlUtil');
 const { USER_STRINGS, formatUserString } = require('../utils/userStrings');
+const jwt = require('jsonwebtoken');
+const SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 async function recordController(req, res) {
     try {
@@ -34,6 +36,7 @@ function decodeToken(token) {
         const decodedToken = jwt.verify(token, SECRET_KEY);
         return decodedToken;
     } catch (error) {
+        console.log(error)
         return null;
     }
 }

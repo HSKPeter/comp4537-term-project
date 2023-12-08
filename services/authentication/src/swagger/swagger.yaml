@@ -535,12 +535,20 @@ paths:
                   error:
                     type: string
                     description: The error message
-  /api-consumption:
+  /api-consumption/{userID}:
     get:
       summary: Get API consumption
       tags:
         - API Statistics
       description: Get the API consumption of the current user
+      parameters:
+        - name: userID
+          in: path
+          description: The user userID
+          required: true
+          schema:
+            type: number
+            example: 1
       responses:
         "200":
           description: JSON object with the API consumption
