@@ -22,7 +22,7 @@ export const USER_MESSAGES_EN = {
     "news_item_card_button_show_full_article": "Show Full Article",
     "news_item_card_read_more_link": "Read more",
     "news_item_card_published_date_prefix": "Published:",
-    "news_item_card_error_summarizing": "Error summarizing article.",
+    "news_item_card_error_summarizing": "Error summarizing article. Please try again later.",
     "admin_page_title": "Admin Page",
     "admin_page_loading": "Loading...",
     "admin_page_error_api_usage": "An error occurred. Was not able to get API usage data. Please try again later.",

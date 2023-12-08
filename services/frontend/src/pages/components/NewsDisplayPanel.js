@@ -88,7 +88,7 @@ function NewsItemCard({ article }) {
     const handleSummarize = async (event) => {
         event.stopPropagation();
         setShowSummary(!showSummary);
-        if (summary && summary !== USER_MESSAGES_EN.news_item_card_error_summarizing) {
+        if (!showSummary || (summary && summary !== USER_MESSAGES_EN.news_item_card_error_summarizing)) {
             return;
         }
 
