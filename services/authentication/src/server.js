@@ -28,8 +28,19 @@ const app = express();
 // Setup Swagger UI
 app.use(ROUTE_PATHS.SWAGGER, swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
-// Enable CORS
-app.use(cors());
+const allowedOrigin = 'http://example.com'; // Replace with your specific endpoint
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (origin === allowedOrigin || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
 
 // Enable body parsing for JSON and URL encoded data
 app.use(express.json());
