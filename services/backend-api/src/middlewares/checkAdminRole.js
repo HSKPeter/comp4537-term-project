@@ -7,7 +7,6 @@ const { getRoleFromToken, USER_ROLES } = require('../utils/userAuthenticationUti
 const pathsExclusiveToAdmin = [
   API_ROUTE_PATHS.API_STATS,
   API_ROUTE_PATHS.API_STATS_BY_USER,
-  API_ROUTE_PATHS.API_CONSUMPTION
 ];
 
 function checkAdminRole(req, res, next) {
