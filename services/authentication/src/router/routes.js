@@ -1,5 +1,5 @@
 const API_ROUTE_PATHS = {
-    ROOT: '/COMP4537/project/api/v2/authentication',
+    ROOT: '',
     REGISTER: '/register',
     LOGIN: '/login',
     USER: '/user',

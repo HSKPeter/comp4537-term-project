@@ -1,4 +1,5 @@
 const { runSQLQuery } = require('../utils/sqlUtil');
+const { USER_STRINGS, formatUserString } = require('../utils/userStrings');
 
 async function apiStatsController(req, res)  {
     try {
@@ -10,7 +11,7 @@ async function apiStatsController(req, res)  {
 
     } catch (err) {
         console.error(`Failed to get API stats from the database: ${err?.stack ?? err}`);
-        res.status(500).json({ error: 'Failed to fetch API stats from the database' });
+        res.status(500).json({ error: USER_STRINGS.FAILED_TO_FETCH });
     }
 }
 

@@ -1,4 +1,5 @@
 const { runSQLQuery } = require('../utils/sqlUtil');
+const { USER_STRINGS, formatUserString } = require('../utils/userStrings');
 
 async function recordController(req, res) {
     try {
@@ -21,10 +22,10 @@ async function recordController(req, res) {
         // Insert the API call into the database
         await runSQLQuery('INSERT INTO APICall (UserID, Time, Method, Endpoint) VALUES (?, ?, ?, ?)', [userID, time, method, endpoint]);
 
-        res.status(201).json({ message: 'API call recorded successfully' });
+        res.status(201).json({ message: USER_STRINGS.API_CALL_RECORDED_SUCESSFULLY });
     } catch (error) {
         console.error('Error recording API call: ', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: USER_STRINGS.SERVER_ERROR });
     }
 };
 

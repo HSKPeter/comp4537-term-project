@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = process.env.JWT_SECRET_KEY;
 const { runSQLQuery, UserTypes } = require('../utils/sqlUtil');
+const { USER_STRINGS, formatUserString } = require('../utils/userStrings');
 
 const DEFAULT_TOKEN_EXPIRES_IN = 60 * 15; // 15 minutes
 
@@ -13,7 +14,7 @@ async function registerController(req, res)  {
         const userExists = await runSQLQuery(`SELECT * FROM User WHERE Name = ?`, [username]);
 
         if (userExists.length > 0) {
-            return res.status(500).json({ error: 'Username already exists' });
+            return res.status(500).json({ error: USER_STRINGS.USERNAME_EXISTS });
         }
 
         // Hash the password
@@ -40,10 +41,10 @@ async function registerController(req, res)  {
         const role = queryResult[0].UserAuthorization;
 
         const token = jwt.sign({ userID: user[0].UserID, username: user[0].Name, role }, SECRET_KEY, { expiresIn: DEFAULT_TOKEN_EXPIRES_IN });
-        res.status(201).json({ message: 'User registered successfully', token, role });
+        res.status(201).json({ message: USER_STRINGS.USER_REGISTERED_SUCCESSFULLY, token, role });
     } catch (error) {
         console.error('Error registering user: ', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ error: USER_STRINGS.SERVER_ERROR });
     }
 }
 

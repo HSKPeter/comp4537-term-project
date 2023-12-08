@@ -21,6 +21,7 @@ const { apiStatsByUserController } = require('./controllers/apiStatsByUser');
 const { apiConsumptionController } = require('./controllers/apiConsumptionController');
 const { swaggerSpecs } = require('./swagger/swaggerDocs');
 const { ROUTE_PATHS } = require('./router/routes');
+const { USER_STRINGS } = require('./utils/userStrings');
 
 const app = express();
 
@@ -38,41 +39,41 @@ const PORT = 8000;
 const API_SECRET_KEY = process.env.API_SECRET_KEY
 
 const BEARER_TOKEN_PREFIX = 'Bearer ';
-app.use((req, res, next) => {
-    try {
-        const authHeader = req.headers.authorization;
+// app.use((req, res, next) => {
+//     try {
+//         const authHeader = req.headers.authorization;
 
-        if (!authHeader) {
-            res.status(401).json({ error: 'No token provided' });
-            return;
-        }
+//         if (!authHeader) {
+//             res.status(401).json({ error: USER_STRINGS.NO_TOKEN });
+//             return;
+//         }
 
-        if (!authHeader.startsWith(BEARER_TOKEN_PREFIX)) {
-            res.status(401).json({ error: 'Invalid token' });
-            return;
-        }
+//         if (!authHeader.startsWith(BEARER_TOKEN_PREFIX)) {
+//             res.status(401).json({ error: USER_STRINGS.INVALID_TOKEN });
+//             return;
+//         }
 
-        const apiKey = authHeader.substring(BEARER_TOKEN_PREFIX.length);
+//         const apiKey = authHeader.substring(BEARER_TOKEN_PREFIX.length);
 
         
-        if (apiKey !== API_SECRET_KEY) {
-            res.status(401).json({ error: 'Invalid token' });
-            return;
-        }
+//         if (apiKey !== API_SECRET_KEY) {
+//             res.status(401).json({ error: USER_STRINGS.INVALID_TOKEN });
+//             return;
+//         }
 
-        next();
-    } catch (error) {
-        console.error('Error authenticating token: ', error);
-        res.status(401).json({ error: 'Invalid token' });
-    }
-});
+//         next();
+//     } catch (error) {
+//         console.error('Error authenticating token: ', error);
+//         res.status(401).json({ error: USER_STRINGS.INVALID_TOKEN });
+//     }
+// });
 
-app.use((req, res, next) => {
-    const method = req.method;
-    const url = req.url;
-    console.log(`[${method}] ${url}`);
-    next();
-})
+// app.use((req, res, next) => {
+//     const method = req.method;
+//     const url = req.url;
+//     console.log(`[${method}] ${url}`);
+//     next();
+// })
 
 app.post(ROUTE_PATHS.REGISTER, registerController);
 app.post(ROUTE_PATHS.LOGIN, loginController);
