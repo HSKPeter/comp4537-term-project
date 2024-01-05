@@ -1,5 +1,8 @@
 # COMP 4537 Term Project
 
+## Hosted Project
+https://sepehrzohoorirad.com/COMP4537/ai-project/
+
 ## Development Guide
 
 ### React Frontend
